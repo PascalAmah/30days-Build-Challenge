@@ -1,0 +1,304 @@
+---
+export interface CardData {
+  src: string;
+  title: string;
+  desc: string;
+}
+
+interface Props {
+  cards: CardData[];
+}
+
+const { cards } = Astro.props;
+const N = cards.length;
+---
+
+<section class="scene" aria-label="3D rotating image carousel">
+  <div class="a3d" style={`--n: ${N}`}>
+    {
+      /* Desktop needs exactly N cards for the cylinder.
+         Mobile needs 2×N for the seamless scroll loop.
+         We render 2×N but hide the duplicates on desktop via CSS. */
+      [...cards, ...cards].map((card, i) => (
+        <div class={`card${i >= N ? ' mobile-dupe' : ''}`} style={`--i: ${i % N}`}>
+          <div class="card-inner">
+            <div class="card-face card-front">
+              <img src={`/${card.src}`} alt={card.title} loading="lazy" />
+            </div>
+            <div class="card-face card-back">
+              <div class="card-back-bg" style={`background-image:url(/${card.src})`} />
+              <div class="card-back-content">
+                <h3 class="back-title">{card.title}</h3>
+                <p class="back-desc">{card.desc}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  /* ─── Desktop carousel (demo pattern) ─── */
+
+  .scene {
+    flex: 1 0 50vh;
+    display: grid;
+    overflow: hidden;
+    perspective: 35em;
+    z-index: 10;
+    mask: linear-gradient(90deg, #0000, #000 20% 80%, #0000);
+    -webkit-mask: linear-gradient(90deg, transparent, #000 20% 80%, transparent);
+  }
+
+  .a3d {
+    display: grid;
+    place-self: center;
+    transform-style: preserve-3d;
+    animation: ry 32s linear infinite;
+    will-change: transform;
+  }
+
+  /* Pause ring when hovering a card — scoped to card, not whole scene */
+  @media (min-width: 641px) {
+    .a3d:has(.card:hover) {
+      animation-play-state: paused;
+    }
+    /* Hide the 2nd set of cards — only needed for mobile scroll loop */
+    .mobile-dupe {
+      display: none;
+    }
+  }
+
+  /* Use rotateY in keyframes for broader browser support */
+  @keyframes ry {
+    from { transform: rotateY(0deg); }
+    to   { transform: rotateY(360deg); }
+  }
+
+  /* Card slot — demo pattern, demo width */
+  .card {
+    --w: 28em;
+    --ba: 1turn / var(--n);
+    grid-area: 1 / 1;
+    width: var(--w);
+    aspect-ratio: 7 / 10;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transform:
+      rotateY(calc(var(--i) * var(--ba)))
+      translateZ(calc(-1 * (0.5 * var(--w) + 0.5em) / tan(0.5 * var(--ba))));
+  }
+
+  /* Inner flip container — demo pattern */
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+    will-change: transform;
+  }
+
+  /* Desktop: hover to flip — demo pattern */
+  @media (min-width: 641px) {
+    .card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+  }
+
+  /* Both faces — demo pattern */
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 1.5em;
+    overflow: hidden;
+  }
+
+  /* Front */
+  .card-front {
+    border: 3px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Back — pre-rotated 180deg, demo pattern */
+  .card-back {
+    transform: rotateY(180deg);
+    background: #0a0a0d;
+    border: 3px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    position: relative;
+    height: 100%;
+  }
+
+  .card-back-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px) brightness(0.28);
+    -webkit-filter: blur(10px) brightness(0.28);
+  }
+
+  .card-back-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .back-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .back-desc {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--ink-dim);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .a3d        { animation-duration: 128s; }
+    .card-inner { transition: none; }
+  }
+
+  /* ─── Mobile horizontal scroll strip ─── */
+  @media (max-width: 640px) {
+    .scene {
+      flex: 0 0 44vh;
+      /* override desktop grid — needs block so the flex strip isn't constrained */
+      display: block;
+      overflow: hidden;
+      perspective: 400px;
+      perspective-origin: 50% 40%;
+      mask: linear-gradient(90deg, #0000, #000 8% 92%, #0000);
+      -webkit-mask: linear-gradient(90deg, transparent, #000 8% 92%, transparent);
+      width: 100%;
+    }
+
+    .a3d {
+      /* override desktop grid layout */
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      width: max-content;
+      /* override desktop transform-style/animation */
+      transform: rotateX(2deg);
+      transform-origin: 50% 100%;
+      transform-style: preserve-3d;
+      place-self: unset;
+      animation: scroll-mobile 18s linear infinite;
+      padding: 20px 34px;
+    }
+
+    @keyframes scroll-mobile {
+      from { margin-left: 0; }
+      to   { margin-left: calc(-38vw * 7 - 10px * 7); }
+    }
+
+    /* Override the desktop cylinder transform on cards */
+    .card {
+      grid-area: unset;
+      width: 38vw;
+      flex: 0 0 38vw;
+      height: calc(38vw * 11 / 7); /* explicit height matching aspect-ratio 7/11 */
+      aspect-ratio: 7 / 11;
+      border-radius: 1.2em;
+      /* completely reset the desktop 3D cylinder placement */
+      transform: none !important;
+      transform-style: preserve-3d;
+      position: relative;
+      z-index: auto;
+      margin: 0;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* card-inner must fill the card fully */
+    .card-inner {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    /* tap-to-flip class set by JS */
+    .card.is-flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* faces need smaller border-radius on mobile */
+    .card-face {
+      border-radius: 1.2em;
+    }
+
+    .card-front { border-width: 2px; }
+
+    .card-back {
+      border-width: 2px;
+      padding: 14px;
+      height: 100%;
+    }
+
+    .back-title { font-size: 0.85rem; }
+    .back-desc  { font-size: 0.68rem; }
+  }
+</style>
+
+<script>
+  // Mobile only — tap to flip + pause scroll
+  if (window.matchMedia("(max-width: 640px)").matches) {
+    const a3d = document.querySelector<HTMLElement>(".a3d")!;
+    let activeCard: HTMLElement | null = null;
+
+    function closeActive() {
+      if (activeCard) {
+        activeCard.classList.remove("is-flipped");
+        activeCard = null;
+        a3d.style.animationPlayState = "running";
+      }
+    }
+
+    document.querySelectorAll<HTMLElement>(".card").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        e.stopPropagation(); // prevent document handler firing on same tap
+        if (activeCard === card) {
+          closeActive();
+        } else {
+          if (activeCard) activeCard.classList.remove("is-flipped");
+          card.classList.add("is-flipped");
+          activeCard = card;
+          a3d.style.animationPlayState = "paused";
+        }
+      });
+    });
+
+    // Tap outside any card — close active and resume scroll
+    document.addEventListener("click", () => {
+      closeActive();
+    });
+  }
+</script>

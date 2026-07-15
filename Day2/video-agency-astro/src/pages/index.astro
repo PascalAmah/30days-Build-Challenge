@@ -1,0 +1,453 @@
+---
+import "../styles/global.css";
+import Carousel3D from "../components/Carousel3D.astro";
+
+const cards = [
+    {
+        src: "arinze.png",
+        tag: "Portrait",
+        title: "Face-Swap Intro",
+        desc: "Viewer's photo woven into the opening frame in under two seconds.",
+    },
+    {
+        src: "basket.png",
+        tag: "Product Drop",
+        title: "Sneaker Launch",
+        desc: "Illustrated hype reel built to tease a release date and drive early sign-ups.",
+    },
+    {
+        src: "basket2.png",
+        tag: "Lookbook",
+        title: "Catalog Edit",
+        desc: "Seasonal lookbook generated per-SKU straight from your catalog.",
+    },
+    {
+        src: "basketball.png",
+        tag: "Sports",
+        title: "Game Day Hype",
+        desc: "Motion-illustrated athlete sequence tuned for pre-match social pushes.",
+    },
+    {
+        src: "cat1.png",
+        tag: "Brand Story",
+        title: "Feline Series",
+        desc: "Whimsical brand storytelling with playful animated transitions.",
+    },
+    {
+        src: "cat2.png",
+        tag: "Brand Story",
+        title: "Companion Cut",
+        desc: "Warm, lifestyle-driven narrative built for emotional connection.",
+    },
+    {
+        src: "clouds.png",
+        tag: "Broadcast",
+        title: "Sky Reveal",
+        desc: "Cinematic aerial opener for stadium screens and broadcast bumpers.",
+    },
+    {
+        src: "flower.png",
+        tag: "Brand Story",
+        title: "Bloom Series",
+        desc: "Macro-detail product photography animated into a slow, tactile reveal.",
+    },
+    {
+        src: "oversize.png",
+        tag: "Fashion",
+        title: "Oversize Drop",
+        desc: "Streetwear capsule launch with bold motion typography overlays.",
+    },
+    {
+        src: "phone.png",
+        tag: "Product Drop",
+        title: "Device Launch",
+        desc: "Sleek product hero reel with 3D parallax and spec callouts.",
+    },
+    {
+        src: "portrait.png",
+        tag: "Portrait",
+        title: "Personalized",
+        desc: "AI-driven personalization that places your customer in the story.",
+    },
+    {
+        src: "scroll.png",
+        tag: "Identity",
+        title: "Scroll Sting",
+        desc: "A 2-second brand sting molded into texture for interstitials and outros.",
+    },
+    {
+        src: "single.png",
+        tag: "Music",
+        title: "Single Cover",
+        desc: "Animated album art with reactive audio waveforms for streaming promos.",
+    },
+    {
+        src: "trouser.png",
+        tag: "Fashion",
+        title: "Tailored Fit",
+        desc: "Precision garment showcase with fabric-close detail cuts.",
+    },
+];
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Studio Volt — A creative video creation agency</title>
+        <meta
+            name="description"
+            content="A creative video creation agency that drives engagement through personalized, interactive video."
+        />
+    </head>
+    <body>
+        <!-- Frame decoration -->
+        <div class="frame-marks" aria-hidden="true">
+            <span class="dot dot-tl"></span>
+            <span class="dot dot-tr"></span>
+            <span class="rail rail-top"></span>
+            <span class="rail rail-left"></span>
+            <span class="rail rail-right"></span>
+        </div>
+        <div class="corner-marker corner-marker-tl" aria-hidden="true"></div>
+        <div class="corner-marker corner-marker-tr" aria-hidden="true"></div>
+
+        <main class="page">
+            <!-- Hero -->
+            <section class="hero">
+                <div class="bolt" aria-hidden="true">
+                    <svg width="22" height="30" viewBox="0 0 22 30" fill="none">
+                        <path
+                            d="M13 0L0 18h8l-3 12L22 10h-9l0-10z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
+
+                <h1 class="headline">
+                    <span class="line1">
+                        A<span class="boxed">
+                            <img
+                                class="boxed-border"
+                                src="/whiteborder.svg"
+                                alt=""
+                                aria-hidden="true"
+                            />CREATIVE</span
+                        ><br class="mobile-br" />VIDEO CREATION AGENCY
+                    </span>
+                    <span class="line2">THAT DRIVES ENGAGEMENT</span>
+                </h1>
+
+                <p class="sub">
+                    We enhance businesses&rsquo; ability<br class="sub-br" />
+                    to boost customer engagement<br class="sub-br" />
+                    through the integration of personalized<br class="sub-br" />
+                    and interactive elements into their videos.
+                </p>
+
+                <a class="cta" href="#generate">
+                    <span>Generate Cards</span>
+                </a>
+            </section>
+
+            <!-- Carousel — fully self-contained component -->
+            <Carousel3D cards={cards} />
+        </main>
+
+        <style>
+            /* ── Page shell ── */
+            .page {
+                position: relative;
+                z-index: 20;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                padding-top: 94px;
+                background: transparent;
+            }
+
+            /* ── Corner bracket markers ── */
+            .corner-marker {
+                position: fixed;
+                width: 50px;
+                height: 50px;
+                background: transparent;
+                pointer-events: none;
+                z-index: 11;
+            }
+            .corner-marker-tl {
+                top: 0;
+                left: 0;
+                background:
+                    repeating-linear-gradient(
+                            to bottom,
+                            var(--line) 0px,
+                            var(--line) 12px,
+                            transparent 12px,
+                            transparent 18px
+                        )
+                        right / 1px 100% no-repeat,
+                    repeating-linear-gradient(
+                            to right,
+                            var(--line) 0px,
+                            var(--line) 12px,
+                            transparent 12px,
+                            transparent 18px
+                        )
+                        bottom / 100% 1px no-repeat;
+            }
+            .corner-marker-tr {
+                top: 0;
+                right: 0;
+                background:
+                    repeating-linear-gradient(
+                            to bottom,
+                            var(--line) 0px,
+                            var(--line) 12px,
+                            transparent 12px,
+                            transparent 18px
+                        )
+                        left / 1px 100% no-repeat,
+                    repeating-linear-gradient(
+                            to right,
+                            var(--line) 0px,
+                            var(--line) 12px,
+                            transparent 12px,
+                            transparent 18px
+                        )
+                        bottom / 100% 1px no-repeat;
+            }
+
+            /* ── Frame rails ── */
+            .frame-marks {
+                position: fixed;
+                inset: 50px;
+                pointer-events: none;
+                z-index: -999;
+            }
+            .dot {
+                position: absolute;
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: var(--ink-dim);
+            }
+            .dot-tl {
+                top: -3px;
+                left: -3px;
+            }
+            .dot-tr {
+                top: -3px;
+                right: -3px;
+            }
+            .rail {
+                position: absolute;
+            }
+            .rail-top {
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: repeating-linear-gradient(
+                    to right,
+                    var(--line) 0px,
+                    var(--line) 12px,
+                    transparent 12px,
+                    transparent 18px
+                );
+            }
+            .rail-left {
+                left: 0;
+                top: 0;
+                bottom: -200px;
+                width: 1px;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    var(--line) 0px,
+                    var(--line) 12px,
+                    transparent 12px,
+                    transparent 18px
+                );
+            }
+            .rail-right {
+                right: 0;
+                top: 0;
+                bottom: -200px;
+                width: 1px;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    var(--line) 0px,
+                    var(--line) 12px,
+                    transparent 12px,
+                    transparent 18px
+                );
+            }
+
+            /* ── Hero ── */
+            .hero {
+                flex-shrink: 0;
+                position: relative;
+                z-index: 3;
+                max-width: 980px;
+                width: 100%;
+                margin: 0 auto;
+                padding: 0 24px 24px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero > * {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            .bolt {
+                color: #eaeaea;
+                margin-bottom: 18px;
+                filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.25));
+            }
+            .headline {
+                font-family: var(--font-display);
+                font-weight: 400;
+                text-transform: uppercase;
+                color: #8b8b90;
+                font-size: clamp(1.4rem, 4.2vw, 4.4rem);
+                line-height: 1.08;
+                letter-spacing: 0.4px;
+                margin: 0 0 22px;
+            }
+            .line1 {
+                display: block;
+                white-space: nowrap;
+                font-size: clamp(1.2rem, 3.8vw, 1em);
+            }
+            .line2 {
+                display: block;
+            }
+            .boxed {
+                display: inline-block;
+                color: var(--ink);
+                padding: 0 12px;
+                margin: 0 4px;
+                transform: translateY(-2px);
+                position: relative;
+            }
+            .boxed-border {
+                position: absolute;
+                inset: -4px -2px;
+                width: calc(100% + 4px);
+                height: calc(100% + 8px);
+                pointer-events: none;
+                display: block;
+                object-fit: fill;
+            }
+            .sub {
+                color: var(--ink-dim);
+                font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+                line-height: 1.6;
+                max-width: 620px;
+                margin: 0 0 34px;
+            }
+            .cta {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 1.3rem;
+                color: var(--ink);
+                background: #0d0d10;
+                border: 1px solid rgba(255, 255, 255, 0.18);
+                border-radius: 999px;
+                padding: 20px 56px;
+                box-shadow:
+                    0 0 0 1px rgba(77, 125, 255, 0.25),
+                    0 0 24px 4px var(--accent-soft),
+                    0 0 60px 8px rgba(77, 125, 255, 0.18);
+                transition:
+                    transform 0.25s ease,
+                    box-shadow 0.25s ease;
+            }
+            .cta:hover {
+                transform: translateY(-2px);
+                box-shadow:
+                    0 0 0 1px rgba(77, 125, 255, 0.4),
+                    0 0 30px 6px var(--accent-soft),
+                    0 0 80px 12px rgba(77, 125, 255, 0.28);
+            }
+
+            /* Hide mobile-only line breaks on desktop */
+            .mobile-br,
+            .sub-br {
+                display: none;
+            }
+
+            /* ── Mobile overrides ── */
+            @media (max-width: 640px) {
+                .page {
+                    padding-top: 66px;
+                }
+                .frame-marks {
+                    inset: 20px;
+                }
+                .cta {
+                    font-size: 0.8rem;
+                    padding: 12px 30px;
+                }
+                .corner-marker {
+                    width: 20px;
+                    height: 20px;
+                }
+                .headline {
+                    font-size: clamp(1.8rem, 7vw, 2.4rem);
+                    line-height: 1.1;
+                    text-align: center;
+                    padding: 0 4px;
+                }
+                .line1 {
+                    white-space: normal;
+                    font-size: inherit;
+                }
+                /* Show the break so line1 splits into two lines */
+                .mobile-br {
+                    display: inline;
+                }
+                /* Show paragraph breaks for 4-line layout */
+                .sub-br {
+                    display: inline;
+                }
+            }
+        </style>
+        <script>
+            import { gsap } from "gsap";
+
+            const hero = document.querySelector<HTMLElement>(".hero")!;
+            if (hero) {
+                gsap.timeline()
+                    .to(".bolt", {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.5,
+                        ease: "power3.out",
+                    })
+                    .to(".headline", {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: "power3.out",
+                    })
+                    .to(".sub", {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: "power3.out",
+                    })
+                    .to(".cta", {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.5,
+                        ease: "power3.out",
+                    });
+            }
+        </script>
+    </body>
+</html>

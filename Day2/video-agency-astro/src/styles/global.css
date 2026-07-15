@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #07070a;
+  --bg-glow: #0e1224;
+  --ink-dim: #97979d;
+  --ink: #f2f2f0;
+  --accent: #4d7dff;
+  --accent-soft: rgba(77, 125, 255, 0.35);
+  --line: rgba(255, 255, 255, 0.14);
+  --card-bg: #111117;
+  --radius: 18px;
+  --font-display: 'Anton', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* Background + gradient lives on html so it always fills the viewport */
+  background:
+    radial-gradient(
+      ellipse 80% 55% at 50% 75%,
+      rgba(30, 50, 140, 0.55) 0%,
+      rgba(20, 30, 90, 0.25) 45%,
+      transparent 75%
+    ),
+    #07070a;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 640px) {
+  html {
+    background:
+      radial-gradient(
+        ellipse 110% 50% at 50% 70%,
+        rgba(35, 55, 160, 0.65) 0%,
+        rgba(20, 30, 100, 0.3) 45%,
+        transparent 70%
+      ),
+      #07070a;
+  }
+}
+
+/* ====== Background noise texture ====== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.2' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  background-repeat: repeat;
+  opacity: 0.8;
+  mix-blend-mode: soft-light;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+::selection { background: var(--accent-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001s !important; animation-iteration-count: 1 !important; transition-duration: 0.001s !important; }
+}
