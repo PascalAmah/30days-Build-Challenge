@@ -19,8 +19,7 @@
 html {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
-  /* Background + gradient lives on html so it always fills the viewport */
+  min-height: 100%;
   background:
     radial-gradient(
       ellipse 80% 55% at 50% 75%,
@@ -29,12 +28,14 @@ html {
       transparent 75%
     ),
     #07070a;
+  /* Prevent overscroll from revealing a white gap on mobile */
+  background-attachment: fixed;
 }
 
 body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  min-height: 100%;
   overflow-x: hidden;
   background: transparent;
   color: var(--ink);
@@ -52,6 +53,7 @@ body {
         transparent 70%
       ),
       #07070a;
+    background-attachment: fixed;
   }
 }
 
@@ -67,6 +69,11 @@ body::before {
   background-repeat: repeat;
   opacity: 0.8;
   mix-blend-mode: soft-light;
+  /* Extend beyond viewport so overscroll doesn't show bare background */
+  top: -50%;
+  bottom: -50%;
+  left: -50%;
+  right: -50%;
 }
 
 img { max-width: 100%; display: block; }
