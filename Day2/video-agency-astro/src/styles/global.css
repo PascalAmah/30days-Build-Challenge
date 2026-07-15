@@ -28,8 +28,6 @@ html {
       transparent 75%
     ),
     #07070a;
-  /* Solid fallback color that shows during overscroll bounce on mobile */
-  background-color: #07070a;
 }
 
 body {
@@ -53,15 +51,12 @@ body {
         transparent 70%
       ),
       #07070a;
-    background-color: #07070a;
-    /* Lock overscroll so the bounce area shows the same dark color */
-    overscroll-behavior: none;
+    /* Disable bounce/rubber-band so overscroll area is never revealed */
+    overscroll-behavior-y: none;
   }
 
   body {
-    overscroll-behavior: none;
-    /* The noise layer must also cover beyond the scroll boundary */
-    background-color: #07070a;
+    overscroll-behavior-y: none;
   }
 }
 
@@ -77,11 +72,6 @@ body::before {
   background-repeat: repeat;
   opacity: 0.8;
   mix-blend-mode: soft-light;
-  /* Extend beyond viewport to cover overscroll bounce area */
-  top: -50%;
-  bottom: -50%;
-  left: -50%;
-  right: -50%;
 }
 
 img { max-width: 100%; display: block; }
