@@ -1,0 +1,107 @@
+---
+
+---
+
+<header
+    id="site-header"
+    class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 sm:px-10 lg:px-16 transition-colors duration-300"
+>
+    <a href="#top" class="flex items-center gap-2 text-white">
+        <img
+            src="/koffi-logo.svg"
+            width="20"
+            height="20"
+            alt=""
+            aria-hidden="true"
+            class="h-4 w-4"
+        />
+        <span class="font-display text-xl tracking-wide">KOFFI</span>
+    </a>
+
+    <a
+        href="#blends"
+        id="header-cta"
+        class="koffi-btn koffi-btn-pink px-5 py-3 text-xs"
+    >
+        EXPLORE BLENDS
+    </a>
+</header>
+
+<style>
+    #site-header {
+        background: transparent;
+        color: white;
+    }
+
+    #site-header.scrolled {
+        background: var(--koffi-cream);
+        box-shadow: 0 4px 20px rgba(42, 22, 8, 0.1);
+    }
+
+    #site-header.scrolled a {
+        color: var(--koffi-brown);
+    }
+
+    #site-header.scrolled a img {
+        filter: brightness(0.15);
+    }
+
+    #site-header.scrolled .koffi-btn-pink {
+        border-color: var(--koffi-brown);
+    }
+</style>
+
+<script>
+    (function () {
+        const header = document.getElementById("site-header")!;
+        const cta = document.getElementById(
+            "header-cta",
+        ) as HTMLAnchorElement | null;
+        if (!header) return;
+
+        const sections = [
+            { id: "top", label: "EXPLORE BLENDS", href: "#blends" },
+            { id: "why", label: "VIEW BLENDS", href: "#blends" },
+            { id: "blends", label: "BACK TO TOP", href: "#top" },
+        ];
+
+        let ticking = false;
+
+        function updateHeader() {
+            if (window.scrollY > 0) {
+                header.classList.add("scrolled");
+            } else {
+                header.classList.remove("scrolled");
+            }
+
+            if (cta) {
+                for (const section of sections) {
+                    const el = document.getElementById(section.id);
+                    if (el) {
+                        const rect = el.getBoundingClientRect();
+                        if (
+                            rect.top < window.innerHeight * 0.5 &&
+                            rect.bottom > 0
+                        ) {
+                            cta.textContent = section.label;
+                            cta.href = section.href;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            ticking = false;
+        }
+
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(updateHeader);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        updateHeader();
+    })();
+</script>

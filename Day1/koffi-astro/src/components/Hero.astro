@@ -1,0 +1,305 @@
+---
+import Header from "./Header.astro";
+---
+
+<div class="bg-[var(--koffi-cream)] p-2 sm:p-3 lg:p-4">
+    <section
+        id="top"
+        class="relative overflow-hidden rounded-xl bg-[var(--koffi-green)] lg:rounded-[1rem]"
+    >
+        <!-- ambient texture -->
+        <div
+            class="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
+            aria-hidden="true"
+            style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 4px 4px;"
+        >
+        </div>
+
+        <Header />
+
+        <div
+            class="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-16 pt-24 sm:px-10 lg:grid-cols-2 lg:gap-6 lg:px-16 lg:pb-24"
+        >
+            <div class="max-w-xl">
+                <h1
+                    class="font-display text-[13vw] leading-[0.95] text-white sm:text-6xl lg:text-[4.2rem]"
+                >
+                    <span class="line-mask whitespace-nowrap"
+                        ><span class="line-inner" style="--line-delay: 0.05s"
+                            >LOVE FOR KOFFI,</span
+                        ></span
+                    >
+                    <span class="line-mask"
+                        ><span class="line-inner" style="--line-delay: 0.18s"
+                            >FEAR OF <span
+                                class="hero-highlight relative inline-block px-2 text-[var(--koffi-brown)]"
+                                >SMALL</span
+                            ></span
+                        ></span
+                    >
+                    <span class="line-mask"
+                        ><span class="line-inner" style="--line-delay: 0.31s"
+                            >PLACES.</span
+                        ></span
+                    >
+                </h1>
+
+                <p
+                    class="reveal mt-6 max-w-md text-base leading-relaxed text-[var(--koffi-green-text)] sm:text-lg"
+                    style="--reveal-delay: 0.5s"
+                >
+                    Great Koffi deserves room to breathe, and so do you.
+                    Discover blends crafted for comfort, calm, and a little
+                    escape in every sip.
+                </p>
+
+                <div
+                    class="reveal mt-8 flex flex-wrap gap-4"
+                    style="--reveal-delay: 0.62s"
+                >
+                    <a
+                        href="#blends"
+                        class="koffi-btn koffi-btn-pink px-7 py-4 text-sm"
+                    >
+                        SHOP OUR KOFFI
+                    </a>
+                    <a
+                        href="#why"
+                        class="koffi-btn koffi-btn-white px-7 py-4 text-sm"
+                    >
+                        MAKE YOUR MUG HAPPY
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="reveal relative w-full lg:-mr-16 lg:justify-self-end"
+                style="--reveal-delay: 0.35s"
+            >
+                <div
+                    class="hero-float relative ml-auto w-full max-w-md lg:max-w-none"
+                    data-parallax
+                >
+                    <img
+                        src="/hero-illus.svg"
+                        alt="Illustration of a person cosied up with a mug of Koffi, steam curling up"
+                        class="block w-full select-none"
+                        draggable="false"
+                    />
+                    <!-- KOFFI label on the cup -->
+                    <img
+                        src="/cup-koffi.svg"
+                        alt=""
+                        class="cup-label"
+                        aria-hidden="true"
+                    />
+                    <!-- Steam wisps rising from the cup -->
+                    <svg
+                        class="steam-overlay"
+                        viewBox="0 0 100 100"
+                        fill="none"
+                        aria-hidden="true"
+                    >
+                        <path
+                            class="steam-wisp steam-1"
+                            d="M35 78 Q30 60 38 45 Q42 35 36 20"
+                            stroke="white"
+                            stroke-width="3"
+                            stroke-linecap="round"
+                            opacity="0"></path>
+                        <path
+                            class="steam-wisp steam-2"
+                            d="M50 80 Q55 62 48 48 Q44 38 50 22"
+                            stroke="white"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            opacity="0"></path>
+                        <path
+                            class="steam-wisp steam-3"
+                            d="M62 76 Q58 58 65 42 Q68 32 62 18"
+                            stroke="white"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            opacity="0"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-indicator" aria-hidden="true">
+            <span></span>
+        </div>
+    </section>
+</div>
+
+<style>
+    /* Text reveal — each line slides up from below */
+    .line-mask {
+        display: block;
+        overflow: hidden;
+    }
+
+    .line-inner {
+        display: inline-block;
+        transform: translateY(100%);
+        animation: line-reveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation-delay: var(--line-delay, 0s);
+    }
+
+    @keyframes line-reveal {
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    .hero-highlight {
+        background: var(--koffi-pink);
+        font-family: "Fredoka", sans-serif;
+    }
+
+    /* KOFFI label on the cup */
+    .cup-label {
+        position: absolute;
+        right: 26%;
+        bottom: 8.8%;
+        transform: rotate(3deg);
+        width: clamp(50px, 7vw, 83px);
+        height: auto;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .hero-float {
+        animation: float 5s ease-in-out infinite;
+        transform-origin: center bottom;
+    }
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(-0.6deg);
+        }
+    }
+
+    .steam-overlay {
+        position: absolute;
+        bottom: 45%;
+        right: 15%;
+        width: 30%;
+        height: auto;
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    .steam-wisp {
+        stroke-dasharray: 80;
+        stroke-dashoffset: 0;
+        animation: steam-rise 3.5s ease-out infinite;
+    }
+
+    .steam-2 {
+        animation-delay: 1.2s;
+        animation-duration: 4s;
+    }
+
+    .steam-3 {
+        animation-delay: 2.4s;
+        animation-duration: 3.2s;
+    }
+
+    @keyframes steam-rise {
+        0% {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+        20% {
+            opacity: 0.7;
+        }
+        80% {
+            opacity: 0.3;
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-18px);
+        }
+    }
+
+    .scroll-indicator {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+    }
+
+    .scroll-indicator span {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-right: 3px solid rgba(255, 255, 255, 0.6);
+        border-bottom: 3px solid rgba(255, 255, 255, 0.6);
+        transform: rotate(45deg);
+        animation: scroll-bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes scroll-bounce {
+        0%,
+        100% {
+            opacity: 0.4;
+            transform: rotate(45deg) translate(0, 0);
+        }
+        50% {
+            opacity: 1;
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .line-inner,
+        .hero-float,
+        .steam-wisp,
+        .header-slide-down {
+            animation: none;
+        }
+        .line-inner {
+            transform: translateY(0);
+        }
+        .scroll-indicator {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    // mousemove parallax for hero illustration
+    (function () {
+        const el = document.querySelector("[data-parallax]")! as HTMLElement;
+
+        if (
+            window.matchMedia &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        )
+            return;
+
+        let rect: DOMRect | null = null;
+        function onMove(e: MouseEvent) {
+            if (!rect) rect = el.getBoundingClientRect();
+            const x =
+                ((e.clientX - (rect.left + rect.width / 2)) / rect.width) * 10;
+            const y =
+                ((e.clientY - (rect.top + rect.height / 2)) / rect.height) * 8;
+            el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${x * 0.06}deg)`;
+        }
+
+        function onLeave() {
+            el.style.transform = "";
+        }
+
+        el.addEventListener("mousemove", onMove);
+        el.addEventListener("mouseleave", onLeave);
+        window.addEventListener("resize", () => (rect = null));
+    })();
+</script>

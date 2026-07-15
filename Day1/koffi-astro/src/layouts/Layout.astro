@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title = "Koffi — Love for Koffi, Fear of Small Places",
+    description = "Great Koffi deserves room to breathe, and so do you. Discover blends crafted for comfort, calm, and a little escape in every sip.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/koffi-logo.svg" />
+        <meta name="description" content={description} />
+        <title>{title}</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body class="bg-[var(--koffi-cream)]">
+        <div
+            id="progress-bar"
+            class="fixed top-0 left-0 right-0 z-[60] h-1 bg-transparent pointer-events-none"
+        >
+            <div
+                id="progress-fill"
+                class="h-full w-0 transition-[width] duration-100 ease-out"
+                style="background: var(--koffi-pink);"
+            >
+            </div>
+        </div>
+
+        <slot />
+
+        <script>
+            (function () {
+                const fill = document.getElementById("progress-fill");
+                if (!fill) return;
+                const progressBar = fill as HTMLElement;
+                function updateProgress() {
+                    const scrollTop = window.scrollY;
+                    const docHeight =
+                        document.documentElement.scrollHeight -
+                        window.innerHeight;
+                    const progress =
+                        docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                    progressBar.style.width = progress + "%";
+                }
+                window.addEventListener("scroll", updateProgress, {
+                    passive: true,
+                });
+                updateProgress();
+            })();
+        </script>
+    </body>
+</html>

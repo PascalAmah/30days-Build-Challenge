@@ -1,0 +1,256 @@
+---
+const cards = [
+    {
+        title: "Crafted for Calm",
+        body: "Blends designed for people who want ritual without rush.",
+        icon: "/hand-write-animated.svg",
+        iconSide: "right",
+    },
+    {
+        title: "Flavour Without the Fuss",
+        body: "Smooth, bold taste minus the noise and crowded caf\u00e9 energy.",
+        icon: "/hand-snap-animated.svg",
+        iconSide: "left",
+    },
+    {
+        title: "Comfort in Every Cup",
+        body: "A soothing brew for all who prefer breathing room over bustle.",
+        icon: "/hand-wave-animated.svg",
+        iconSide: "right",
+    },
+];
+---
+
+<section
+    id="why"
+    class="relative bg-[var(--koffi-cream)] px-6 py-24 sm:px-10 lg:px-16"
+>
+    <div
+        class="pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-multiply"
+        aria-hidden="true"
+        style="background-image: radial-gradient(circle, var(--koffi-brown) 1px, transparent 1px); background-size: 6px 6px;"
+    >
+    </div>
+
+    <div
+        class="pointer-events-none absolute left-10 top-0 hidden h-full w-px bg-[repeating-linear-gradient(to_bottom,var(--koffi-brown)_0_6px,transparent_6px_14px)] opacity-20 lg:block"
+        aria-hidden="true"
+    >
+    </div>
+
+    <div class="section-head mx-auto max-w-3xl text-center">
+        <span
+            class="inline-flex items-center gap-2 rounded-full border border-[var(--koffi-brown)]/15 bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-[var(--koffi-brown)]/70"
+        >
+            <img src="/cup.svg" alt="" aria-hidden="true" class="h-3.5 w-3.5" />
+            // Why Koffi Exists \\
+        </span>
+
+        <h2
+            class="font-groovy mt-6 text-4xl leading-tight text-[var(--koffi-brown)] sm:text-5xl"
+        >
+            Coffee that gives you<br />
+            <span class="bg-[var(--koffi-pink)] px-2">space to breathe</span>
+        </h2>
+
+        <p class="mt-5 text-[var(--koffi-muted)]">
+            Because great flavour deserves room, and so do you.
+        </p>
+    </div>
+
+    <div
+        class="card-stack relative mx-auto mt-16 max-w-2xl"
+        style={`--count: ${cards.length}`}
+    >
+        {
+            cards.map((card, i) => (
+                <article
+                    class:list={[
+                        "why-card group absolute flex items-center gap-6 rounded-3xl bg-white px-8 py-9 shadow-[var(--shadow-soft)] outline-none sm:px-10",
+                        card.iconSide === "left"
+                            ? "flex-row-reverse"
+                            : "flex-row",
+                    ]}
+                    style={`--i: ${i};`}
+                    tabindex="0"
+                    data-index={i}
+                >
+                    <div class="max-w-xs">
+                        <h3 class="text-xl font-semibold text-[var(--koffi-brown)] sm:text-2xl">
+                            {card.title}
+                        </h3>
+                        <p class="mt-2 text-sm text-[var(--koffi-muted)] sm:text-base">
+                            {card.body}
+                        </p>
+                    </div>
+
+                    <div class="card-icon shrink-0">
+                        <img
+                            src={card.icon}
+                            alt=""
+                            aria-hidden="true"
+                            width="88"
+                            height="90"
+                            class="h-20 w-auto sm:h-[88px]"
+                        />
+                    </div>
+                </article>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .card-stack {
+        height: calc(210px + (var(--count) - 1) * 150px);
+    }
+
+    .why-card {
+        --base-rotate: 0deg;
+        /* cascade down-and-right so each card overlaps the previous */
+        top: calc(var(--i) * 150px);
+        left: calc(var(--i) * 30px);
+        width: calc(100% - 50px);
+        z-index: calc(var(--count) - var(--i));
+        opacity: 0;
+        transform: translateY(28px) rotate(var(--base-rotate)) scale(0.97);
+        transition:
+            transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 0.35s ease,
+            opacity 0.6s ease;
+        transition-delay: calc(var(--i) * 110ms);
+        cursor: pointer;
+        will-change: transform, box-shadow;
+    }
+
+    .why-card.tilting {
+        transition: transform 0.12s ease-out;
+        transition-delay: 0s;
+    }
+
+    .why-card:nth-child(1) {
+        --base-rotate: -2.2deg;
+    }
+    .why-card:nth-child(2) {
+        --base-rotate: 1.6deg;
+    }
+    .why-card:nth-child(3) {
+        --base-rotate: -1.2deg;
+    }
+
+    .card-stack.in-view .why-card {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--base-rotate)) scale(1);
+    }
+
+    .card-icon {
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .why-card:hover,
+    .why-card:focus-visible {
+        transform: translateY(-14px) rotate(0deg) scale(1.035);
+        box-shadow: 0 34px 65px -22px rgba(42, 22, 8, 0.42);
+        z-index: 20;
+    }
+
+    .why-card:hover .card-icon,
+    .why-card:focus-visible .card-icon {
+        transform: scale(1.12);
+    }
+
+    .section-head {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+            opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .section-head.in-view {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .why-card {
+            transition: none;
+            opacity: 1;
+            transform: translateY(0) rotate(var(--base-rotate));
+        }
+        .section-head {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .card-stack {
+            height: calc(140px + (var(--count) - 1) * 60px);
+        }
+        .why-card {
+            position: absolute;
+            top: calc(var(--i) * 60px);
+            left: calc(var(--i) * 14px);
+            width: calc(100% - 28px);
+            padding: 0.875rem 1rem;
+            gap: 0.75rem;
+        }
+        .why-card .card-icon img {
+            height: 3rem;
+            width: auto;
+        }
+        .why-card h3 {
+            font-size: 1rem;
+        }
+        .why-card p {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
+<script>
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("in-view");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.2 },
+    );
+
+    document
+        .querySelectorAll(".card-stack, .section-head")
+        .forEach((el) => observer.observe(el));
+
+    // 3D tilt on cards
+    document.querySelectorAll(".why-card").forEach((card) => {
+        const el = card as HTMLElement;
+        if (
+            window.matchMedia &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        )
+            return;
+        if (window.matchMedia && window.matchMedia("(hover: none)").matches)
+            return;
+
+        el.addEventListener("mousemove", (e: MouseEvent) => {
+            el.classList.add("tilting");
+            const rect = el.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+            const tiltX = (y - 0.5) * -20;
+            const tiltY = (x - 0.5) * 20;
+            el.style.transform = `perspective(400px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-12px) scale(1.05)`;
+        });
+
+        el.addEventListener("mouseleave", () => {
+            el.classList.remove("tilting");
+            el.style.transform = "";
+        });
+    });
+</script>

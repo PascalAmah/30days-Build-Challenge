@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+:root {
+  --koffi-green: #0e4a34;
+  --koffi-green-deep: #0a3a29;
+  --koffi-cream: #f8f3e8;
+  --koffi-pink: #ff86d6;
+  --koffi-pink-deep: #f566c6;
+  --koffi-brown: #2a1608;
+  --koffi-green-text: #cfe6da;
+  --koffi-muted: #8a8072;
+  --shadow-soft: 0 20px 45px -18px rgba(42, 22, 8, 0.35);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--koffi-cream);
+  color: var(--koffi-brown);
+  font-family: "Poppins", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: "Fredoka", "Poppins", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+}
+
+.font-groovy {
+  font-family: "Bagel Fat One", "Poppins", cursive;
+}
+
+/* Square buttons with a hard offset shadow */
+.koffi-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 2px solid var(--koffi-brown);
+  box-shadow: 4px 4px 0 0 var(--koffi-brown);
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+  will-change: transform;
+}
+
+.koffi-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--koffi-brown);
+}
+
+.koffi-btn:active {
+  transform: translate(2px, 2px) scale(0.97);
+  box-shadow: 1px 1px 0 0 var(--koffi-brown);
+}
+
+.koffi-btn-pink {
+  background: var(--koffi-pink);
+  color: var(--koffi-brown);
+}
+
+.koffi-btn-pink:hover {
+  background: var(--koffi-pink-deep);
+}
+
+.koffi-btn-white {
+  background: #fff;
+  color: var(--koffi-brown);
+}
+
+/* Hero specific tweaks */
+.hero-float {
+  transition: transform 350ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--koffi-pink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* subtle card shadow for the WhySection */
+.why-card {
+  box-shadow: 0 18px 35px -12px rgba(42, 22, 8, 0.18);
+}
+
+/* On-load reveal transition (hero, headings, etc.) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+@keyframes reveal-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
