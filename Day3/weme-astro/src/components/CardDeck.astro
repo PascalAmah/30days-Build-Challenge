@@ -196,7 +196,7 @@ const cards: Card[] = [
     }
 
     /* ---------- mobile: stacked pile, tap to fan out along an arc ---------- */
-    @media (max-width: 720px) {
+    @media screen and (max-width: 768px) {
         .card-deck {
             aspect-ratio: auto;
             height: min(78vw, 380px);
@@ -350,7 +350,7 @@ const cards: Card[] = [
     document.addEventListener("DOMContentLoaded", () => {
             const deck = document.querySelector(".card-deck");
             const mobileCards = deck.querySelectorAll(".card-deck__card, .card-deck__card--black");
-            const isMobileLayout = () => window.innerWidth <= 720;
+            const isMobileLayout = () => window.innerWidth <= 980;
 
             mobileCards.forEach((card) => {
                 card.addEventListener("animationend", () => {
