@@ -1,0 +1,343 @@
+---
+interface Card {
+    name: string;
+    src: string;
+    left: number;
+    top: number;
+    width: number;
+}
+
+const cards: Card[] = [
+    {
+        name: "green",
+        src: "/card-green.webp",
+        left: 11.82,
+        top: 13.3,
+        width: 18.83,
+    },
+    {
+        name: "red",
+        src: "/card-red.webp",
+        left: 26.15,
+        top: 25.86,
+        width: 15.68,
+    },
+    {
+        name: "yellow",
+        src: "/card-yellow.webp",
+        left: 40.48,
+        top: 15.15,
+        width: 18.38,
+    },
+    {
+        name: "blue",
+        src: "/card-blue.webp",
+        left: 54.76,
+        top: 22.04,
+        width: 19.36,
+    },
+    {
+        name: "black",
+        src: "/card-black.webp",
+        left: 70.76,
+        top: 18.47,
+        width: 17.39,
+    },
+];
+---
+
+<div
+    class="card-deck"
+    role="img"
+    aria-label="Fanned stack of five placeholder cards"
+>
+    {
+        cards.map((card, i) =>
+            card.name === "black" ? (
+                <div
+                    class="card-deck__card card-deck__card--black"
+                    style={`left:${card.left}%; top:${card.top}%; width:${card.width}%; --i:${i};`}
+                    style:z-index={i + 1}
+                >
+                    <img
+                        class="card-deck__card-img"
+                        src={card.src}
+                        alt={`${card.name} placeholder card`}
+                        loading="eager"
+                        decoding="async"
+                    />
+                    <img
+                        class="card-deck__cloud-mascot"
+                        src="/cloud.svg"
+                        alt=""
+                        aria-hidden="true"
+                    />
+                </div>
+            ) : (
+                <img
+                    class="card-deck__card"
+                    src={card.src}
+                    alt={`${card.name} placeholder card`}
+                    style={`left:${card.left}%; top:${card.top}%; width:${card.width}%; --i:${i};`}
+                    style:z-index={i + 1}
+                    loading="eager"
+                    decoding="async"
+                />
+            ),
+        )
+    }
+</div>
+
+<span class="card-deck__mobile-hint" aria-hidden="true">Tap to explore ✦</span>
+
+<style>
+    .card-deck {
+        position: relative;
+        width: 100%;
+        max-width: 68rem;
+        aspect-ratio: 2226 / 812;
+        margin-inline: auto;
+        perspective: 800px;
+    }
+
+    .card-deck__card {
+        position: absolute;
+        height: auto;
+        display: block;
+        transform: translateY(var(--rest-y, 0)) scale(1);
+        transform-origin: bottom center;
+        opacity: 0;
+        filter: drop-shadow(0 12px 20px rgba(20, 20, 20, 0.22));
+        animation: card-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: calc(300ms + var(--i) * 150ms);
+        transition:
+            transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+            filter 0.35s ease;
+        cursor: pointer;
+        will-change: transform;
+    }
+
+    .card-deck__card:hover {
+        filter: drop-shadow(0 34px 34px rgba(10, 10, 10, 0.55));
+        z-index: 10 !important;
+    }
+
+    /* black card wrapper + cloud overlay */
+    .card-deck__card--black {
+        position: absolute;
+        display: block;
+        transform: translateY(var(--rest-y, 0)) scale(1);
+        transform-origin: bottom center;
+        opacity: 0;
+        filter: drop-shadow(0 12px 20px rgba(20, 20, 20, 0.22));
+        animation: card-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: calc(300ms + var(--i) * 150ms);
+        transition:
+            transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+            filter 0.35s ease;
+        cursor: pointer;
+        will-change: transform;
+    }
+
+    .card-deck__card--black:hover {
+        filter: drop-shadow(0 34px 34px rgba(10, 10, 10, 0.55));
+        z-index: 10 !important;
+    }
+
+    .card-deck__card-img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    @keyframes card-in {
+        from {
+            opacity: 0;
+            transform: translateY(6%) scale(0.85);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* ---------- cloud mascot ---------- */
+    .card-deck__cloud-mascot {
+        position: absolute;
+        left: 50%;
+        top: -15%;
+        width: 60%;
+        height: auto;
+        transform: translateX(-50%);
+        opacity: 0;
+        animation: card-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: calc(300ms + var(--i) * 150ms);
+        z-index: 20;
+        pointer-events: none;
+    }
+
+    /* ---------- mobile hint (hidden on desktop) ---------- */
+    .card-deck__mobile-hint {
+        display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .card-deck__card,
+        .card-deck__card--black,
+        .card-deck__cloud-mascot {
+            animation: none;
+            opacity: 1;
+        }
+        .card-deck__card:hover,
+        .card-deck__card--black:hover {
+            transform: none;
+        }
+    }
+
+    /* ---------- mobile: stacked pile, tap to fan out along an arc ---------- */
+    @media (max-width: 720px) {
+        .card-deck {
+            aspect-ratio: auto;
+            height: min(78vw, 380px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2.5rem; /* room for the hint label below the pile */
+        }
+
+        .card-deck__card,
+        .card-deck__card--black {
+            position: absolute;
+            top: 55% !important;
+            left: 50% !important;
+            width: min(58vw, 180px) !important;
+            transform-origin: 50% 100%;
+            transition: transform 0.55s cubic-bezier(0.2, 0.9, 0.25, 1);
+            transition-delay: 0ms;
+            cursor: pointer;
+            animation: none;
+            opacity: 1 !important;
+            transform: translate(-50%, -50%) rotate(var(--stack-rot, 0deg));
+        }
+
+        .card-deck__card img,
+        .card-deck__card--black img,
+        .card-deck__card-img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 14px;
+        }
+
+        /* stacked: slight rotation per card so it reads as a pile, not one flat card */
+        .card-deck__card:nth-child(1) {
+            --stack-rot: -6deg;
+            z-index: 1;
+        }
+        .card-deck__card:nth-child(2) {
+            --stack-rot: -3deg;
+            z-index: 2;
+        }
+        .card-deck__card:nth-child(3) {
+            --stack-rot: 0deg;
+            z-index: 3;
+        }
+        .card-deck__card:nth-child(4) {
+            --stack-rot: 3deg;
+            z-index: 4;
+        }
+        .card-deck__card:nth-child(5),
+        .card-deck__card--black:nth-child(5) {
+            --stack-rot: 6deg;
+            z-index: 5;
+        }
+
+        /* spread: fan out along an arc (left/right + lift), staggered by distance from center */
+        .card-deck--spread .card-deck__card:nth-child(1) {
+            transform: translate(calc(-50% - 68px), calc(-50% - 18px))
+                rotate(-26deg) scale(1.04);
+            transition-delay: 0ms;
+        }
+        .card-deck--spread .card-deck__card:nth-child(2) {
+            transform: translate(calc(-50% - 34px), calc(-50% - 4px))
+                rotate(-13deg) scale(1.04);
+            transition-delay: 40ms;
+        }
+        .card-deck--spread .card-deck__card:nth-child(3) {
+            transform: translate(-50%, -50%) rotate(0deg) scale(1.06);
+            transition-delay: 80ms;
+        }
+        .card-deck--spread .card-deck__card:nth-child(4) {
+            transform: translate(calc(-50% + 34px), calc(-50% - 4px))
+                rotate(13deg) scale(1.04);
+            transition-delay: 40ms;
+        }
+        .card-deck--spread .card-deck__card:nth-child(5),
+        .card-deck--spread .card-deck__card--black:nth-child(5) {
+            transform: translate(calc(-50% + 68px), calc(-50% - 18px))
+                rotate(26deg) scale(1.04);
+            transition-delay: 0ms;
+        }
+
+        .card-deck__cloud-mascot {
+                        top: -20%;
+                        left: 70%;
+                        width: 58% !important;
+                        opacity: 1 !important;
+                        animation: none;
+                        z-index: 20;
+                    }
+          }
+
+        .card-deck__mobile-hint {
+            display: block;
+            position: absolute;
+            bottom: -2.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            letter-spacing: 0.02em;
+            color: rgba(20, 20, 20, 0.55);
+            white-space: nowrap;
+            animation: hint-pulse 1.8s ease-in-out infinite;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .card-deck--interacted .card-deck__mobile-hint {
+            opacity: 0;
+        }
+    }
+
+    @keyframes hint-pulse {
+        0%,
+        100% {
+            opacity: 0.5;
+            transform: translateX(-50%) translateY(0);
+        }
+        50% {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-3px);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .card-deck__mobile-hint {
+            animation: none;
+        }
+    }
+</style>
+
+<script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+        const deck = document.querySelector(".card-deck");
+        const isMobileLayout = () => window.innerWidth <= 720;
+
+        // Tap to toggle spread on mobile
+        deck.addEventListener("click", (e) => {
+            if (!isMobileLayout()) return;
+            e.stopPropagation();
+            deck.classList.toggle("card-deck--spread");
+        });
+    });
+</script>

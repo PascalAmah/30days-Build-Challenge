@@ -1,0 +1,218 @@
+---
+import CardDeck from "./CardDeck.astro";
+---
+
+<section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+
+    <header class="hero__nav">
+        <a class="logo" href="/">
+            <img class="logo__img" src="/logo.svg" alt="WEME" />
+        </a>
+        <a class="btn btn--cta hero__nav-cta" href="#book"
+            >Book Your Free Intro Call</a
+        >
+        <button
+            class="btn btn--cta hero__nav-menu"
+            type="button"
+            aria-label="Open menu">Menu</button
+        >
+    </header>
+
+    <div class="hero__content">
+        <h1 class="hero__title">
+            <span class="hero__line" style="--d:0"
+                >Give Your ideas a glow up.</span
+            >
+            <span class="hero__line" style="--d:1"
+                >Meet your new AI creative</span
+            >
+            <span class="hero__line" style="--d:2"
+                ><span class="hero__highlight">collaborator.</span></span
+            >
+        </h1>
+        <p class="hero__subtitle">
+            Capture, organize, and elevate your ideas across work, life and
+            leisure
+        </p>
+    </div>
+
+    <CardDeck />
+
+    <ul class="logos">
+        <li><img src="/github.svg" alt="GitHub" /></li>
+        <li><img src="/vercel.svg" alt="Vercel" /></li>
+        <li><img src="/linkedin.svg" alt="LinkedIn" /></li>
+        <li><img src="/calcom.svg" alt="Cal.com" /></li>
+    </ul>
+</section>
+
+<style>
+    .hero {
+        position: relative;
+        min-height: 100vh;
+        background: var(--bg) url("/background.webp") center / cover no-repeat;
+        overflow: hidden;
+        padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 7vw, 6rem) 4rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ---------- nav ---------- */
+    .hero__nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 1.5rem;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        text-decoration: none;
+    }
+    .logo__img {
+        height: 2.5rem;
+        width: auto;
+    }
+
+    .btn--cta {
+        font-family: "Inter Tight", var(--font-body);
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        text-align: center;
+        color: #5e0044;
+        width: auto;
+        height: 50px;
+        background: linear-gradient(351.66deg, #ff59d1 7.28%, #fdb9ea 93.58%);
+        border: none;
+        border-radius: 100px;
+        padding: 16px 28px;
+        box-shadow:
+            inset 0px -2px 2px 0px #0000001a,
+            inset 0px 1px 2px 0px #ffffff99;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+    .btn--cta:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            inset 0px -2px 2px 0px #0000001a,
+            inset 0px 1px 2px 0px #ffffff99,
+            0 8px 24px -6px rgba(255, 89, 209, 0.4);
+    }
+    .hero__nav-menu {
+        display: none;
+    }
+
+    /* ---------- headline ---------- */
+    .hero__content {
+        max-width: 62rem;
+        margin: clamp(2.5rem, 8vh, 5.5rem) auto 0;
+        text-align: center;
+    }
+
+    .hero__title {
+        font-family: "Cal Sans", var(--font-display);
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        font-size: clamp(2rem, 5vw, 60px);
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.15em;
+    }
+
+    .hero__line {
+        display: block;
+        overflow: hidden;
+        opacity: 0;
+        animation: reveal-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: calc(0.3s + var(--d) * 0.3s);
+    }
+
+    .hero__highlight {
+        background: var(--highlight);
+        line-height: 0.85;
+        display: inline-block;
+    }
+
+    .hero__subtitle {
+        margin: 1.5rem auto 0;
+        max-width: 34rem;
+        font-family: "Inter Tight", var(--font-body);
+        font-weight: 400;
+        font-size: clamp(1rem, 2vw, 22px);
+        line-height: 1.5;
+        letter-spacing: 0;
+        color: var(--muted);
+        opacity: 0;
+        animation: reveal-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: 1.3s;
+    }
+
+    @keyframes reveal-up {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ---------- logo strip ---------- */
+    .logos {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(1.5rem, 5vw, 3.5rem);
+        margin: clamp(2rem, 6vh, 3.5rem) 0 0;
+        padding: 0;
+    }
+
+    .logos img {
+        display: block;
+        height: clamp(1.4rem, 2.5vw, 1.8rem);
+        width: auto;
+        opacity: 0.7;
+        transition: opacity 0.2s ease;
+    }
+
+    .logos img:hover {
+        opacity: 1;
+    }
+
+    @media (max-width: 720px) {
+        .hero__nav-cta {
+            display: none;
+        }
+        .hero__nav-menu {
+            display: inline-block;
+        }
+        .hero__content {
+            margin-top: 2rem;
+        }
+        .logos {
+            gap: 1.5rem 2.5rem;
+        }
+    }
+</style>
