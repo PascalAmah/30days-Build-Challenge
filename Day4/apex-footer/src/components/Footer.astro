@@ -1,0 +1,611 @@
+---
+// cx / cy are centroid positions (px) inside a 1440 x 300 reference strip.
+// w / h are the *intrinsic* size of each blob image (rotation is baked
+// into the artwork itself, so no extra CSS rotation is applied to the shape —
+// only the text label is rotated to match the art).
+const blobs = [
+    {
+        img: "blob_1.png",
+        label: "MARKETING",
+        color: "#37B669",
+        cx: 111,
+        cy: 206,
+        angle: -12.5,
+        w: 209,
+        h: 135,
+    },
+    {
+        img: "blob_2.png",
+        label: "STRATEGY",
+        color: "#F4FF77",
+        cx: 193,
+        cy: 121,
+        angle: 0,
+        w: 184,
+        h: 79,
+    },
+    {
+        img: "blob_3.png",
+        label: "BRANDING",
+        color: "#ED5D3A",
+        cx: 311,
+        cy: 208,
+        angle: 10.6,
+        w: 190,
+        h: 105,
+    },
+    {
+        img: "blob_4.png",
+        label: "SALES",
+        color: "#659DF5",
+        cx: 405,
+        cy: 118,
+        angle: 24.4,
+        w: 200,
+        h: 154,
+    },
+    {
+        img: "blob_5.png",
+        label: "WEBSITE DEV",
+        color: "#FCCEF0",
+        cx: 487,
+        cy: 201,
+        angle: -22.0,
+        w: 200,
+        h: 142,
+    },
+    {
+        img: "blob_6.png",
+        label: "FRAMER DEV",
+        color: "#FBF8E9",
+        cx: 663,
+        cy: 248,
+        angle: 11.2,
+        w: 197,
+        h: 101,
+    },
+    {
+        img: "blob_7.png",
+        label: "WEBFLOW",
+        color: "#6AEA9C",
+        cx: 739,
+        cy: 165,
+        angle: -19.4,
+        w: 200,
+        h: 136,
+    },
+    {
+        img: "blob_8.png",
+        label: "NEWSLETTER",
+        color: "#ED5D3A",
+        cx: 857,
+        cy: 231,
+        angle: -16.7,
+        w: 194,
+        h: 121,
+    },
+    {
+        img: "blob_9.png",
+        label: "UIUX DESIGN",
+        color: "#659DF5",
+        cx: 950,
+        cy: 127,
+        angle: 9.6,
+        w: 190,
+        h: 105,
+    },
+    {
+        img: "blob_10.png",
+        label: "PORTFOLIO",
+        color: "#F4FF77",
+        cx: 1024,
+        cy: 219,
+        angle: -49.3,
+        w: 185,
+        h: 166,
+    },
+    {
+        img: "blob_11.png",
+        label: "AI DESIGNS",
+        color: "#FBF8E9",
+        cx: 1163,
+        cy: 236,
+        angle: 15.5,
+        w: 229,
+        h: 124,
+    },
+    {
+        img: "blob_12.png",
+        label: "ILLUSTRATION",
+        color: "#FE99B6",
+        cx: 1231,
+        cy: 117,
+        angle: 25.3,
+        w: 200,
+        h: 154,
+    },
+    {
+        img: "blob_13.png",
+        label: "ADVERTISEMENT",
+        color: "#659DF5",
+        cx: 1341,
+        cy: 220,
+        angle: 7.6,
+        w: 179,
+        h: 101,
+    },
+];
+
+// text color inside each blob (white text on the darker/saturated blobs,
+// dark text on the pale ones), matching the reference art.
+function textColor(hex: string) {
+    const pale = ["#F4FF77", "#FCCEF0", "#FBF8E9"];
+    return pale.includes(hex) ? "#1a1a18" : "#ffffff";
+}
+
+const quickLinks = ["Home", "About", "Services", "Contact"];
+const products = ["Ai Assistant", "Mobile App", "Account", "Credit Card"];
+const company = ["About", "Privacy Policy", "Support", "Terms of Service"];
+---
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-top">
+            <h2 class="headline fade-up" style="--d:0ms">
+                Thank you for your curiosity.<br class="line-break" />
+                Let&rsquo;s build something cool.
+                <img
+                    class="hand-icon hand-icon--inline"
+                    src="/hand.svg"
+                    alt=""
+                    aria-hidden="true"
+                />
+            </h2>
+            <img
+                class="hand-icon hand-icon--float fade-up"
+                style="--d:150ms"
+                src="/hand.svg"
+                alt=""
+                aria-hidden="true"
+            />
+        </div>
+
+        <hr class="divider" />
+
+        <div class="footer-main">
+            <div class="brand">
+                <div class="brand-name">
+                    <img
+                        class="logo fade-up"
+                        style="--d:300ms"
+                        src="/logo-icon.svg"
+                        alt="Apex"
+                    />
+                    <span class="fade-up" style="--d:350ms"
+                        >Apex<sup>TM</sup></span
+                    >
+                </div>
+                <p class="tagline fade-up" style="--d:400ms">
+                    Smarter tools for modern finance teams.<br />All rights
+                    reserved.
+                </p>
+            </div>
+
+            <div class="link-columns">
+                <nav class="link-col fade-up" style="--d:500ms">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        {
+                            quickLinks.map((l) => (
+                                <li>
+                                    <a href="#">{l}</a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </nav>
+                <nav class="link-col fade-up" style="--d:600ms">
+                    <h3>Products</h3>
+                    <ul>
+                        {
+                            products.map((l) => (
+                                <li>
+                                    <a href="#">{l}</a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </nav>
+                <nav class="link-col fade-up" style="--d:700ms">
+                    <h3>Company</h3>
+                    <ul>
+                        {
+                            company.map((l) => (
+                                <li>
+                                    <a href="#">{l}</a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <hr class="divider divider-bottom" />
+    </div>
+
+    <div class="blob-strip" id="blob-strip">
+        <div class="blob-track">
+            {
+                blobs.map((b, i) => (
+                    <div
+                        class="blob"
+                        style={`--x:${b.cx}px; --y:${b.cy}px; --w:${b.w}px; --h:${b.h}px; --delay:${i * 90}ms;`}
+                    >
+                        <div
+                            class="blob-shape"
+                            style={`--mask-url:url(/images/${b.img}); background-color:${b.color};`}
+                        />
+                        <span
+                            class="blob-label"
+                            style={`transform: translate(-50%,-50%) rotate(${b.angle}deg); color:${textColor(b.color)};`}
+                        >
+                            {b.label}
+                        </span>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</footer>
+
+<script>
+    const footer = document.querySelector(".site-footer");
+    if (footer) {
+        const io = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        footer.classList.add("in-view");
+                        io.disconnect();
+                    }
+                }
+            },
+            { threshold: 0.1 },
+        );
+        io.observe(footer);
+    }
+</script>
+
+<style>
+    .site-footer {
+        background: #181818;
+        color: #fff;
+        font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+        overflow: hidden;
+    }
+
+    .fade-up {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+            opacity 0.6s ease,
+            transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+        transition-delay: var(--d, 0ms);
+    }
+
+    .site-footer.in-view .fade-up {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .footer-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 56px 88px 0;
+    }
+
+    @media (max-width: 900px) {
+        .footer-inner {
+            padding: 28px 28px 0;
+        }
+    }
+
+    .footer-top {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .headline {
+        font-family: "Phudu", "Arial Black", sans-serif;
+        font-weight: 600;
+        font-style: semibold;
+        text-transform: uppercase;
+        font-size: clamp(28px, 3.6vw, 44px);
+        line-height: 1.12;
+        letter-spacing: -0.01em;
+        margin: 0;
+        max-width: 900px;
+    }
+
+    .hand-icon {
+        width: clamp(36px, 4vw, 56px);
+        height: auto;
+        flex-shrink: 0;
+    }
+
+    .hand-icon--float {
+    }
+
+    .hand-icon--inline {
+        display: none;
+    }
+
+    @media (max-width: 700px) {
+        .footer-top {
+            display: block;
+        }
+        .line-break {
+            display: none;
+        }
+        .headline {
+            max-width: none;
+        }
+        .hand-icon--float {
+            display: none;
+        }
+        .hand-icon--inline {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+            width: 32px;
+        }
+        .site-footer.in-view .blob {
+            animation: blobDropMobile 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)
+                var(--delay) forwards;
+        }
+    }
+
+    .divider {
+        border: none;
+        height: 1px;
+        background: repeating-linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.18) 0,
+            rgba(255, 255, 255, 0.18) 8px,
+            transparent 8px,
+            transparent 16px
+        );
+        margin: 44px 0;
+    }
+
+    .footer-main {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+
+    .brand-name {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 24px;
+        font-weight: 400;
+    }
+
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .brand-name sup {
+        font-size: 10px;
+    }
+
+    .tagline {
+        margin: 18px 0 0;
+        color: #999;
+        font-size: 14.5px;
+        line-height: 1.6;
+    }
+
+    .link-columns {
+        display: flex;
+        gap: 64px;
+    }
+
+    .link-col h3 {
+        font-family: "Manrope", sans-serif;
+        margin: 0 0 20px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .link-col ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .link-col a {
+        color: #8f8f8f;
+        text-decoration: none;
+        font-size: 14.5px;
+        transition: color 0.2s ease;
+    }
+
+    .link-col a:hover,
+    .link-col a:focus-visible {
+        color: #fff;
+    }
+
+    @media (max-width: 900px) {
+        .footer-main {
+            flex-direction: column;
+            gap: 32px;
+        }
+        .link-columns {
+            flex-wrap: wrap;
+            row-gap: 32px;
+            column-gap: 40px;
+        }
+    }
+
+    .blob-strip {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 40px;
+        padding-bottom: 14px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+    }
+
+    .blob-strip::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .blob-strip::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+
+    .blob-strip::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .blob-track {
+        flex-shrink: 0;
+        position: relative;
+        width: 1440px;
+        height: 300px;
+    }
+
+    .blob {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--w);
+        height: var(--h);
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .site-footer.in-view .blob {
+        animation: blobDrop 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--delay)
+            forwards;
+    }
+
+    @keyframes blobDropMobile {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, calc(-50% - 60px)) scale(0.15);
+        }
+        60% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(0.55);
+        }
+        100% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(0.55);
+        }
+    }
+
+    @keyframes blobDrop {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, calc(-50% - 80px)) scale(0.3);
+        }
+        60% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        100% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    .blob-shape {
+        position: absolute;
+        inset: 0;
+        -webkit-mask-image: var(--mask-url);
+        mask-image: var(--mask-url);
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        transition: transform 0.35s ease;
+    }
+
+    .blob-label {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        font-family: "Inter", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        text-decoration: line-through;
+        text-decoration-thickness: 1.5px;
+        pointer-events: none;
+        transition: text-decoration-color 0.2s ease;
+    }
+
+    .blob:hover .blob-shape {
+        animation: jiggle 0.42s ease;
+    }
+
+    .blob:hover .blob-label {
+        text-decoration: none;
+    }
+
+    @keyframes jiggle {
+        0% {
+            transform: rotate(0deg) scale(1);
+        }
+        20% {
+            transform: rotate(-4deg) scale(1.03);
+        }
+        40% {
+            transform: rotate(4deg) scale(1.03);
+        }
+        60% {
+            transform: rotate(-3deg) scale(1.02);
+        }
+        80% {
+            transform: rotate(2deg) scale(1.01);
+        }
+        100% {
+            transform: rotate(0deg) scale(1);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .blob,
+        .blob-shape {
+            transition: none;
+            animation: none;
+        }
+        .blob-strip .blob {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+</style>

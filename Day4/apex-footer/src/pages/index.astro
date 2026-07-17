@@ -1,0 +1,40 @@
+---
+import Footer from "../components/Footer.astro";
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/logo-icon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Apex — Footer</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600&family=Phudu:wght@900&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <Footer />
+    </body>
+</html>
+
+<style is:global>
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: #181818;
+        font-family: "Inter", sans-serif;
+    }
+</style>
