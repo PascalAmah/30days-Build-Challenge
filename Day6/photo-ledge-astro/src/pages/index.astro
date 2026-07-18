@@ -186,7 +186,7 @@ function placeholder(from: string, to: string, label: string): string {
                         >Drag the photos and arrange them</span
                     >
                     <span class="hint-mobile"
-                        >tap a photo to pick it up, tap again to place it</span
+                        >touch and hold to drag, release to drop</span
                     >
                 </p>
             </header>
@@ -228,11 +228,10 @@ function placeholder(from: string, to: string, label: string): string {
         <script>
             // -----------------------------------------------------------------
             // Interaction model
-            //  - mouse / trackpad / pen: press → drag → release, with the card
-            //    tilting into the direction of the swipe (like a loose photo
-            //    sliding on a table), then settling flat when you let go.
-            //  - touch: tap lifts the card (it follows your finger without
-            //           needing to stay pressed on it), a second tap sets it down
+            //  - All pointer types (mouse / trackpad / pen / touch):
+            //    press-and-hold → drag → release to drop
+            //  - Card tilts into the direction of the swipe during drag,
+            //    then smoothly settles back to its resting rotation on release.
             // -----------------------------------------------------------------
             const board = document.getElementById("board") as HTMLElement;
             const cards = Array.from(
@@ -240,8 +239,7 @@ function placeholder(from: string, to: string, label: string): string {
             );
 
             let topZ = cards.length + 1;
-            let heldCard: HTMLElement | null = null; // touch "pick up" mode
-            let dragCard: HTMLElement | null = null; // mouse/pen drag mode
+            let dragCard: HTMLElement | null = null; // pointer drag mode
             let offsetX = 0;
             let offsetY = 0;
             let lastX = 0;
@@ -345,48 +343,15 @@ function placeholder(from: string, to: string, label: string): string {
 
             cards.forEach((card) => {
                 card.addEventListener("pointerdown", (e: PointerEvent) => {
-                    const isTouch = e.pointerType === "touch";
-
-                    if (!isTouch) {
-                        // --- Desktop / pen: begin a normal drag ---
-                        e.preventDefault();
-                        dragCard = card;
-                        bringToFront(card);
-                        beginLift(card, e.pointerType);
-                        card.setPointerCapture(e.pointerId);
-                        const r = card.getBoundingClientRect();
-                        offsetX = e.clientX - r.left;
-                        offsetY = e.clientY - r.top;
-                        lastX = e.clientX;
-                        return;
-                    }
-
-                    // --- Touch: tap to pick up / tap again to place ---
+                    // All pointer types — press and drag, release to drop
                     e.preventDefault();
-                    if (heldCard === card) {
-                        // Second tap on the held card: place it right here.
-                        settle(card);
-                        heldCard = null;
-                        return;
-                    }
-                    if (heldCard) {
-                        // A different card is already held — drop it where this tap is.
-                        const r = heldCard.getBoundingClientRect();
-                        placeAt(
-                            heldCard,
-                            e.clientX,
-                            e.clientY,
-                            r.width / 2,
-                            r.height / 2,
-                        );
-                        settle(heldCard);
-                        heldCard = null;
-                        return;
-                    }
-                    // Pick this one up.
-                    heldCard = card;
+                    dragCard = card;
                     bringToFront(card);
                     beginLift(card, e.pointerType);
+                    card.setPointerCapture(e.pointerId);
+                    const r = card.getBoundingClientRect();
+                    offsetX = e.clientX - r.left;
+                    offsetY = e.clientY - r.top;
                     lastX = e.clientX;
                 });
             });
@@ -395,16 +360,6 @@ function placeholder(from: string, to: string, label: string): string {
                 if (dragCard) {
                     placeAt(dragCard, e.clientX, e.clientY, offsetX, offsetY);
                     updateTilt(dragCard, e.clientX);
-                } else if (heldCard && e.pointerType === "touch") {
-                    const r = heldCard.getBoundingClientRect();
-                    placeAt(
-                        heldCard,
-                        e.clientX,
-                        e.clientY,
-                        r.width / 2,
-                        r.height / 2,
-                    );
-                    updateTilt(heldCard, e.clientX);
                 }
             });
 
@@ -415,37 +370,26 @@ function placeholder(from: string, to: string, label: string): string {
                 }
             });
 
-            // Tapping empty board space places a currently-held card there too.
-            board.addEventListener("pointerdown", (e: PointerEvent) => {
-                if (e.target === board && heldCard) {
-                    const r = heldCard.getBoundingClientRect();
-                    placeAt(
-                        heldCard,
-                        e.clientX,
-                        e.clientY,
-                        r.width / 2,
-                        r.height / 2,
-                    );
-                    settle(heldCard);
-                    heldCard = null;
-                }
-            });
-
             // Keyboard support: Enter/Space picks up, arrow keys nudge, Enter/Space again drops.
+            let keyboardCard: HTMLElement | null = null;
+
             cards.forEach((card) => {
                 card.addEventListener("keydown", (e: KeyboardEvent) => {
                     if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
-                        if (heldCard === card) {
+                        if (keyboardCard === card) {
                             settle(card);
-                            heldCard = null;
+                            keyboardCard = null;
                         } else {
-                            heldCard = card;
+                            keyboardCard = card;
                             bringToFront(card);
                             beginLift(card, "keyboard");
                             card.style.setProperty("--live-rot", "0deg");
                         }
-                    } else if (heldCard === card && e.key.startsWith("Arrow")) {
+                    } else if (
+                        keyboardCard === card &&
+                        e.key.startsWith("Arrow")
+                    ) {
                         e.preventDefault();
                         const step = e.shiftKey ? 24 : 8;
                         const style = card.style;
