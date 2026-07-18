@@ -8,7 +8,7 @@ const plans = [
         yearlyMonthly: 249,
         save: 15,
         color: "blue",
-        checkStyle: "outline",
+        checkStyle: "filled",
     },
     {
         id: "advanced",
@@ -42,7 +42,6 @@ const features = [
 ];
 ---
 
-<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -75,13 +74,13 @@ const features = [
                             type="button"
                             class="toggle-btn"
                             data-period="monthly"
-                            aria-pressed="false">Monthly</button
+                            aria-pressed="true">Monthly</button
                         >
                         <button
                             type="button"
                             class="toggle-btn"
                             data-period="yearly"
-                            aria-pressed="true">Yearly</button
+                            aria-pressed="false">Yearly</button
                         >
                         <span class="toggle-thumb" aria-hidden="true"></span>
                     </div>
@@ -242,7 +241,29 @@ const features = [
                 margin: 0 auto;
             }
 
+            @keyframes fadeUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(24px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
             .eyebrow {
+                animation: fadeUp 0.6s ease both;
+                animation-delay: 0.05s;
                 margin: 0 0 18px;
                 font-size: 14px;
                 color: var(--muted);
@@ -250,6 +271,8 @@ const features = [
             }
 
             h1 {
+                animation: fadeUp 0.6s ease both;
+                animation-delay: 0.1s;
                 margin: 0 0 22px;
                 font-size: clamp(34px, 5vw, 52px);
                 line-height: 1.08;
@@ -259,6 +282,8 @@ const features = [
             }
 
             .subtitle {
+                animation: fadeUp 0.6s ease both;
+                animation-delay: 0.15s;
                 margin: 0 auto 40px;
                 font-size: 17px;
                 line-height: 1.6;
@@ -272,6 +297,8 @@ const features = [
             }
 
             .toggle-row {
+                animation: fadeUp 0.6s ease both;
+                animation-delay: 0.2s;
                 display: inline-flex;
                 align-items: center;
                 gap: 12px;
@@ -342,44 +369,53 @@ const features = [
             }
 
             .card-frame {
+                animation: fadeIn 0.6s ease both;
+                animation-delay: calc(0.3s + var(--stagger) * 0.1s);
                 position: relative;
                 border-radius: 30px;
-                padding: 8px;
+                padding: 6px;
                 background: transparent;
+                text-align: center;
                 transition:
                     background 0.35s ease,
                     transform 0.35s ease;
             }
 
-            .card-frame[data-plan="essential"],
+            .card-frame[data-active="true"],
             .card-frame:hover,
             .card-frame:focus-within {
                 transform: translateY(-6px);
             }
 
-            .badge {
-                margin: 0;
-                text-align: center;
-                font-size: 13px;
-                font-weight: 600;
-                padding: 13px 0 34px;
-                opacity: 0;
-                transform: translateY(-6px);
-                transition:
-                    opacity 0.3s ease,
-                    transform 0.3s ease;
-            }
-
-            .card-frame[data-plan="essential"] .badge,
+            .card-frame[data-active="true"] .badge,
             .card-frame:hover .badge,
             .card-frame:focus-within .badge {
                 opacity: 1;
                 transform: translateY(0);
             }
 
-            .page.is-monthly .badge {
+            .page.is-yearly .badge {
                 opacity: 0 !important;
                 transform: translateY(-6px) !important;
+                margin: 0 !important;
+                padding: 20px !important;
+                height: 0;
+                overflow: hidden;
+            }
+
+            .badge {
+                display: inline-block;
+                margin: 13px 0 34px;
+                font-size: 13px;
+                font-weight: 600;
+                padding: 6px 20px;
+                background: var(--badge-bg);
+                border-radius: 999px;
+                opacity: 0;
+                transform: translateY(-6px);
+                transition:
+                    opacity 0.3s ease,
+                    transform 0.3s ease;
             }
 
             .card-white {
@@ -389,12 +425,13 @@ const features = [
                 padding: 36px 32px 34px;
                 border: 1px solid var(--card-border);
                 margin-top: -26px;
+                text-align: left;
                 transition:
                     margin-top 0.3s ease,
                     box-shadow 0.35s ease;
             }
 
-            .card-frame[data-plan="essential"] .card-white,
+            .card-frame[data-active="true"] .card-white,
             .card-frame:hover .card-white,
             .card-frame:focus-within .card-white {
                 margin-top: 0;
@@ -405,26 +442,39 @@ const features = [
                 margin-top: -26px !important;
             }
 
+            .page.is-yearly .card-white {
+                margin-top: 0 !important;
+            }
+
             .card-frame[data-color="blue"] {
                 --frame: var(--blue-frame);
                 --badge-text: var(--blue-badge-text);
                 --accent: var(--blue);
+                --badge-bg: #edf0ff;
             }
             .card-frame[data-color="green"] {
                 --frame: var(--green-frame);
                 --badge-text: var(--green-badge-text);
                 --accent: var(--green);
+                --badge-bg: #e5ffe4;
             }
             .card-frame[data-color="purple"] {
                 --frame: var(--purple-frame);
                 --badge-text: var(--purple-badge-text);
                 --accent: var(--purple);
+                --badge-bg: #fbecff;
             }
 
-            .card-frame[data-plan="essential"],
+            .card-frame[data-active="true"],
             .card-frame:hover,
             .card-frame:focus-within {
                 background: var(--frame);
+            }
+
+            .page.is-yearly .card-frame[data-active="true"],
+            .page.is-yearly .card-frame:hover,
+            .page.is-yearly .card-frame:focus-within {
+                padding: 6px;
             }
 
             .badge {
@@ -448,7 +498,7 @@ const features = [
 
             .price {
                 display: flex;
-                align-items: baseline;
+                align-items: center;
                 gap: 10px;
                 margin: 0 0 24px;
             }
@@ -464,6 +514,7 @@ const features = [
             .price-meta {
                 display: flex;
                 flex-direction: column;
+                justify-content: center;
                 line-height: 1.3;
             }
 
@@ -501,7 +552,7 @@ const features = [
                 color: var(--ink);
             }
 
-            .card-frame[data-plan="essential"] .cta,
+            .card-frame[data-active="true"] .cta,
             .card-frame:hover .cta,
             .card-frame:focus-within .cta {
                 background: var(--button-blue);
@@ -554,14 +605,14 @@ const features = [
                 color: transparent;
             }
 
-            .card-frame[data-plan="essential"] .check--outline,
+            .card-frame[data-active="true"] .check--outline,
             .card-frame:hover .check--outline,
             .card-frame:focus-within .check--outline {
                 border-color: var(--accent);
                 color: var(--accent);
             }
 
-            .card-frame[data-plan="essential"] .check--filled,
+            .card-frame[data-active="true"] .check--filled,
             .card-frame:hover .check--filled,
             .card-frame:focus-within .check--filled {
                 background: var(--accent);
@@ -586,9 +637,12 @@ const features = [
             }
 
             @media (max-width: 860px) {
+                .page {
+                    padding: 48px 20px 64px;
+                }
                 .cards {
                     grid-template-columns: 1fr;
-                    max-width: 380px;
+                    max-width: 400px;
                     margin-left: auto;
                     margin-right: auto;
                 }
@@ -599,9 +653,57 @@ const features = [
                 }
             }
 
+            @media (max-width: 480px) {
+                .page {
+                    padding: 32px 16px 48px;
+                }
+                h1 {
+                    font-size: 28px;
+                }
+                .subtitle {
+                    font-size: 15px;
+                }
+                .toggle-row {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+                .toggle-btn {
+                    padding: 8px 16px;
+                    font-size: 13px;
+                }
+                .save-hint {
+                    font-size: 12px;
+                }
+                .cards {
+                    margin-top: 40px;
+                    gap: 20px;
+                }
+                .card-white {
+                    padding: 24px 20px 26px;
+                }
+                .badge {
+                    font-size: 12px;
+                    padding: 5px 14px;
+                }
+                .price-amount {
+                    font-size: 32px;
+                }
+                .feature-list {
+                    gap: 12px;
+                }
+                .feature-list li {
+                    font-size: 13px;
+                }
+                .footnote {
+                    margin-top: 40px;
+                    font-size: 13px;
+                }
+            }
+
             @media (prefers-reduced-motion: reduce) {
                 * {
                     transition: none !important;
+                    animation: none !important;
                 }
             }
         </style>
@@ -617,6 +719,7 @@ const features = [
             function setPeriod(period: "monthly" | "yearly") {
                 toggle.dataset.active = period;
                 page.classList.toggle("is-monthly", period === "monthly");
+                page.classList.toggle("is-yearly", period === "yearly");
 
                 buttons.forEach((btn) => {
                     const active = btn.dataset.period === period;
@@ -638,7 +741,53 @@ const features = [
                 });
             });
 
-            setPeriod("yearly");
+            setPeriod("monthly");
+
+            /* ---- Active card management ---- */
+            const cardFrames =
+                document.querySelectorAll<HTMLElement>(".card-frame");
+            const cardsSection = document.querySelector<HTMLElement>(".cards");
+            const essentialCard = document.querySelector<HTMLElement>(
+                '.card-frame[data-plan="essential"]',
+            );
+
+            // Default: essential plan is active
+            essentialCard?.setAttribute("data-active", "true");
+
+            function clearActive() {
+                cardFrames.forEach((c) => c.removeAttribute("data-active"));
+            }
+
+            function setActive(card: HTMLElement) {
+                clearActive();
+                card.setAttribute("data-active", "true");
+            }
+
+            function resetActive() {
+                clearActive();
+                essentialCard?.setAttribute("data-active", "true");
+            }
+
+            cardFrames.forEach((card) => {
+                // Desktop hover
+                card.addEventListener("mouseenter", () => setActive(card));
+
+                // Mobile tap — toggle on/off
+                card.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    if (card.hasAttribute("data-active")) {
+                        resetActive();
+                    } else {
+                        setActive(card);
+                    }
+                });
+            });
+
+            // When mouse leaves all cards, restore essential
+            cardsSection?.addEventListener("mouseleave", () => resetActive());
+
+            // Tap outside cards resets to essential
+            document.addEventListener("click", () => resetActive());
         </script>
     </body>
 </html>
