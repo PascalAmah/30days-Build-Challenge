@@ -565,12 +565,15 @@ function placeholder(from: string, to: string, label: string): string {
             @media (max-width: 720px) {
                 html,
                 body {
-                    height: 100%;
+                    position: fixed;
+                    inset: 0;
                     overflow: hidden;
                 }
 
                 main {
-                    height: 100dvh;
+                    position: fixed;
+                    inset: 0;
+                    height: auto;
                     padding: 8px 10px 8px;
                     overflow: hidden;
                 }
