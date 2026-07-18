@@ -1,0 +1,725 @@
+---
+const plans = [
+    {
+        id: "essential",
+        name: "Essential plan",
+        desc: "Perfect for small teams handling payments and transfers daily.",
+        monthly: 293,
+        yearlyMonthly: 249,
+        save: 15,
+        color: "blue",
+        checkStyle: "filled",
+    },
+    {
+        id: "advanced",
+        name: "Advanced",
+        desc: "For small teams and startups sending, receiving and managing global payments.",
+        monthly: 599,
+        yearlyMonthly: 449,
+        save: 25,
+        color: "green",
+        checkStyle: "filled",
+    },
+    {
+        id: "global",
+        name: "Global plan",
+        desc: "Built for scaling companies with finance teams and compliance needs.",
+        monthly: 998,
+        yearlyMonthly: 549,
+        save: 45,
+        color: "purple",
+        checkStyle: "filled",
+    },
+];
+
+const features = [
+    "Up to 10 team seats",
+    "Role-based permissions",
+    "Tracking dashboard",
+    "Payment scheduling",
+    "Priority email support",
+    "Monthly finance reports",
+];
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Plans &amp; Pricing — Flexible pricing for growing banks</title>
+        <meta
+            name="description"
+            content="Optimize payment accuracy and manage transfers with secure workflows."
+        />
+        <link rel="icon" href="/favicon.svg" />
+    </head>
+    <body>
+        <main class="page">
+            <section class="hero">
+                <p class="eyebrow">Plans &amp; Pricing</p>
+                <h1>Flexible pricing for growing banks</h1>
+                <p class="subtitle">
+                    Optimize payment accuracy and manage <strong
+                        >transfers with secure workflows.</strong
+                    >
+                </p>
+
+                <div class="toggle-row">
+                    <div
+                        class="toggle"
+                        role="group"
+                        aria-label="Billing period"
+                    >
+                        <button
+                            type="button"
+                            class="toggle-btn"
+                            data-period="monthly"
+                            aria-pressed="true">Monthly</button
+                        >
+                        <button
+                            type="button"
+                            class="toggle-btn"
+                            data-period="yearly"
+                            aria-pressed="false">Yearly</button
+                        >
+                        <span class="toggle-thumb" aria-hidden="true"></span>
+                    </div>
+                    <span class="save-hint" aria-hidden="true">
+                        <svg
+                            width="26"
+                            height="18"
+                            viewBox="0 0 26 18"
+                            fill="none"
+                        >
+                            <path
+                                d="M1 17C6 6 14 1 24 3"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"></path>
+                            <path
+                                d="M17 1.5L24.5 3L21.5 10"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                        Save 20%
+                    </span>
+                </div>
+            </section>
+
+            <section class="cards" aria-label="Pricing plans">
+                {
+                    plans.map((plan, i) => (
+                        <article
+                            class="card-frame"
+                            data-color={plan.color}
+                            data-plan={plan.id}
+                            style={`--stagger:${i}`}
+                        >
+                            <p class="badge">
+                                Billed annually — save <span>{plan.save}</span>%
+                            </p>
+
+                            <div class="card-white">
+                                <h2>{plan.name}</h2>
+                                <p class="desc">{plan.desc}</p>
+
+                                <p class="price">
+                                    <span class="price-amount">
+                                        $
+                                        <span
+                                            class="price-number"
+                                            data-monthly={plan.monthly}
+                                            data-yearly={plan.yearlyMonthly}
+                                        >
+                                            {plan.yearlyMonthly}
+                                        </span>
+                                    </span>
+                                    <span class="price-meta">
+                                        <span class="price-unit">monthly</span>
+                                        <span class="price-sub">
+                                            billed annually
+                                        </span>
+                                    </span>
+                                </p>
+
+                                <button type="button" class="cta">
+                                    Start free trial
+                                </button>
+
+                                <hr />
+
+                                <ul class="feature-list">
+                                    {features.map((f) => (
+                                        <li>
+                                            <span
+                                                class={`check check--${plan.checkStyle}`}
+                                                aria-hidden="true"
+                                            >
+                                                <svg
+                                                    width="10"
+                                                    height="8"
+                                                    viewBox="0 0 10 8"
+                                                    fill="none"
+                                                >
+                                                    <path
+                                                        d="M1 4L3.5 6.5L9 1"
+                                                        stroke="currentColor"
+                                                        stroke-width="1.6"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            {f}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </article>
+                    ))
+                }
+            </section>
+
+            <p class="footnote">
+                All plans include a 14-day free trial. No credit card required.
+                Questions? <a href="#faq">See our FAQ →</a>
+            </p>
+        </main>
+
+        <style>
+            :root {
+                --ink: #14141c;
+                --muted: #74748a;
+                --bg: #f3f1ec;
+                --card-border: #e6e4de;
+                --blue: #4b57ea;
+                --blue-frame: #ccd0fa;
+                --blue-badge-text: #3d3ee0;
+                --green: #22a35a;
+                --green-frame: #c9f2cd;
+                --green-badge-text: #1b7d43;
+                --purple: #c026d3;
+                --purple-frame: #ecd0f4;
+                --purple-badge-text: #a21caf;
+                --button-blue: #3d4bec;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                background: var(--bg);
+                background-image: linear-gradient(
+                    90deg,
+                    rgba(0, 0, 0, 0.035) 1px,
+                    transparent 1px
+                );
+                background-size: 56px 100%;
+                font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+                color: var(--ink);
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .page {
+                max-width: 1180px;
+                margin: 0 auto;
+                padding: 88px 32px 96px;
+            }
+
+            .hero {
+                text-align: center;
+                max-width: 720px;
+                margin: 0 auto;
+            }
+
+            @keyframes fadeUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(24px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            .eyebrow {
+                animation: fadeUp 0.6s ease both;
+                animation-delay: 0.05s;
+                margin: 0 0 18px;
+                font-size: 14px;
+                color: var(--muted);
+                letter-spacing: 0.02em;
+            }
+
+            h1 {
+                animation: fadeUp 0.6s ease both;
+                animation-delay: 0.1s;
+                margin: 0 0 22px;
+                font-size: clamp(34px, 5vw, 52px);
+                line-height: 1.08;
+                letter-spacing: -0.01em;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+
+            .subtitle {
+                animation: fadeUp 0.6s ease both;
+                animation-delay: 0.15s;
+                margin: 0 auto 40px;
+                font-size: 17px;
+                line-height: 1.6;
+                color: #b3b1ab;
+                max-width: 480px;
+            }
+
+            .subtitle strong {
+                color: var(--ink);
+                font-weight: 600;
+            }
+
+            .toggle-row {
+                animation: fadeUp 0.6s ease both;
+                animation-delay: 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 12px;
+                position: relative;
+            }
+
+            .toggle {
+                position: relative;
+                display: inline-flex;
+                background: #fff;
+                border-radius: 999px;
+                padding: 4px;
+                box-shadow:
+                    0 1px 2px rgba(20, 20, 28, 0.06),
+                    0 0 0 1px rgba(20, 20, 28, 0.05);
+            }
+
+            .toggle-btn {
+                position: relative;
+                z-index: 1;
+                border: none;
+                background: transparent;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 9px 22px;
+                border-radius: 999px;
+                cursor: pointer;
+                color: var(--muted);
+                transition: color 0.25s ease;
+                font-family: inherit;
+            }
+
+            .toggle-btn[aria-pressed="true"] {
+                color: var(--ink);
+            }
+
+            .toggle-thumb {
+                position: absolute;
+                top: 4px;
+                bottom: 4px;
+                left: 4px;
+                width: calc(50% - 4px);
+                background: #eef0f2;
+                border-radius: 999px;
+                transition: transform 0.28s cubic-bezier(0.65, 0, 0.35, 1);
+            }
+
+            .toggle[data-active="yearly"] .toggle-thumb {
+                transform: translateX(100%);
+            }
+
+            .save-hint {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--button-blue);
+                white-space: nowrap;
+            }
+
+            .cards {
+                margin-top: 64px;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 28px;
+                align-items: start;
+            }
+
+            .card-frame {
+                animation: fadeIn 0.6s ease both;
+                animation-delay: calc(0.3s + var(--stagger) * 0.1s);
+                position: relative;
+                border-radius: 30px;
+                padding: 6px;
+                background: transparent;
+                text-align: center;
+                transition:
+                    background 0.35s ease,
+                    transform 0.35s ease;
+            }
+
+            .card-frame[data-active="true"],
+            .card-frame:hover,
+            .card-frame:focus-within {
+                transform: translateY(-6px);
+            }
+
+            .card-frame[data-active="true"] .badge,
+            .card-frame:hover .badge,
+            .card-frame:focus-within .badge {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .page.is-yearly .badge {
+                opacity: 0 !important;
+                transform: translateY(-6px) !important;
+                margin: 0 !important;
+                padding: 20px !important;
+                height: 0;
+                overflow: hidden;
+            }
+
+            .badge {
+                display: inline-block;
+                margin: 13px 0 34px;
+                font-size: 13px;
+                font-weight: 600;
+                padding: 6px 20px;
+                background: var(--badge-bg);
+                border-radius: 999px;
+                opacity: 0;
+                transform: translateY(-6px);
+                transition:
+                    opacity 0.3s ease,
+                    transform 0.3s ease;
+            }
+
+            .card-white {
+                position: relative;
+                background: #fff;
+                border-radius: 24px;
+                padding: 36px 32px 34px;
+                border: 1px solid var(--card-border);
+                margin-top: -26px;
+                text-align: left;
+                transition:
+                    margin-top 0.3s ease,
+                    box-shadow 0.35s ease;
+            }
+
+            .card-frame[data-active="true"] .card-white,
+            .card-frame:hover .card-white,
+            .card-frame:focus-within .card-white {
+                margin-top: 0;
+                box-shadow: 0 18px 40px -18px rgba(20, 20, 28, 0.18);
+            }
+
+            .page.is-monthly .card-white {
+                margin-top: -26px !important;
+            }
+
+            .page.is-yearly .card-white {
+                margin-top: 0 !important;
+            }
+
+            .card-frame[data-color="blue"] {
+                --frame: var(--blue-frame);
+                --badge-text: var(--blue-badge-text);
+                --accent: var(--blue);
+                --badge-bg: #edf0ff;
+            }
+            .card-frame[data-color="green"] {
+                --frame: var(--green-frame);
+                --badge-text: var(--green-badge-text);
+                --accent: var(--green);
+                --badge-bg: #e5ffe4;
+            }
+            .card-frame[data-color="purple"] {
+                --frame: var(--purple-frame);
+                --badge-text: var(--purple-badge-text);
+                --accent: var(--purple);
+                --badge-bg: #fbecff;
+            }
+
+            .card-frame[data-active="true"],
+            .card-frame:hover,
+            .card-frame:focus-within {
+                background: var(--frame);
+            }
+
+            .page.is-yearly .card-frame[data-active="true"],
+            .page.is-yearly .card-frame:hover,
+            .page.is-yearly .card-frame:focus-within {
+                padding: 6px;
+            }
+
+            .badge {
+                color: var(--badge-text);
+            }
+
+            h2 {
+                margin: 0 0 10px;
+                font-size: 22px;
+                font-weight: 700;
+                letter-spacing: -0.01em;
+            }
+
+            .desc {
+                margin: 0 0 28px;
+                font-size: 14.5px;
+                line-height: 1.55;
+                color: var(--muted);
+                min-height: 66px;
+            }
+
+            .price {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin: 0 0 24px;
+            }
+
+            .price-amount {
+                font-size: 40px;
+                font-weight: 800;
+                letter-spacing: -0.02em;
+                line-height: 1;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .price-meta {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                line-height: 1.3;
+            }
+
+            .price-unit {
+                font-size: 14px;
+                color: var(--ink);
+                font-weight: 500;
+            }
+
+            .price-sub {
+                font-size: 12.5px;
+                color: #b6b4ae;
+                opacity: 1;
+                transition: opacity 0.2s ease;
+            }
+
+            .page.is-monthly .price-sub {
+                opacity: 0;
+            }
+
+            .cta {
+                width: 100%;
+                border-radius: 999px;
+                padding: 15px 0;
+                font-size: 15px;
+                font-weight: 600;
+                font-family: inherit;
+                cursor: pointer;
+                transition:
+                    background 0.3s ease,
+                    color 0.3s ease,
+                    border-color 0.3s ease;
+                border: 1.5px solid #e3e1db;
+                background: #fff;
+                color: var(--ink);
+            }
+
+            .card-frame[data-active="true"] .cta,
+            .card-frame:hover .cta,
+            .card-frame:focus-within .cta {
+                background: var(--button-blue);
+                border-color: var(--button-blue);
+                color: #fff;
+            }
+
+            hr {
+                border: none;
+                border-top: 1px solid #ececea;
+                margin: 28px 0 22px;
+            }
+
+            .feature-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .feature-list li {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-size: 14.5px;
+                color: #3c3c46;
+            }
+
+            .check {
+                flex: none;
+                width: 19px;
+                height: 19px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                background: #d8d6d0;
+                transition:
+                    background 0.3s ease,
+                    border-color 0.3s ease,
+                    color 0.3s ease;
+            }
+
+            .check--outline {
+                background: transparent;
+                border: 1.6px solid #d8d6d0;
+                color: transparent;
+            }
+
+            .card-frame[data-active="true"] .check--outline,
+            .card-frame:hover .check--outline,
+            .card-frame:focus-within .check--outline {
+                border-color: var(--accent);
+                color: var(--accent);
+            }
+
+            .card-frame[data-active="true"] .check--filled,
+            .card-frame:hover .check--filled,
+            .card-frame:focus-within .check--filled {
+                background: var(--accent);
+                color: #fff;
+            }
+
+            .footnote {
+                text-align: center;
+                margin: 64px 0 0;
+                font-size: 14px;
+                color: var(--muted);
+            }
+
+            .footnote a {
+                color: var(--button-blue);
+                font-weight: 600;
+                text-decoration: none;
+            }
+
+            .footnote a:hover {
+                text-decoration: underline;
+            }
+
+            @media (max-width: 860px) {
+                .cards {
+                    grid-template-columns: 1fr;
+                    max-width: 380px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                .card-frame,
+                .card-frame:hover,
+                .card-frame:focus-within {
+                    transform: none;
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                * {
+                    transition: none !important;
+                    animation: none !important;
+                }
+            }
+        </style>
+
+        <script>
+            const page = document.querySelector(".page") as HTMLElement;
+            const toggle = document.querySelector(".toggle") as HTMLElement;
+            const buttons =
+                document.querySelectorAll<HTMLButtonElement>(".toggle-btn");
+            const priceNumbers =
+                document.querySelectorAll<HTMLElement>(".price-number");
+
+            function setPeriod(period: "monthly" | "yearly") {
+                toggle.dataset.active = period;
+                page.classList.toggle("is-monthly", period === "monthly");
+                page.classList.toggle("is-yearly", period === "yearly");
+
+                buttons.forEach((btn) => {
+                    const active = btn.dataset.period === period;
+                    btn.setAttribute("aria-pressed", String(active));
+                });
+
+                priceNumbers.forEach((el) => {
+                    const value =
+                        period === "monthly"
+                            ? el.dataset.monthly
+                            : el.dataset.yearly;
+                    el.textContent = value ?? el.textContent;
+                });
+            }
+
+            buttons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    setPeriod(btn.dataset.period as "monthly" | "yearly");
+                });
+            });
+
+            setPeriod("monthly");
+
+            /* ---- Active card management ---- */
+            const cardFrames =
+                document.querySelectorAll<HTMLElement>(".card-frame");
+            const cardsSection = document.querySelector<HTMLElement>(".cards");
+            const essentialCard = document.querySelector<HTMLElement>(
+                '.card-frame[data-plan="essential"]',
+            );
+
+            // Default: essential plan is active
+            essentialCard?.setAttribute("data-active", "true");
+
+            function clearActive() {
+                cardFrames.forEach((c) => c.removeAttribute("data-active"));
+            }
+
+            cardFrames.forEach((card) => {
+                card.addEventListener("mouseenter", () => {
+                    clearActive();
+                    card.setAttribute("data-active", "true");
+                });
+            });
+
+            // When mouse leaves all cards, restore essential
+            cardsSection?.addEventListener("mouseleave", () => {
+                clearActive();
+                essentialCard?.setAttribute("data-active", "true");
+            });
+        </script>
+    </body>
+</html>
