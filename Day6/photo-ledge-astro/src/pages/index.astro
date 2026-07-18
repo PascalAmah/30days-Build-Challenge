@@ -1,0 +1,675 @@
+---
+// ---------------------------------------------------------------------------
+// Photo Ledge — a corkboard of polaroids you can pick up and hang anywhere.
+// Desktop: press and drag. Mobile: tap to lift, tap again to place.
+// ---------------------------------------------------------------------------
+import PhotoCard from "../components/PhotoCard.astro";
+
+interface Photo {
+    id: string;
+    caption: string;
+    accent: string; // pastel card background
+    ink: string; // caption ink color
+    imgSrc?: string; // real image, if we have one
+    from: string; // placeholder gradient start (used when no imgSrc)
+    to: string; // placeholder gradient end
+    rot: number; // resting tilt, desktop
+    rotM: number; // resting tilt, mobile
+    x: number;
+    y: number; // desktop position, % of board
+    xm: number;
+    ym: number; // mobile position, % of board
+    z: number;
+}
+
+const photos: Photo[] = [
+    {
+        id: "truck",
+        caption: "Truck central Abuja",
+        accent: "#c9e4a3",
+        ink: "#3c5a1e",
+        imgSrc: "/images/truck-central-abuja.jpg",
+        from: "#d7ecb3",
+        to: "#7fa856",
+        rot: -6,
+        rotM: -5,
+        x: 10,
+        y: 6,
+        xm: 8,
+        ym: 4,
+        z: 1,
+    },
+    {
+        id: "laptop",
+        caption: "Fine boy launch",
+        accent: "#f6d4c8",
+        ink: "#8a4632",
+        from: "#2b2f3a",
+        to: "#6b7a99",
+        rot: 4,
+        rotM: 3,
+        x: 46,
+        y: 2,
+        xm: 30,
+        ym: 18,
+        z: 2,
+    },
+    {
+        id: "tea",
+        caption: "Arabian Tea Memory",
+        accent: "#ffffff",
+        ink: "#5a4632",
+        from: "#3a2a1e",
+        to: "#a97c50",
+        rot: -3,
+        rotM: -4,
+        x: 62,
+        y: 22,
+        xm: 4,
+        ym: 46,
+        z: 3,
+    },
+    {
+        id: "football",
+        caption: "Watching my man play",
+        accent: "#f3a58c",
+        ink: "#7a2e17",
+        from: "#1f3d1f",
+        to: "#4f7a4f",
+        rot: 5,
+        rotM: 6,
+        x: 4,
+        y: 42,
+        xm: 34,
+        ym: 62,
+        z: 4,
+    },
+    {
+        id: "cockpit",
+        caption: "Pilot me",
+        accent: "#e2b6ea",
+        ink: "#5a2568",
+        from: "#101826",
+        to: "#3a5a7a",
+        rot: -7,
+        rotM: -6,
+        x: 55,
+        y: 46,
+        xm: 6,
+        ym: 82,
+        z: 5,
+    },
+    {
+        id: "vacation",
+        caption: "Vacation",
+        accent: "#f6e9a8",
+        ink: "#7a6216",
+        from: "#c9b98f",
+        to: "#5f7a5a",
+        rot: -8,
+        rotM: -3,
+        x: 4,
+        y: 70,
+        xm: 32,
+        ym: 106,
+        z: 6,
+    },
+    {
+        id: "star",
+        caption: "Star Girl Biba",
+        accent: "#a9d4ef",
+        ink: "#1f4e6b",
+        from: "#8aa9c9",
+        to: "#f0e6d8",
+        rot: 6,
+        rotM: 4,
+        x: 34,
+        y: 68,
+        xm: 8,
+        ym: 128,
+        z: 7,
+    },
+];
+
+// Small inline placeholder "photo" — a soft gradient with a camera glyph,
+// so it's obvious where a real photo should be dropped in later.
+function placeholder(from: string, to: string, label: string): string {
+    const safeLabel = label.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${from}"/>
+      <stop offset="1" stop-color="${to}"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#g)"/>
+  <g fill="#ffffff" fill-opacity="0.55">
+    <rect x="95" y="118" width="110" height="80" rx="10"/>
+    <circle cx="150" cy="158" r="26" fill="${from}"/>
+    <rect x="128" y="104" width="26" height="16" rx="3"/>
+  </g>
+  <text x="150" y="230" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
+        font-size="13" fill="#ffffff" fill-opacity="0.85" letter-spacing="0.5">
+    ${safeLabel}
+  </text>
+</svg>`.trim();
+    return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+        />
+        <title>Photo Ledge — hang your favorite photos</title>
+        <meta
+            name="description"
+            content="A corkboard of favorite photos you can pick up and hang anywhere."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <main>
+            <header class="intro">
+                <h1>hang your Favorite photos</h1>
+                <p class="hint">
+                    <span class="hint-desktop"
+                        >Drag the photos and arrange them</span
+                    >
+                    <span class="hint-mobile"
+                        >tap a photo to pick it up, tap again to place it</span
+                    >
+                </p>
+            </header>
+
+            <section class="board" id="board" aria-label="Photo board">
+                {
+                    photos.map((p, i) => (
+                        <PhotoCard
+                            id={p.id}
+                            caption={p.caption}
+                            accent={p.accent}
+                            ink={p.ink}
+                            imgSrc={
+                                p.imgSrc ??
+                                placeholder(p.from, p.to, "add photo")
+                            }
+                            rot={p.rot}
+                            rotM={p.rotM}
+                            x={p.x}
+                            y={p.y}
+                            xm={p.xm}
+                            ym={p.ym}
+                            z={p.z}
+                            delay={i * 0.08}
+                        />
+                    ))
+                }
+            </section>
+
+            <!-- Hidden file input for photo uploads -->
+            <input
+                type="file"
+                id="photo-upload-input"
+                accept="image/*"
+                style="display:none"
+            />
+        </main>
+
+        <script>
+            // -----------------------------------------------------------------
+            // Interaction model
+            //  - mouse / trackpad / pen: press → drag → release, with the card
+            //    tilting into the direction of the swipe (like a loose photo
+            //    sliding on a table), then settling flat when you let go.
+            //  - touch: tap lifts the card (it follows your finger without
+            //           needing to stay pressed on it), a second tap sets it down
+            // -----------------------------------------------------------------
+            const board = document.getElementById("board") as HTMLElement;
+            const cards = Array.from(
+                board.querySelectorAll<HTMLElement>(".card"),
+            );
+
+            let topZ = cards.length + 1;
+            let heldCard: HTMLElement | null = null; // touch "pick up" mode
+            let dragCard: HTMLElement | null = null; // mouse/pen drag mode
+            let offsetX = 0;
+            let offsetY = 0;
+            let lastX = 0;
+            let liveTilt = 0;
+
+            const MAX_TILT = 16; // deg, clamp so it never looks unhinged
+            const TILT_SENSITIVITY = 0.9; // deg per px of horizontal swipe speed
+            const TILT_SMOOTHING = 0.35; // 0..1, higher = snappier / more jitter
+
+            function bringToFront(card: HTMLElement) {
+                topZ += 1;
+                card.style.zIndex = String(topZ);
+            }
+
+            function boardRect() {
+                return board.getBoundingClientRect();
+            }
+
+            function liftScale(pointerType: string) {
+                return pointerType === "touch" ? 1.1 : 1.07;
+            }
+
+            function beginLift(card: HTMLElement, pointerType: string) {
+                card.classList.add("lifted");
+                card.style.transition = "none";
+                liveTilt = 0;
+                card.style.setProperty("--live-rot", "0deg");
+                card.style.setProperty(
+                    "--live-scale",
+                    String(liftScale(pointerType)),
+                );
+            }
+
+            function updateTilt(card: HTMLElement, clientX: number) {
+                const delta = clientX - lastX;
+                lastX = clientX;
+                const target = Math.max(
+                    -MAX_TILT,
+                    Math.min(MAX_TILT, delta * TILT_SENSITIVITY),
+                );
+                liveTilt += (target - liveTilt) * TILT_SMOOTHING;
+                card.style.setProperty(
+                    "--live-rot",
+                    `${liveTilt.toFixed(2)}deg`,
+                );
+            }
+
+            function settle(card: HTMLElement) {
+                card.classList.remove("lifted");
+                // Read the resting rotation for the current viewport so the
+                // card animates smoothly into its tilted resting angle instead
+                // of snapping flat and then jumping.
+                const isMobile =
+                    window.matchMedia("(max-width: 720px)").matches;
+                const restRot =
+                    card.style.getPropertyValue(
+                        isMobile ? "--rot-m" : "--rot",
+                    ) || "0deg";
+                card.style.transition =
+                    "transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease";
+                // next frame so the transition actually kicks in
+                requestAnimationFrame(() => {
+                    card.style.setProperty("--live-rot", restRot);
+                    card.style.setProperty("--live-scale", "1");
+                });
+                const cleanup = (ev: TransitionEvent) => {
+                    if (ev.propertyName !== "transform") return;
+                    card.style.transition = "";
+                    card.style.removeProperty("--live-rot");
+                    card.style.removeProperty("--live-scale");
+                    card.removeEventListener("transitionend", cleanup);
+                };
+                card.addEventListener("transitionend", cleanup);
+            }
+
+            function placeAt(
+                card: HTMLElement,
+                clientX: number,
+                clientY: number,
+                grabX: number,
+                grabY: number,
+            ) {
+                const rect = boardRect();
+                const cardRect = card.getBoundingClientRect();
+                const w = cardRect.width;
+                const h = cardRect.height;
+
+                let left = clientX - rect.left - grabX;
+                let top = clientY - rect.top - grabY;
+
+                // Keep the card mostly within the board.
+                left = Math.max(-w * 0.3, Math.min(left, rect.width - w * 0.7));
+                top = Math.max(
+                    -h * 0.15,
+                    Math.min(top, rect.height - h * 0.85),
+                );
+
+                card.style.left = `${left}px`;
+                card.style.top = `${top}px`;
+            }
+
+            cards.forEach((card) => {
+                card.addEventListener("pointerdown", (e: PointerEvent) => {
+                    const isTouch = e.pointerType === "touch";
+
+                    if (!isTouch) {
+                        // --- Desktop / pen: begin a normal drag ---
+                        e.preventDefault();
+                        dragCard = card;
+                        bringToFront(card);
+                        beginLift(card, e.pointerType);
+                        card.setPointerCapture(e.pointerId);
+                        const r = card.getBoundingClientRect();
+                        offsetX = e.clientX - r.left;
+                        offsetY = e.clientY - r.top;
+                        lastX = e.clientX;
+                        return;
+                    }
+
+                    // --- Touch: tap to pick up / tap again to place ---
+                    e.preventDefault();
+                    if (heldCard === card) {
+                        // Second tap on the held card: place it right here.
+                        settle(card);
+                        heldCard = null;
+                        return;
+                    }
+                    if (heldCard) {
+                        // A different card is already held — drop it where this tap is.
+                        const r = heldCard.getBoundingClientRect();
+                        placeAt(
+                            heldCard,
+                            e.clientX,
+                            e.clientY,
+                            r.width / 2,
+                            r.height / 2,
+                        );
+                        settle(heldCard);
+                        heldCard = null;
+                        return;
+                    }
+                    // Pick this one up.
+                    heldCard = card;
+                    bringToFront(card);
+                    beginLift(card, e.pointerType);
+                    lastX = e.clientX;
+                });
+            });
+
+            board.addEventListener("pointermove", (e: PointerEvent) => {
+                if (dragCard) {
+                    placeAt(dragCard, e.clientX, e.clientY, offsetX, offsetY);
+                    updateTilt(dragCard, e.clientX);
+                } else if (heldCard && e.pointerType === "touch") {
+                    const r = heldCard.getBoundingClientRect();
+                    placeAt(
+                        heldCard,
+                        e.clientX,
+                        e.clientY,
+                        r.width / 2,
+                        r.height / 2,
+                    );
+                    updateTilt(heldCard, e.clientX);
+                }
+            });
+
+            window.addEventListener("pointerup", () => {
+                if (dragCard) {
+                    settle(dragCard);
+                    dragCard = null;
+                }
+            });
+
+            // Tapping empty board space places a currently-held card there too.
+            board.addEventListener("pointerdown", (e: PointerEvent) => {
+                if (e.target === board && heldCard) {
+                    const r = heldCard.getBoundingClientRect();
+                    placeAt(
+                        heldCard,
+                        e.clientX,
+                        e.clientY,
+                        r.width / 2,
+                        r.height / 2,
+                    );
+                    settle(heldCard);
+                    heldCard = null;
+                }
+            });
+
+            // Keyboard support: Enter/Space picks up, arrow keys nudge, Enter/Space again drops.
+            cards.forEach((card) => {
+                card.addEventListener("keydown", (e: KeyboardEvent) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        if (heldCard === card) {
+                            settle(card);
+                            heldCard = null;
+                        } else {
+                            heldCard = card;
+                            bringToFront(card);
+                            beginLift(card, "keyboard");
+                            card.style.setProperty("--live-rot", "0deg");
+                        }
+                    } else if (heldCard === card && e.key.startsWith("Arrow")) {
+                        e.preventDefault();
+                        const step = e.shiftKey ? 24 : 8;
+                        const style = card.style;
+                        const left =
+                            parseFloat(style.left || "0") || card.offsetLeft;
+                        const top =
+                            parseFloat(style.top || "0") || card.offsetTop;
+                        let nl = left,
+                            nt = top;
+                        if (e.key === "ArrowLeft") nl -= step;
+                        if (e.key === "ArrowRight") nl += step;
+                        if (e.key === "ArrowUp") nt -= step;
+                        if (e.key === "ArrowDown") nt += step;
+                        style.left = `${nl}px`;
+                        style.top = `${nt}px`;
+                    }
+                });
+            });
+
+            // -----------------------------------------------------------------
+            // Photo upload / delete (localStorage-backed)
+            // -----------------------------------------------------------------
+            const fileInput = document.getElementById(
+                "photo-upload-input",
+            ) as HTMLInputElement;
+            let uploadTargetCard: HTMLElement | null = null;
+
+            const LS_PREFIX = "pl_";
+
+            function setPhoto(card: HTMLElement, dataUrl: string) {
+                const img = card.querySelector<HTMLImageElement>(".photo img")!;
+                img.src = dataUrl;
+                localStorage.setItem(LS_PREFIX + card.dataset.id, dataUrl);
+                toggleButtons(card, true);
+            }
+
+            function clearPhoto(card: HTMLElement) {
+                const img = card.querySelector<HTMLImageElement>(".photo img")!;
+                img.src = img.dataset.placeholder!;
+                localStorage.removeItem(LS_PREFIX + card.dataset.id);
+                toggleButtons(card, false);
+            }
+
+            function toggleButtons(card: HTMLElement, hasPhoto: boolean) {
+                const uploadBtn =
+                    card.querySelector<HTMLElement>(".upload-btn")!;
+                const deleteBtn =
+                    card.querySelector<HTMLElement>(".delete-btn")!;
+                uploadBtn.style.display = hasPhoto ? "none" : "flex";
+                deleteBtn.style.display = hasPhoto ? "flex" : "none";
+            }
+
+            // Restore saved photos from localStorage
+            cards.forEach((card) => {
+                const saved = localStorage.getItem(LS_PREFIX + card.dataset.id);
+                if (saved) {
+                    const img =
+                        card.querySelector<HTMLImageElement>(".photo img")!;
+                    img.src = saved;
+                    toggleButtons(card, true);
+                }
+            });
+
+            // Handle file selection
+            fileInput.addEventListener("change", () => {
+                const file = fileInput.files?.[0];
+                if (!file || !uploadTargetCard) return;
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    setPhoto(uploadTargetCard!, reader.result as string);
+                    uploadTargetCard = null;
+                };
+                reader.readAsDataURL(file);
+                fileInput.value = "";
+            });
+
+            // Attach upload and delete handlers to each card's buttons
+            cards.forEach((card) => {
+                const uploadBtn =
+                    card.querySelector<HTMLElement>(".upload-btn")!;
+                const deleteBtn =
+                    card.querySelector<HTMLElement>(".delete-btn")!;
+
+                uploadBtn.addEventListener("pointerdown", (e) => {
+                    e.stopPropagation(); // don't start a card drag
+                    uploadTargetCard = card;
+                    fileInput.click();
+                });
+
+                deleteBtn.addEventListener("pointerdown", (e) => {
+                    e.stopPropagation(); // don't start a card drag
+                    clearPhoto(card);
+                });
+            });
+        </script>
+
+        <style>
+            :root {
+                --board-brown-1: #8a5a3c;
+                --board-brown-2: #a06b47;
+                --board-line: rgba(255, 255, 255, 0.05);
+                --paper: #f3f1ec;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                background: var(--paper);
+                color: #2a2a2a;
+                font-family: "Poppins", sans-serif;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            main {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 48px 20px 80px;
+            }
+
+            .intro {
+                text-align: center;
+                max-width: 640px;
+                margin-bottom: 28px;
+            }
+
+            .intro h1 {
+                font-family: "Caveat", cursive;
+                font-weight: 700;
+                font-size: clamp(2.4rem, 5vw, 3.4rem);
+                margin: 0 0 8px;
+                color: #1c1c1c;
+                transform: rotate(-1deg);
+                animation: fadeUp 0.7s ease-out both;
+            }
+
+            .hint {
+                margin: 0;
+                color: #6b6b6b;
+                font-size: 0.98rem;
+                line-height: 1.5;
+                animation: fadeUp 0.7s 0.15s ease-out both;
+            }
+
+            .hint-mobile {
+                display: none;
+            }
+
+            .board {
+                position: relative;
+                width: 100%;
+                max-width: 1100px;
+                height: 640px;
+                border-radius: 22px;
+                overflow: hidden;
+                touch-action: none; /* we handle all pointer gestures ourselves */
+                background-color: #92613d;
+                background-image: url("/Mosaic.png");
+                background-repeat: repeat;
+                background-size: auto;
+                box-shadow:
+                    0 20px 50px rgba(0, 0, 0, 0.18),
+                    inset 0 0 60px rgba(0, 0, 0, 0.2);
+            }
+
+            @media (max-width: 720px) {
+                html,
+                body {
+                    height: 100dvh;
+                    overflow: hidden;
+                }
+
+                main {
+                    height: 100dvh;
+                    padding: 20px 12px 16px;
+                    overflow: hidden;
+                }
+
+                .intro {
+                    margin-bottom: 12px;
+                }
+
+                .intro h1 {
+                    font-size: clamp(1.8rem, 6vw, 2.4rem);
+                }
+
+                .hint {
+                    font-size: 0.82rem;
+                }
+
+                .hint-desktop {
+                    display: none;
+                }
+
+                .hint-mobile {
+                    display: inline;
+                }
+
+                .board {
+                    flex: 1;
+                    height: auto;
+                    border-radius: 16px;
+                }
+            }
+
+            /* ---------------- Entry animations ---------------- */
+            @keyframes fadeUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(24px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
+    </body>
+</html>

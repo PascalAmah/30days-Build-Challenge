@@ -1,0 +1,274 @@
+---
+// A single polaroid you can pick up and hang anywhere on the board.
+// Positioning + drag physics live in the parent page's script — this
+// component only owns how one card looks.
+//
+// Photo upload/delete buttons are included; the parent page wires them up.
+
+interface Props {
+    id: string;
+    caption: string;
+    accent: string; // pastel mat color
+    ink: string; // caption ink color
+    imgSrc: string;
+    imgAlt?: string;
+    rot?: number; // resting tilt, desktop (deg)
+    rotM?: number; // resting tilt, mobile (deg)
+    x: number;
+    y: number; // desktop position, % of board
+    xm: number;
+    ym: number; // mobile position, % of board
+    z?: number;
+    delay?: number; // staggered reveal delay (seconds)
+}
+
+const {
+    id,
+    caption,
+    accent,
+    ink,
+    imgSrc,
+    imgAlt = caption,
+    rot = 0,
+    rotM = 0,
+    x,
+    y,
+    xm,
+    ym,
+    z = 1,
+    delay = 0,
+} = Astro.props;
+---
+
+<figure
+    class="card"
+    data-id={id}
+    tabindex="0"
+    role="button"
+    aria-label={`${caption}. Press to pick up, press again to place.`}
+    style={`
+    --accent:${accent};
+    --ink:${ink};
+    --rot:${rot}deg;
+    --rot-m:${rotM}deg;
+    --x:${x}%;
+    --y:${y}%;
+    --x-m:${xm}%;
+    --y-m:${ym}%;
+    z-index:${z};
+    animation-delay:${delay}s;
+  `}
+>
+    <div class="photo">
+        <img
+            src={imgSrc}
+            alt={imgAlt}
+            draggable="false"
+            loading="lazy"
+            data-placeholder={imgSrc}
+        />
+        <button class="upload-btn" title="Add photo" aria-label="Upload photo">
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><line x1="12" y1="5" x2="12" y2="19"></line><line
+                    x1="5"
+                    y1="12"
+                    x2="19"
+                    y2="12"></line></svg
+            >
+        </button>
+        <button
+            class="delete-btn"
+            title="Remove photo"
+            aria-label="Remove photo"
+            style="display:none"
+        >
+            <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><line x1="18" y1="6" x2="6" y2="18"></line><line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"></line></svg
+            >
+        </button>
+    </div>
+    <figcaption>{caption}</figcaption>
+</figure>
+
+<style>
+    .card {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: 190px;
+        padding: 7px 7px 24px;
+        background: var(--accent);
+        border: 4px solid #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+        /* --live-rot / --live-scale are set transiently by the drag script;
+       they fall back to the card's resting tilt when idle. */
+        transform: rotate(var(--live-rot, var(--rot)))
+            scale(var(--live-scale, 1));
+        transition: box-shadow 0.18s ease;
+        cursor: grab;
+        margin: 0;
+        user-select: none;
+        animation: cardReveal 0.55s ease-out backwards;
+    }
+
+    .card:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 3px;
+    }
+
+    .card.lifted {
+        cursor: grabbing;
+        box-shadow: 0 26px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .photo {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+    }
+
+    /* Upload button — center overlay "+" circle */
+    .upload-btn {
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0, 0, 0, 0.35);
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition:
+            background 0.18s ease,
+            transform 0.18s ease;
+        pointer-events: auto;
+    }
+
+    .upload-btn:hover {
+        background: rgba(0, 0, 0, 0.55);
+        transform: scale(1.1);
+    }
+
+    .upload-btn:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    /* Delete button — top-right corner circle */
+    .delete-btn {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(220, 60, 60, 0.85);
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition:
+            background 0.18s ease,
+            transform 0.18s ease;
+        pointer-events: auto;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .delete-btn:hover {
+        background: rgba(200, 40, 40, 0.95);
+        transform: scale(1.15);
+    }
+
+    .delete-btn:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    figcaption {
+        font-family: "Caveat", cursive;
+        font-weight: 600;
+        font-size: 1.15rem;
+        text-align: center;
+        color: var(--ink);
+        margin-top: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (max-width: 720px) {
+        .card {
+            width: 148px;
+            left: var(--x-m);
+            top: var(--y-m);
+            transform: rotate(var(--live-rot, var(--rot-m)))
+                scale(var(--live-scale, 1));
+        }
+
+        .upload-btn {
+            width: 34px;
+            height: 34px;
+        }
+
+        .delete-btn {
+            width: 24px;
+            height: 24px;
+            top: 5px;
+            right: 5px;
+        }
+
+        figcaption {
+            font-size: 1rem;
+        }
+    }
+
+    @keyframes cardReveal {
+        from {
+            opacity: 0;
+            transform: rotate(var(--rot)) scale(0.88);
+        }
+        to {
+            opacity: 1;
+            transform: rotate(var(--rot)) scale(1);
+        }
+    }
+</style>
