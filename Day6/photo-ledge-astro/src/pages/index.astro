@@ -476,6 +476,10 @@ function placeholder(from: string, to: string, label: string): string {
 
                 uploadBtn.addEventListener("pointerdown", (e) => {
                     e.stopPropagation(); // don't start a card drag
+                });
+
+                uploadBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
                     uploadTargetCard = card;
                     fileInput.click();
                 });
