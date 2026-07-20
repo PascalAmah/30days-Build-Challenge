@@ -1,0 +1,1142 @@
+---
+import "../styles/global.css";
+
+const slotCount = 12;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Gallery</title>
+    </head>
+    <body>
+        <header class="nav">
+            <nav class="nav__links" id="navLinks">
+                <a href="/" class="nav__link">HOME</a>
+                <a href="/gallery" class="nav__link nav__link--active"
+                    >GALLERY</a
+                >
+                <a href="/contact" class="nav__link">CONTACT</a>
+            </nav>
+            <div class="nav__auth">
+                <button class="btn btn--ghost">LOGIN</button>
+                <button class="btn btn--solid">SIGN UP</button>
+            </div>
+            <button class="nav__burger" aria-label="Open menu" id="burger">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path
+                        d="M2 5H18M2 10H18M2 15H18"
+                        stroke="white"
+                        stroke-width="1.6"></path>
+                </svg>
+            </button>
+        </header>
+
+        <main class="gallery">
+            <section class="gallery__grid" aria-label="Image thumbnails">
+                {
+                    Array.from({ length: slotCount }).map((_, i) => (
+                        <div class="thumb" data-index={i} style={`--i: ${i}`}>
+                            <button
+                                class="thumb__view"
+                                aria-label="Empty slot"
+                                aria-pressed="false"
+                            >
+                                <img
+                                    class="thumb__img"
+                                    src=""
+                                    alt=""
+                                    loading="lazy"
+                                />
+                            </button>
+                            <div class="thumb__plus">
+                                <label
+                                    class="thumb__upload"
+                                    aria-label="Upload image"
+                                    tabindex="0"
+                                >
+                                    <svg
+                                        width="28"
+                                        height="28"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <line x1="12" y1="5" x2="12" y2="19" />
+                                        <line x1="5" y1="12" x2="19" y2="12" />
+                                    </svg>
+                                    <input
+                                        type="file"
+                                        class="thumb__file-input"
+                                        accept="image/*"
+                                        hidden
+                                    />
+                                </label>
+                            </div>
+                            <div class="thumb__actions">
+                                <button
+                                    class="thumb__delete"
+                                    aria-label="Remove uploaded image"
+                                    tabindex="0"
+                                >
+                                    <svg
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <line x1="18" y1="6" x2="6" y2="18" />
+                                        <line x1="6" y1="6" x2="18" y2="18" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                }
+            </section>
+
+            <!-- Desktop viewer -->
+            <section class="gallery__viewer" aria-label="Selected image">
+                <div class="viewer__stage">
+                    <div class="viewer__empty" id="viewer-empty">
+                        <svg
+                            width="48"
+                            height="48"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            opacity="0.3"
+                        >
+                            <rect
+                                x="3"
+                                y="3"
+                                width="18"
+                                height="18"
+                                rx="2"
+                                ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <p>Upload an image to get started</p>
+                    </div>
+                    <img id="viewer-image" src="" alt="" style="display:none" />
+                </div>
+            </section>
+        </main>
+
+        <!-- Mobile lightbox -->
+        <div
+            class="lightbox"
+            id="lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Image viewer"
+        >
+            <div class="lightbox__toolbar">
+                <span class="lightbox__counter" id="lb-counter"></span>
+                <button
+                    class="lightbox__action lightbox__replace"
+                    id="lb-replace"
+                    aria-label="Replace image"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path
+                            d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+                        ></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    <input
+                        type="file"
+                        class="lightbox__file-input"
+                        accept="image/*"
+                        hidden
+                    />
+                </button>
+                <button
+                    class="lightbox__action lightbox__delete"
+                    id="lb-delete"
+                    aria-label="Delete image"
+                >
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path
+                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                        ></path>
+                    </svg>
+                </button>
+                <button
+                    class="lightbox__action lightbox__close"
+                    id="lb-close"
+                    aria-label="Close viewer"
+                >
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="lightbox__image-wrap" id="lb-wrap">
+                <div class="lightbox__hint" id="lb-hint">
+                    ← Swipe to browse →
+                </div>
+                <img id="lb-image" src="" alt="" />
+            </div>
+        </div>
+
+        <script>
+            // @ts-nocheck
+            const STORAGE_PREFIX = "gallery-upload-";
+
+            const thumbWrappers = document.querySelectorAll(".thumb");
+            const viewerImage = document.getElementById("viewer-image");
+            const viewerEmpty = document.getElementById("viewer-empty");
+
+            // Lightbox elements
+            const lightbox = document.getElementById("lightbox");
+            const lbImage = document.getElementById("lb-image");
+            const lbCounter = document.getElementById("lb-counter");
+            const lbClose = document.getElementById("lb-close");
+            const lbDelete = document.getElementById("lb-delete");
+            const lbReplaceInput = document.querySelector(
+                ".lightbox__file-input",
+            );
+            const lbHint = document.getElementById("lb-hint");
+
+            let activeIndex = -1;
+
+            // Swipe state
+            let touchStartX = 0;
+            let touchDeltaX = 0;
+            let isSwiping = false;
+            let swipeConsumed = false;
+            const SWIPE_THRESHOLD = 60;
+
+            // ----- Desktop viewer helpers -----
+            function showViewerImage(src, alt) {
+                viewerEmpty.style.display = "none";
+                viewerImage.style.display = "block";
+                viewerImage.removeAttribute("src");
+                requestAnimationFrame(function () {
+                    viewerImage.src = src;
+                    viewerImage.alt = alt;
+                });
+            }
+
+            function hideViewerImage() {
+                viewerImage.style.display = "none";
+                viewerImage.removeAttribute("src");
+                viewerEmpty.style.display = "";
+            }
+
+            function selectThumb(wrapper, i) {
+                thumbWrappers.forEach(function (t) {
+                    t.classList.remove("thumb--active");
+                    t.querySelector(".thumb__view").setAttribute(
+                        "aria-pressed",
+                        "false",
+                    );
+                });
+                wrapper.classList.add("thumb--active");
+                var viewBtn = wrapper.querySelector(".thumb__view");
+                viewBtn.setAttribute("aria-pressed", "true");
+                localStorage.setItem("gallery-active-index", String(i));
+
+                var src = viewBtn.dataset.src;
+                var alt = viewBtn.dataset.alt || "";
+                if (src) showViewerImage(src, alt);
+                else hideViewerImage();
+            }
+
+            // ----- Lightbox -----
+            function getSlideInfo(i) {
+                var wrapper = thumbWrappers[i];
+                if (!wrapper) return null;
+                var viewBtn = wrapper.querySelector(".thumb__view");
+                var src = viewBtn.dataset.src;
+                if (!src) return null;
+                return {
+                    src: src,
+                    alt: viewBtn.dataset.alt || "",
+                    wrapper: wrapper,
+                };
+            }
+
+            function getImageCount() {
+                var count = 0;
+                for (var i = 0; i < thumbWrappers.length; i++) {
+                    if (getSlideInfo(i)) count++;
+                }
+                return count;
+            }
+
+            function updateCounter() {
+                var total = getImageCount();
+                lbCounter.textContent =
+                    total > 0 ? activeIndex + 1 + " / " + total : "";
+            }
+
+            function showSlide(index) {
+                var info = getSlideInfo(index);
+                if (!info) return;
+                activeIndex = index;
+                lbImage.style.opacity = "0";
+                lbHint.style.display = "none";
+                setTimeout(function () {
+                    lbImage.src = info.src;
+                    lbImage.alt = info.alt;
+                    lbImage.style.opacity = "1";
+                }, 150);
+                updateCounter();
+            }
+
+            function openLightbox(index) {
+                var info = getSlideInfo(index);
+                if (!info) return;
+                activeIndex = index;
+                lbImage.src = info.src;
+                lbImage.alt = info.alt;
+                lbImage.style.opacity = "1";
+                lightbox.classList.add("lightbox--open");
+                document.body.style.overflow = "hidden";
+                updateCounter();
+
+                if (!sessionStorage.getItem("lb-hint-seen")) {
+                    lbHint.style.display = "flex";
+                    setTimeout(function () {
+                        lbHint.style.opacity = "0";
+                        setTimeout(function () {
+                            lbHint.style.display = "none";
+                            lbHint.style.opacity = "1";
+                        }, 400);
+                    }, 2000);
+                    sessionStorage.setItem("lb-hint-seen", "1");
+                }
+            }
+
+            function closeLightbox() {
+                lightbox.classList.remove("lightbox--open");
+                document.body.style.overflow = "";
+                activeIndex = -1;
+            }
+
+            function goNext() {
+                for (var i = activeIndex + 1; i < thumbWrappers.length; i++) {
+                    if (getSlideInfo(i)) {
+                        showSlide(i);
+                        return;
+                    }
+                }
+                for (var i = 0; i < activeIndex; i++) {
+                    if (getSlideInfo(i)) {
+                        showSlide(i);
+                        return;
+                    }
+                }
+            }
+
+            function goPrev() {
+                for (var i = activeIndex - 1; i >= 0; i--) {
+                    if (getSlideInfo(i)) {
+                        showSlide(i);
+                        return;
+                    }
+                }
+                for (var i = thumbWrappers.length - 1; i > activeIndex; i--) {
+                    if (getSlideInfo(i)) {
+                        showSlide(i);
+                        return;
+                    }
+                }
+            }
+
+            // ----- Swipe -----
+            function onSwipeStart(x) {
+                touchStartX = x;
+                touchDeltaX = 0;
+                isSwiping = true;
+                swipeConsumed = false;
+                lbImage.style.transition = "none";
+            }
+
+            function onSwipeMove(x) {
+                if (!isSwiping || swipeConsumed) return;
+                touchDeltaX = x - touchStartX;
+                lbImage.style.transform =
+                    "translateX(" +
+                    touchDeltaX +
+                    "px) scale(" +
+                    (1 - Math.abs(touchDeltaX) / 800) +
+                    ")";
+                lbImage.style.opacity = String(1 - Math.abs(touchDeltaX) / 500);
+            }
+
+            function onSwipeEnd() {
+                if (!isSwiping) return;
+                isSwiping = false;
+                lbImage.style.transition =
+                    "transform 0.3s ease, opacity 0.3s ease";
+
+                if (touchDeltaX < -SWIPE_THRESHOLD && !swipeConsumed) {
+                    swipeConsumed = true;
+                    lbImage.style.transform = "translateX(-100px)";
+                    lbImage.style.opacity = "0";
+                    setTimeout(function () {
+                        lbImage.style.transition = "";
+                        lbImage.style.transform = "";
+                        goNext();
+                    }, 300);
+                } else if (touchDeltaX > SWIPE_THRESHOLD && !swipeConsumed) {
+                    swipeConsumed = true;
+                    lbImage.style.transform = "translateX(100px)";
+                    lbImage.style.opacity = "0";
+                    setTimeout(function () {
+                        lbImage.style.transition = "";
+                        lbImage.style.transform = "";
+                        goPrev();
+                    }, 300);
+                } else {
+                    lbImage.style.transform = "";
+                    lbImage.style.opacity = "1";
+                    setTimeout(function () {
+                        lbImage.style.transition = "";
+                    }, 300);
+                }
+                touchDeltaX = 0;
+            }
+
+            // Touch events
+            lbImage.addEventListener(
+                "touchstart",
+                function (e) {
+                    onSwipeStart(e.touches[0].clientX);
+                },
+                { passive: true },
+            );
+
+            lbImage.addEventListener(
+                "touchmove",
+                function (e) {
+                    onSwipeMove(e.touches[0].clientX);
+                },
+                { passive: true },
+            );
+
+            lbImage.addEventListener("touchend", onSwipeEnd, { passive: true });
+            lbImage.addEventListener("touchcancel", onSwipeEnd, {
+                passive: true,
+            });
+
+            // Mouse swipe for testing
+            lbImage.addEventListener("pointerdown", function (e) {
+                if (e.pointerType !== "mouse") return;
+                onSwipeStart(e.clientX);
+                lbImage.setPointerCapture(e.pointerId);
+            });
+
+            lbImage.addEventListener("pointermove", function (e) {
+                if (e.pointerType !== "mouse") return;
+                onSwipeMove(e.clientX);
+            });
+
+            lbImage.addEventListener("pointerup", function (e) {
+                if (e.pointerType !== "mouse") return;
+                onSwipeEnd();
+            });
+
+            lbImage.addEventListener("pointercancel", onSwipeEnd);
+
+            // ----- Lightbox buttons -----
+            lbClose.addEventListener("click", closeLightbox);
+
+            lbDelete.addEventListener("click", function () {
+                if (activeIndex < 0) return;
+                var info = getSlideInfo(activeIndex);
+                if (!info) return;
+                var wrapper = info.wrapper;
+                var viewBtn = wrapper.querySelector(".thumb__view");
+                var img = wrapper.querySelector(".thumb__img");
+                var fileInput = wrapper.querySelector(".thumb__file-input");
+
+                localStorage.removeItem(STORAGE_PREFIX + activeIndex);
+                img.removeAttribute("src");
+                img.style.display = "none";
+                delete viewBtn.dataset.src;
+                delete viewBtn.dataset.alt;
+                fileInput.value = "";
+                wrapper.classList.remove("thumb--uploaded");
+                if (wrapper.classList.contains("thumb--active"))
+                    hideViewerImage();
+
+                var next = -1;
+                for (var i = activeIndex + 1; i < thumbWrappers.length; i++) {
+                    if (getSlideInfo(i)) {
+                        next = i;
+                        break;
+                    }
+                }
+                if (next === -1) {
+                    for (var i = 0; i < activeIndex; i++) {
+                        if (getSlideInfo(i)) {
+                            next = i;
+                            break;
+                        }
+                    }
+                }
+                if (next !== -1) showSlide(next);
+                else closeLightbox();
+            });
+
+            lbReplaceInput.addEventListener("change", function () {
+                if (activeIndex < 0) return;
+                var file = lbReplaceInput.files[0];
+                if (!file) return;
+                var info = getSlideInfo(activeIndex);
+                if (!info) return;
+                var wrapper = info.wrapper;
+                var viewBtn = wrapper.querySelector(".thumb__view");
+                var img = wrapper.querySelector(".thumb__img");
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var dataUrl = e.target.result;
+                    localStorage.setItem(
+                        STORAGE_PREFIX + activeIndex,
+                        JSON.stringify({
+                            dataUrl: dataUrl,
+                            filename: file.name,
+                        }),
+                    );
+                    img.style.display = "block";
+                    img.style.opacity = "0";
+                    img.src = dataUrl;
+                    viewBtn.dataset.src = dataUrl;
+                    viewBtn.dataset.alt = file.name;
+                    wrapper.classList.add("thumb--uploaded");
+                    requestAnimationFrame(function () {
+                        img.style.opacity = "1";
+                    });
+                    if (wrapper.classList.contains("thumb--active"))
+                        showViewerImage(dataUrl, file.name);
+                    showSlide(activeIndex);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Keyboard
+            document.addEventListener("keydown", function (e) {
+                if (!lightbox.classList.contains("lightbox--open")) return;
+                if (e.key === "Escape") closeLightbox();
+                if (e.key === "ArrowRight") goNext();
+                if (e.key === "ArrowLeft") goPrev();
+            });
+
+            // ----- Thumbnails -----
+            for (var idx = 0; idx < thumbWrappers.length; idx++) {
+                (function (i) {
+                    var wrapper = thumbWrappers[i];
+                    var viewBtn = wrapper.querySelector(".thumb__view");
+                    var img = wrapper.querySelector(".thumb__img");
+                    var fileInput = wrapper.querySelector(".thumb__file-input");
+                    var deleteBtn = wrapper.querySelector(".thumb__delete");
+
+                    // Restore
+                    (function restore() {
+                        var key = STORAGE_PREFIX + i;
+                        var saved = localStorage.getItem(key);
+                        if (!saved) return;
+                        try {
+                            var parsed = JSON.parse(saved);
+                            if (!parsed.dataUrl) return;
+                            img.src = parsed.dataUrl;
+                            viewBtn.dataset.src = parsed.dataUrl;
+                            viewBtn.dataset.alt =
+                                parsed.filename || "uploaded image";
+                            img.style.display = "";
+                            wrapper.classList.add("thumb--uploaded");
+                        } catch (e) {
+                            localStorage.removeItem(key);
+                        }
+                    })();
+
+                    viewBtn.addEventListener("click", function () {
+                        if (window.innerWidth <= 900) {
+                            openLightbox(i);
+                        } else {
+                            var update = function () {
+                                selectThumb(wrapper, i);
+                            };
+                            if (document.startViewTransition)
+                                document.startViewTransition(update);
+                            else update();
+                        }
+                    });
+
+                    fileInput.addEventListener("change", function () {
+                        var file = fileInput.files[0];
+                        if (!file) return;
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var dataUrl = e.target.result;
+                            localStorage.setItem(
+                                STORAGE_PREFIX + i,
+                                JSON.stringify({
+                                    dataUrl: dataUrl,
+                                    filename: file.name,
+                                }),
+                            );
+                            img.style.display = "block";
+                            img.style.opacity = "0";
+                            img.src = dataUrl;
+                            viewBtn.dataset.src = dataUrl;
+                            viewBtn.dataset.alt = file.name;
+                            wrapper.classList.add("thumb--uploaded");
+                            requestAnimationFrame(function () {
+                                img.style.opacity = "1";
+                            });
+                            if (wrapper.classList.contains("thumb--active"))
+                                showViewerImage(dataUrl, file.name);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                    deleteBtn.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        localStorage.removeItem(STORAGE_PREFIX + i);
+                        img.removeAttribute("src");
+                        img.style.display = "none";
+                        delete viewBtn.dataset.src;
+                        delete viewBtn.dataset.alt;
+                        fileInput.value = "";
+                        wrapper.classList.remove("thumb--uploaded");
+                        if (wrapper.classList.contains("thumb--active"))
+                            hideViewerImage();
+                    });
+                })(idx);
+            }
+
+            // Restore active
+            (function restoreActive() {
+                var savedIndex = localStorage.getItem("gallery-active-index");
+                if (savedIndex !== null) {
+                    var idx = parseInt(savedIndex, 10);
+                    var wrapper = thumbWrappers[idx];
+                    if (wrapper)
+                        requestAnimationFrame(function () {
+                            selectThumb(wrapper, idx);
+                        });
+                }
+            })();
+
+            // Close lightbox on resize up
+            window.addEventListener("resize", function () {
+                if (
+                    window.innerWidth > 900 &&
+                    lightbox.classList.contains("lightbox--open")
+                )
+                    closeLightbox();
+            });
+
+            // Burger
+            var burger = document.getElementById("burger");
+            var navLinks = document.getElementById("navLinks");
+            burger.addEventListener("click", function () {
+                navLinks.classList.toggle("nav__links--open");
+            });
+        </script>
+
+        <style>
+            @keyframes fadeSlideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(16px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* ======== Nav ======== */
+            .nav {
+                height: var(--nav-h);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 40px;
+                border-bottom: 1px dashed var(--color-line);
+                flex-shrink: 0;
+                position: relative;
+                z-index: 5;
+                background: var(--color-paper);
+                animation: fadeSlideUp 0.5s ease both;
+            }
+            .nav__links {
+                display: flex;
+                gap: 32px;
+            }
+            .nav__link {
+                text-decoration: none;
+                font-size: 13px;
+                letter-spacing: 0.06em;
+                color: var(--color-ink);
+                font-weight: 700;
+            }
+            .nav__auth {
+                display: flex;
+                gap: 12px;
+            }
+            .btn {
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                border: none;
+                padding: 12px 20px;
+                cursor: pointer;
+            }
+            .btn--ghost {
+                background: var(--color-chip-bg);
+                color: var(--color-ink);
+            }
+            .btn--solid {
+                background: var(--color-ink);
+                color: var(--color-paper);
+            }
+            .nav__burger {
+                display: none;
+                background: var(--color-ink);
+                border: none;
+                width: 60px;
+                height: 60px;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            .nav__burger svg {
+                display: block;
+            }
+
+            /* ======== Desktop gallery ======== */
+            .gallery {
+                flex: 1;
+                display: grid;
+                grid-template-columns: minmax(320px, 45%) 1fr;
+                align-items: stretch;
+                min-height: 0;
+                overflow: hidden;
+            }
+            .gallery__grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--gap);
+                padding: 40px;
+                align-content: start;
+                overflow-y: auto;
+                min-height: 0;
+            }
+            .gallery__viewer {
+                background: var(--color-panel-bg);
+                background-image: radial-gradient(
+                    var(--color-panel-dot) 1.4px,
+                    transparent 1.4px
+                );
+                background-size: 16px 16px;
+                display: flex;
+                align-items: flex-start;
+                padding: 40px;
+                min-height: 0;
+                overflow: hidden;
+                animation: fadeSlideUp 0.5s 0.1s ease both;
+            }
+            .viewer__stage {
+                width: 100%;
+                max-width: 720px;
+            }
+            .viewer__stage img {
+                width: 100%;
+                height: auto;
+                display: block;
+                max-height: calc(100vh - var(--nav-h) - 80px);
+                object-fit: contain;
+                animation: fadeSlideUp 0.4s ease both;
+            }
+            .viewer__empty {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                padding: 80px 40px;
+                color: var(--color-muted);
+                text-align: center;
+                font-size: 14px;
+                animation: fadeSlideUp 0.4s 0.15s ease both;
+            }
+            .viewer__empty svg {
+                display: block;
+                flex-shrink: 0;
+            }
+            .viewer__empty p {
+                margin: 0;
+            }
+
+            /* ======== Thumbs ======== */
+            .thumb {
+                position: relative;
+                aspect-ratio: 1 / 1;
+                overflow: hidden;
+                border: 3px solid transparent;
+                display: block;
+                background: var(--color-panel-bg);
+                transition:
+                    border-color 0.3s ease,
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+                cursor: pointer;
+                animation: fadeSlideUp 0.4s ease both;
+                animation-delay: calc(0.04s * var(--i, 0));
+            }
+            .thumb:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            }
+            .thumb--active {
+                border-color: var(--color-accent);
+                box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.25);
+            }
+            .thumb__view {
+                padding: 0;
+                border: none;
+                background: none;
+                width: 100%;
+                height: 100%;
+                display: block;
+                cursor: pointer;
+            }
+            .thumb__img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: none;
+                opacity: 0;
+                transition: opacity 0.4s ease;
+            }
+            .thumb--uploaded .thumb__img {
+                display: block;
+                opacity: 1;
+            }
+
+            .thumb__plus {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2;
+                pointer-events: none;
+            }
+            .thumb--uploaded .thumb__plus {
+                display: none;
+            }
+            .thumb__upload {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: rgba(0, 0, 0, 0.45);
+                color: #fff;
+                border: none;
+                cursor: pointer;
+                backdrop-filter: blur(4px);
+                transition:
+                    background 0.2s ease,
+                    transform 0.2s ease;
+                pointer-events: auto;
+            }
+            .thumb:hover .thumb__upload {
+                background: rgba(0, 0, 0, 0.6);
+                transform: scale(1.1);
+            }
+            .thumb__upload svg {
+                display: block;
+            }
+
+            .thumb::after {
+                content: "";
+                position: absolute;
+                inset: 6px;
+                border: 2px dashed rgba(0, 0, 0, 0.15);
+                border-radius: 2px;
+                pointer-events: none;
+                transition:
+                    border-color 0.3s ease,
+                    opacity 0.3s ease;
+                z-index: 1;
+            }
+            .thumb:hover::after {
+                border-color: rgba(0, 0, 0, 0.3);
+            }
+            .thumb--active::after {
+                border-color: var(--color-accent);
+                opacity: 0.6;
+            }
+            .thumb--uploaded::after {
+                opacity: 0;
+            }
+
+            .thumb__actions {
+                position: absolute;
+                top: 6px;
+                right: 6px;
+                display: flex;
+                gap: 4px;
+                z-index: 3;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+            .thumb:hover .thumb__actions,
+            .thumb:focus-within .thumb__actions,
+            .thumb--uploaded .thumb__actions {
+                opacity: 1;
+            }
+            .thumb__delete {
+                display: none;
+                align-items: center;
+                justify-content: center;
+                width: 28px;
+                height: 28px;
+                border-radius: 6px;
+                background: rgba(220, 38, 38, 0.8);
+                color: #fff;
+                border: none;
+                cursor: pointer;
+                backdrop-filter: blur(4px);
+                transition:
+                    background 0.2s ease,
+                    transform 0.15s ease;
+            }
+            .thumb__delete:hover {
+                background: rgba(220, 38, 38, 1);
+                transform: scale(1.1);
+            }
+            .thumb__delete svg {
+                display: block;
+            }
+            .thumb--uploaded .thumb__delete {
+                display: flex;
+                animation: fadeSlideUp 0.25s ease both;
+            }
+
+            ::view-transition-old(thumb-active),
+            ::view-transition-new(thumb-active) {
+                animation-duration: 0.25s;
+            }
+            .thumb--active {
+                view-transition-name: thumb-active;
+            }
+
+            /* ======== Mobile lightbox ======== */
+            .lightbox {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.55);
+                backdrop-filter: blur(24px);
+                -webkit-backdrop-filter: blur(24px);
+                flex-direction: column;
+            }
+            .lightbox--open {
+                display: flex;
+            }
+
+            .lightbox__toolbar {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                padding: 8px 12px;
+                padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
+                z-index: 2;
+                flex-shrink: 0;
+            }
+            .lightbox__action {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border: none;
+                border-radius: 8px;
+                background: rgba(0, 0, 0, 0.25);
+                color: #fff;
+                cursor: pointer;
+                transition: background 0.15s ease;
+            }
+            .lightbox__action:active {
+                background: rgba(0, 0, 0, 0.5);
+            }
+            .lightbox__action svg {
+                display: block;
+            }
+            .lightbox__delete:active {
+                background: rgba(220, 38, 38, 0.7);
+            }
+
+            .lightbox__counter {
+                flex: 1;
+                text-align: center;
+                color: rgba(255, 255, 255, 0.6);
+                font-size: 13px;
+                font-family: var(--font-mono);
+            }
+
+            .lightbox__image-wrap {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 16px;
+                padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+                position: relative;
+                overflow: hidden;
+                min-height: 0;
+            }
+
+            .lightbox__image-wrap img {
+                width: 80%;
+                height: 80%;
+                object-fit: contain;
+                transition: opacity 0.2s ease;
+                user-select: none;
+                -webkit-user-drag: none;
+                touch-action: pan-y;
+                will-change: transform, opacity;
+            }
+
+            .lightbox__hint {
+                display: none;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                inset: 0;
+                z-index: 3;
+                color: rgba(255, 255, 255, 0.6);
+                font-size: 14px;
+                font-family: var(--font-mono);
+                letter-spacing: 0.06em;
+                transition: opacity 0.4s ease;
+                pointer-events: none;
+            }
+
+            /* ======== Mobile responsive ======== */
+            @media (max-width: 900px) {
+                body {
+                    overflow: auto;
+                }
+
+                .nav {
+                    padding: 0 20px;
+                }
+                .nav__auth {
+                    display: none;
+                }
+                .nav__links {
+                    display: none;
+                }
+                .nav__links--open {
+                    display: flex;
+                    position: absolute;
+                    top: var(--nav-h);
+                    left: 0;
+                    right: 0;
+                    background: var(--color-paper);
+                    flex-direction: column;
+                    padding: 20px;
+                    gap: 16px;
+                    border-bottom: 1px dashed var(--color-line);
+                    z-index: 10;
+                }
+                .nav__burger {
+                    display: flex;
+                }
+
+                .gallery {
+                    display: flex;
+                    flex-direction: column;
+                    overflow: visible;
+                }
+                .gallery__viewer {
+                    display: none;
+                }
+                .gallery__grid {
+                    padding: 20px;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 4px;
+                    overflow-y: visible;
+                }
+
+                .thumb {
+                    border-width: 2px;
+                }
+                .thumb::after {
+                    inset: 4px;
+                    border-width: 1.5px;
+                }
+                .thumb__upload {
+                    width: 36px;
+                    height: 36px;
+                }
+                .thumb__actions {
+                    top: 4px;
+                    right: 4px;
+                }
+                .thumb__delete {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 4px;
+                }
+            }
+        </style>
+    </body>
+</html>
