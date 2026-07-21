@@ -1,0 +1,475 @@
+---
+import "../styles/global.css";
+
+const films = [
+    {
+        id: "disclosure-day",
+        title: ["DISCLOSURE", "DAY"],
+        caption: '"THE TRUTH IS FINALLY OUT"',
+        image: "/images/disclosure-day.webp",
+        alt: "Disclosure Day movie poster",
+        band: 1,
+    },
+    {
+        id: "the-odyssey",
+        title: ["THE", "ODYSSEY"],
+        caption: '"EVERY JOURNEY HAS A DESTINY"',
+        image: "/images/the-odyssey.webp",
+        alt: "The Odyssey movie poster",
+        band: 1,
+    },
+    {
+        id: "scary-movie",
+        title: ["SCARY", "MOVIE"],
+        caption: '"LAUGHTER MEETS TERROR"',
+        image: "/images/scary-movie.webp",
+        alt: "Scary Movie poster",
+        band: 1,
+    },
+    {
+        id: "the-mandalorian-and-grogu",
+        title: ["THE MANDALORIAN", "AND GROGU"],
+        caption: '"A GALAXY FAR, FAR AWAY"',
+        image: "/images/mandalorian-and-grogu.webp",
+        alt: "The Mandalorian and Grogu movie poster",
+        band: 1,
+    },
+    {
+        id: "avengers-doomsday",
+        title: ["AVENGERS:", "DOOMSDAY"],
+        caption: '"THE END OF EVERYTHING"',
+        image: "/images/avengers-doomsday.webp",
+        alt: "Avengers Doomsday movie poster",
+        band: 1,
+    },
+    {
+        id: "spider-man-brand-new-day",
+        title: ["SPIDER-MAN:", "BRAND NEW DAY"],
+        caption: '"A NEW DAY. A NEW THREAT."',
+        image: "/images/spider-man-brand-new-day.webp",
+        alt: "Spider-Man Brand New Day movie poster",
+        band: 1,
+    },
+];
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Maxeene Film Foundation</title>
+    </head>
+    <body>
+        <header class="nav">
+            <div class="nav__brand">
+                <div class="brand__name">MAXEENE</div>
+                <div class="brand__sub">FILM FOUNDATION</div>
+            </div>
+            <div class="nav__eyebrow" id="eyebrow">(01) COUTURE</div>
+            <button class="nav__menu" aria-label="Open menu">
+                MENU
+                <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+                    <path
+                        d="M0 1H18M0 7H18M0 13H18"
+                        stroke="white"
+                        stroke-width="1.6"></path>
+                </svg>
+            </button>
+        </header>
+
+        <div class="rule"></div>
+
+        <div class="page">
+            <div class="rail rail--left" aria-hidden="true"></div>
+
+            <main class="content">
+                <section class="band band--0 intro">
+                    <p class="intro__copy">
+                        See the latest films and live events<br />
+                        in 2D and 3D at Vue cinemas.
+                    </p>
+                </section>
+
+                {
+                    films.map((film) => (
+                        <section
+                            class={`band band--${film.band} row`}
+                            data-image={film.image}
+                            data-alt={film.alt}
+                        >
+                            <img
+                                class="row__image"
+                                src={film.image}
+                                alt={film.alt}
+                            />
+                            <h2 class="row__title">
+                                {film.title.map((line) => (
+                                    <>
+                                        {line}
+                                        <br />
+                                    </>
+                                ))}
+                            </h2>
+                            <p class="row__caption">{film.caption}</p>
+                        </section>
+                    ))
+                }
+            </main>
+
+            <div class="rail rail--right" aria-hidden="true"></div>
+
+            <div class="fixed-frame">
+                <div class="fixed-frame__box">
+                    <img
+                        id="fixed-image"
+                        src={films[0].image}
+                        alt={films[0].alt}
+                    />
+                </div>
+            </div>
+        </div>
+
+        <script define:vars={{ films }}>
+            const rows = document.querySelectorAll(".row");
+            const fixedImage = document.getElementById("fixed-image");
+            const eyebrow = document.getElementById("eyebrow");
+
+            let currentImage = films[0].image;
+
+            const fixedFrame = document.querySelector(".fixed-frame");
+
+            const setActive = (row) => {
+                rows.forEach((r) => r.classList.remove("is-active"));
+                row.classList.add("is-active");
+                fixedFrame?.classList.add("is-visible");
+
+                const src = row.dataset.image;
+                const alt = row.dataset.alt || "";
+
+                if (src && src !== currentImage && fixedImage) {
+                    currentImage = src;
+                    fixedImage.style.opacity = "0";
+                    window.setTimeout(() => {
+                        fixedImage.src = src;
+                        fixedImage.alt = alt;
+                        fixedImage.style.opacity = "1";
+                    }, 180);
+                }
+
+                const index = Array.from(rows).indexOf(row) + 1;
+                if (eyebrow) {
+                    eyebrow.textContent = `(0${index}) COUTURE`;
+                }
+            };
+
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            setActive(entry.target);
+                        }
+                    });
+                },
+                {
+                    root: null,
+                    rootMargin: "-45% 0px -45% 0px",
+                    threshold: 0,
+                },
+            );
+
+            rows.forEach((row) => observer.observe(row));
+
+            const burger = document.querySelector(".nav__menu");
+            burger?.addEventListener("click", () => {
+                document.body.classList.toggle("menu-open");
+            });
+        </script>
+
+        <style>
+            .nav {
+                position: sticky;
+                top: 0;
+                z-index: 30;
+                height: var(--nav-h);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 40px;
+                background: var(--band-0);
+            }
+
+            .brand__name {
+                font-size: 22px;
+                font-weight: 800;
+                letter-spacing: 0.02em;
+                line-height: 1;
+            }
+
+            .brand__sub {
+                font-size: 10px;
+                font-weight: 600;
+                letter-spacing: 0.16em;
+                color: var(--color-muted);
+                margin-top: 4px;
+            }
+
+            .nav__eyebrow {
+                font-size: 20px;
+                font-weight: 700;
+                letter-spacing: 0.02em;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .nav__menu {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: var(--color-ink);
+                color: #fff;
+                border: none;
+                padding: 14px 20px;
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                cursor: pointer;
+            }
+
+            .rule {
+                position: sticky;
+                top: var(--nav-h);
+                z-index: 30;
+                height: 2px;
+                background: repeating-linear-gradient(
+                    to right,
+                    var(--color-line) 0,
+                    var(--color-line) 12px,
+                    transparent 12px,
+                    transparent 24px
+                );
+            }
+
+            .page {
+                display: flex;
+            }
+
+            .rail {
+                width: var(--rail);
+                flex-shrink: 0;
+                position: relative;
+            }
+
+            .rail--left::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 2px;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    var(--color-line) 0,
+                    var(--color-line) 12px,
+                    transparent 12px,
+                    transparent 24px
+                );
+            }
+
+            .rail--right::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: 2px;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    var(--color-line) 0,
+                    var(--color-line) 12px,
+                    transparent 12px,
+                    transparent 24px
+                );
+            }
+
+            .content {
+                flex: 1;
+            }
+
+            .band {
+                position: relative;
+                margin-bottom: 12px;
+            }
+
+            .band:last-child {
+                margin-bottom: 180px;
+            }
+
+            .band--0 {
+                background: var(--band-0);
+            }
+
+            .band--1 {
+                background: var(--band-1);
+            }
+
+            .intro {
+                min-height: 45vh;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                padding: 40px 8vw 40px 0;
+            }
+
+            .intro__copy {
+                max-width: 420px;
+                font-size: 22px;
+                line-height: 1.35;
+                text-align: left;
+                margin: -20px;
+            }
+
+            .row {
+                min-height: 30vh;
+                display: flex;
+                align-items: end;
+                justify-content: space-between;
+                padding: 30px 3vw;
+            }
+
+            .row__image {
+                display: none;
+            }
+
+            .row__title {
+                font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+                font-weight: 600;
+                font-size: 22px;
+                line-height: 1.12;
+                letter-spacing: 0.01em;
+                color: var(--color-muted);
+                transition: color 0.35s ease;
+                margin: 0;
+            }
+
+            .row__caption {
+                font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+                font-weight: 500;
+                font-size: 15px;
+                letter-spacing: 0;
+                color: var(--color-muted);
+                transition: color 0.35s ease;
+                margin: 0;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .row.is-active .row__title,
+            .row.is-active .row__caption {
+                color: var(--color-ink);
+            }
+
+            .fixed-frame {
+                position: fixed;
+                top: calc(var(--nav-h) + 1px);
+                left: 0;
+                right: 0;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                pointer-events: none;
+                z-index: 5;
+                opacity: 0;
+                transition: opacity 0.4s ease;
+            }
+
+            .fixed-frame.is-visible {
+                opacity: 1;
+            }
+
+            .fixed-frame__box {
+                border: 1px solid var(--color-ink);
+                padding: 16px;
+                background: var(--band-0);
+            }
+
+            .fixed-frame__box img {
+                width: min(16vw, 250px);
+                height: auto;
+                aspect-ratio: 2 / 3;
+                object-fit: cover;
+                transition: opacity 0.2s ease;
+            }
+
+            @media (max-width: 900px) {
+                .nav {
+                    padding: 0 20px;
+                }
+
+                .brand__sub {
+                    display: none;
+                }
+
+                .nav__eyebrow {
+                    display: none;
+                }
+
+                .rail {
+                    width: 24px;
+                }
+
+                .rail--left::before {
+                    right: 0;
+                }
+
+                .rail--right::before {
+                    left: 0;
+                }
+
+                .intro {
+                    justify-content: flex-start;
+                    padding: 32px var(--rail);
+                    min-height: auto;
+                }
+
+                .intro__copy {
+                    text-align: left;
+                    font-size: 17px;
+                    max-width: none;
+                }
+
+                .row {
+                    min-height: auto;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: end;
+                    gap: 8px;
+                    padding: 32px 24px 24px;
+                }
+
+                .row__image {
+                    display: block;
+                    width: 100%;
+                    aspect-ratio: 4 / 3;
+                    object-fit: cover;
+                    border: 1px solid var(--color-ink);
+                }
+
+                .row__title {
+                    max-width: none;
+                }
+
+                .row__caption {
+                    white-space: normal;
+                }
+
+                .fixed-frame {
+                    display: none;
+                }
+            }
+        </style>
+    </body>
+</html>
