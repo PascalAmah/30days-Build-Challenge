@@ -1,0 +1,568 @@
+---
+const tags = [
+    { text: "Claude", bg: "#d9d48c", color: "#4a431c", fx: 0.305, fy: 0.415 },
+    {
+        text: "AI thinking",
+        bg: "#93cce2",
+        color: "#1c4a5c",
+        fx: 0.272,
+        fy: 0.465,
+    },
+    { text: "Design", bg: "#2b2fc9", color: "#ffffff", fx: 0.262, fy: 0.515 },
+    {
+        text: "AI thinking",
+        bg: "#d9d48c",
+        color: "#4a431c",
+        fx: 0.245,
+        fy: 0.56,
+    },
+    {
+        text: "Interaction",
+        bg: "#e8ac55",
+        color: "#5c3a10",
+        fx: 0.245,
+        fy: 0.605,
+    },
+    {
+        text: "Design Engineer",
+        bg: "#c67a13",
+        color: "#ffffff",
+        fx: 0.238,
+        fy: 0.65,
+    },
+    {
+        text: "Animation",
+        bg: "#a8447f",
+        color: "#ffffff",
+        fx: 0.252,
+        fy: 0.695,
+    },
+    { text: "Animation", bg: "#a9b955", color: "#3a4517", fx: 0.298, fy: 0.74 },
+    {
+        text: "AI thinking",
+        bg: "#93cce2",
+        color: "#1c4a5c",
+        fx: 0.398,
+        fy: 0.722,
+    },
+    {
+        text: "Website design",
+        bg: "#161616",
+        color: "#ffffff",
+        fx: 0.388,
+        fy: 0.767,
+    },
+    { text: "Prompting", bg: "#a9e8c6", color: "#1c5c3a", fx: 0.612, fy: 0.64 },
+    {
+        text: "AI thinking",
+        bg: "#93cce2",
+        color: "#1c4a5c",
+        fx: 0.598,
+        fy: 0.688,
+    },
+    {
+        text: "Figma Make",
+        bg: "#a8447f",
+        color: "#ffffff",
+        fx: 0.588,
+        fy: 0.733,
+    },
+    { text: "Cursor", bg: "#161616", color: "#ffffff", fx: 0.548, fy: 0.76 },
+    {
+        text: "Antigravity",
+        bg: "#5952e0",
+        color: "#ffffff",
+        fx: 0.518,
+        fy: 0.792,
+    },
+];
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Day 10 — 30 Days Challenge</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Phudu:wght@700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="bg-grid"></div>
+
+        <header class="top-bar">
+            <span class="day-label">DAY 10</span>
+
+            <nav class="desktop-nav">
+                <span>ANIMATION</span>
+                <span>FUN &amp; INTERESTING</span>
+                <span>CHALLENGING</span>
+            </nav>
+
+            <button
+                class="menu-btn"
+                type="button"
+                id="menuBtn"
+                aria-label="Open menu">MENU</button
+            >
+        </header>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-overlay"></div>
+            <div class="mobile-menu-panel">
+                <button
+                    class="mobile-menu-close"
+                    id="menuClose"
+                    type="button"
+                    aria-label="Close menu"
+                >
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        ><line x1="18" y1="6" x2="6" y2="18"></line><line
+                            x1="6"
+                            y1="6"
+                            x2="18"
+                            y2="18"></line></svg
+                    >
+                </button>
+                <nav class="mobile-nav">
+                    <a href="#">ANIMATION</a>
+                    <a href="#">FUN &amp; INTERESTING</a>
+                    <a href="#">CHALLENGING</a>
+                </nav>
+            </div>
+        </div>
+
+        <div class="tag-field" id="tagField">
+            {
+                tags.map((t, i) => (
+                    <div
+                        class="tag"
+                        data-fx={t.fx}
+                        data-fy={t.fy}
+                        style={`background:${t.bg}; color:${t.color};`}
+                    >
+                        {t.text}
+                    </div>
+                ))
+            }
+        </div>
+
+        <h1 class="hero-title">
+            <span>30 Days</span>
+            <span>Challenge</span>
+        </h1>
+
+        <script>
+            const field = document.getElementById("tagField")!;
+            const tagEls = Array.from(
+                field.querySelectorAll<HTMLDivElement>(".tag"),
+            );
+            const n = tagEls.length;
+
+            const isFinePointer = window.matchMedia(
+                "(hover: hover) and (pointer: fine)",
+            ).matches;
+
+            type Pt = { x: number; y: number };
+            let positions: Pt[] = [];
+            let targets: Pt[] = [];
+
+            function basePositions(): Pt[] {
+                return tagEls.map((el) => ({
+                    x: parseFloat(el.dataset.fx || "0.5") * window.innerWidth,
+                    y: parseFloat(el.dataset.fy || "0.5") * window.innerHeight,
+                }));
+            }
+
+            function initPositions() {
+                const base = basePositions();
+                positions = base.map((p) => ({ ...p }));
+                targets = base.map((p) => ({ ...p }));
+            }
+
+            initPositions();
+
+            // Mouse position (desktop snake-follow)
+            let mouse: Pt = { ...positions[0] };
+            let mouseActive = false;
+
+            window.addEventListener("mousemove", (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                mouseActive = true;
+            });
+
+            window.addEventListener("mouseleave", () => {
+                mouseActive = false;
+            });
+
+            // Autonomous floating targets (mobile / coarse pointer)
+            function pickNewFloatTargets() {
+                const margin = 60;
+                targets = tagEls.map(() => ({
+                    x:
+                        margin +
+                        Math.random() * (window.innerWidth - margin * 2),
+                    y:
+                        margin +
+                        Math.random() * (window.innerHeight - margin * 2),
+                }));
+            }
+
+            let floatTimer: number | undefined;
+            if (!isFinePointer) {
+                pickNewFloatTargets();
+                floatTimer = window.setInterval(pickNewFloatTargets, 4200);
+            }
+
+            function render() {
+                if (isFinePointer) {
+                    // Snake: head chases the mouse (or drifts home if mouse hasn't moved yet),
+                    // each following tag chases the one before it.
+                    const headTarget = mouseActive ? mouse : basePositions()[0];
+                    positions[0].x += (headTarget.x - positions[0].x) * 0.16;
+                    positions[0].y += (headTarget.y - positions[0].y) * 0.16;
+
+                    for (let i = 1; i < n; i++) {
+                        positions[i].x +=
+                            (positions[i - 1].x - positions[i].x) * 0.22;
+                        positions[i].y +=
+                            (positions[i - 1].y - positions[i].y) * 0.22;
+                    }
+                } else {
+                    for (let i = 0; i < n; i++) {
+                        positions[i].x +=
+                            (targets[i].x - positions[i].x) * 0.012;
+                        positions[i].y +=
+                            (targets[i].y - positions[i].y) * 0.012;
+                    }
+                }
+
+                tagEls.forEach((el, i) => {
+                    el.style.transform = `translate(${positions[i].x}px, ${positions[i].y}px) translate(-50%, -50%)`;
+                });
+
+                requestAnimationFrame(render);
+            }
+
+            requestAnimationFrame(render);
+
+            window.addEventListener("resize", () => {
+                if (!isFinePointer) {
+                    pickNewFloatTargets();
+                }
+            });
+
+            // ── Mobile menu toggle ──
+            const menuBtn = document.getElementById("menuBtn")!;
+            const mobileMenu = document.getElementById("mobileMenu")!;
+            const menuClose = document.getElementById("menuClose")!;
+            const menuOverlay = mobileMenu.querySelector(
+                ".mobile-menu-overlay",
+            )!;
+
+            let menuOpen = false;
+
+            function openMenu() {
+                menuOpen = true;
+                mobileMenu.style.pointerEvents = "";
+                mobileMenu.classList.add("open");
+                menuBtn.textContent = "CLOSE";
+                menuBtn.setAttribute("aria-label", "Close menu");
+                menuBtn.setAttribute("aria-expanded", "true");
+                document.body.style.overflow = "hidden";
+            }
+
+            function closeMenu() {
+                menuOpen = false;
+                mobileMenu.classList.remove("open");
+                menuBtn.textContent = "MENU";
+                menuBtn.setAttribute("aria-label", "Open menu");
+                menuBtn.setAttribute("aria-expanded", "false");
+                document.body.style.overflow = "";
+
+                // Re-apply pointer-events: none after the slide-out transition ends
+                const onTransitionEnd = () => {
+                    mobileMenu.style.pointerEvents = "none";
+                    mobileMenu.removeEventListener(
+                        "transitionend",
+                        onTransitionEnd,
+                    );
+                };
+                mobileMenu.addEventListener("transitionend", onTransitionEnd);
+            }
+
+            menuBtn.addEventListener("click", () => {
+                if (menuOpen) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+
+            menuClose.addEventListener("click", closeMenu);
+            menuOverlay.addEventListener("click", closeMenu);
+        </script>
+
+        <style>
+            :root {
+                --ink: #161616;
+                --paper: #f5f4f0;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                background: var(--paper);
+                font-family: "Cal Sans", system-ui, sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                color: var(--ink);
+            }
+
+            .bg-grid {
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                background-image: repeating-linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.035) 0px,
+                    rgba(0, 0, 0, 0.035) 1px,
+                    transparent 1px,
+                    transparent 26px
+                );
+                pointer-events: none;
+            }
+
+            @font-face {
+                font-family: "Cal Sans";
+                src: url("https://cdn.jsdelivr.net/npm/cal-sans@1.0.1/fonts/CalSans-SemiBurst.woff2")
+                    format("woff2");
+                font-weight: 400;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            .top-bar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 20;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 28px 32px;
+                font-size: 20px;
+            }
+
+            .day-label {
+                font-weight: 400;
+                font-size: 20px;
+                letter-spacing: 0.02em;
+            }
+
+            .desktop-nav {
+                display: flex;
+                gap: clamp(40px, 8vw, 140px);
+                font-weight: 400;
+                font-size: 20px;
+                letter-spacing: 0.03em;
+            }
+
+            .menu-btn {
+                display: none;
+                border: none;
+                background: var(--ink);
+                color: #fff;
+                font-weight: 400;
+                font-size: 20px;
+                letter-spacing: 0.03em;
+                padding: 10px 22px;
+                border-radius: 999px;
+                cursor: pointer;
+            }
+
+            .tag-field {
+                position: fixed;
+                inset: 0;
+                z-index: 10;
+                pointer-events: none;
+            }
+
+            .tag {
+                position: absolute;
+                top: 0;
+                left: 0;
+                transform: translate(-9999px, -9999px);
+                white-space: nowrap;
+                padding: 14px 30px;
+                border-radius: 999px;
+                font-weight: 400;
+                font-size: 20px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+                will-change: transform;
+            }
+
+            .hero-title {
+                position: fixed;
+                left: 24px;
+                bottom: 0;
+                z-index: 5;
+                margin: 0;
+                font-family: "Phudu", serif;
+                font-weight: 700;
+                font-style: bold;
+                text-transform: uppercase;
+                line-height: 0.86;
+                font-size: clamp(3rem, 12vw, 140px);
+                letter-spacing: -0.01em;
+                display: flex;
+                flex-direction: column;
+                pointer-events: none;
+            }
+
+            /* ── Mobile menu ── */
+            .mobile-menu {
+                position: fixed;
+                inset: 0;
+                z-index: 100;
+                pointer-events: none;
+                visibility: hidden;
+                transition: visibility 0s 0.35s;
+            }
+
+            .mobile-menu-overlay {
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0);
+                transition: background 0.35s ease;
+            }
+
+            .mobile-menu-panel {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: min(320px, 80vw);
+                background: #fff;
+                box-shadow: -8px 0 30px rgba(0, 0, 0, 0.12);
+                transform: translateX(100%);
+                transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+                display: flex;
+                flex-direction: column;
+                padding: 28px 28px;
+            }
+
+            .mobile-menu-close {
+                align-self: flex-end;
+                border: none;
+                background: none;
+                cursor: pointer;
+                padding: 6px;
+                color: var(--ink);
+            }
+
+            .mobile-nav {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+                margin-top: 48px;
+                font-weight: 400;
+                font-size: 20px;
+                letter-spacing: 0.03em;
+            }
+
+            .mobile-nav a {
+                text-decoration: none;
+                color: var(--ink);
+            }
+
+            /* Open state */
+            .mobile-menu.open {
+                pointer-events: auto;
+                visibility: visible;
+                transition: visibility 0s 0s;
+            }
+
+            .mobile-menu.open .mobile-menu-overlay {
+                background: rgba(0, 0, 0, 0.45);
+            }
+
+            .mobile-menu.open .mobile-menu-panel {
+                transform: translateX(0);
+            }
+
+            @media (max-width: 860px) {
+                .desktop-nav {
+                    display: none;
+                }
+                .menu-btn {
+                    display: inline-block;
+                }
+                .top-bar {
+                    padding: 20px 20px;
+                    font-size: 16px;
+                }
+                .day-label {
+                    font-size: 16px;
+                }
+                .menu-btn {
+                    font-size: 16px;
+                }
+                .tag {
+                    font-size: 16px;
+                    padding: 11px 22px;
+                }
+                .hero-title {
+                    left: 16px;
+                    font-size: clamp(2.5rem, 15vw, 5rem);
+                }
+            }
+
+            @media (max-width: 480px) {
+                .top-bar {
+                    padding: 16px 16px;
+                    font-size: 14px;
+                }
+                .day-label {
+                    font-size: 14px;
+                }
+                .menu-btn {
+                    font-size: 14px;
+                    padding: 8px 18px;
+                }
+                .tag {
+                    font-size: 14px;
+                    padding: 9px 16px;
+                }
+                .hero-title {
+                    left: 12px;
+                    font-size: clamp(2rem, 18vw, 3.5rem);
+                }
+                .mobile-nav {
+                    font-size: 16px;
+                }
+            }
+        </style>
+    </body>
+</html>
