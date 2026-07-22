@@ -217,24 +217,19 @@ const tags = [
             let touch: Pt | null = null;
             let touchActive = false;
 
-            if (!isFinePointer) {
-                // Ambient drift targets: gently orbit around base position
-                function updateDriftTargets(time: number) {
-                    const amp = 40;
-                    const speed = 0.0008;
-                    targets = tagEls.map((_, i) => {
-                        const base = basePositions()[i];
-                        return {
-                            x:
-                                base.x +
-                                Math.sin(time * speed + phases[i].x) * amp,
-                            y:
-                                base.y +
-                                Math.sin(time * speed + phases[i].y) * amp,
-                        };
-                    });
-                }
+            function updateDriftTargets(time: number) {
+                const amp = 40;
+                const speed = 0.0008;
+                targets = tagEls.map((_, i) => {
+                    const base = basePositions()[i];
+                    return {
+                        x: base.x + Math.sin(time * speed + phases[i].x) * amp,
+                        y: base.y + Math.sin(time * speed + phases[i].y) * amp,
+                    };
+                });
+            }
 
+            if (!isFinePointer) {
                 // Touch tracking
                 field.addEventListener("touchstart", (e) => {
                     const t = e.touches[0];
@@ -593,6 +588,10 @@ const tags = [
                 }
                 .day-label {
                     font-size: 14px;
+                    font-weight: 500;
+                }
+                .mobile-nav {
+                    font-weight: 500;
                 }
                 .menu-btn {
                     font-size: 14px;
