@@ -207,29 +207,62 @@ const tags = [
                 mouseActive = false;
             });
 
-            // Autonomous floating targets (mobile / coarse pointer)
-            function pickNewFloatTargets() {
-                const margin = 60;
-                targets = tagEls.map(() => ({
-                    x:
-                        margin +
-                        Math.random() * (window.innerWidth - margin * 2),
-                    y:
-                        margin +
-                        Math.random() * (window.innerHeight - margin * 2),
-                }));
+            // ── Mobile: ambient drift + touch follow ──
+            // Each tag gets a unique sinusoidal phase so they drift organically
+            const phases = tagEls.map(() => ({
+                x: Math.random() * Math.PI * 2,
+                y: Math.random() * Math.PI * 2,
+            }));
+
+            let touch: Pt | null = null;
+            let touchActive = false;
+
+            if (!isFinePointer) {
+                // Ambient drift targets: gently orbit around base position
+                function updateDriftTargets(time: number) {
+                    const amp = 40;
+                    const speed = 0.0008;
+                    targets = tagEls.map((_, i) => {
+                        const base = basePositions()[i];
+                        return {
+                            x:
+                                base.x +
+                                Math.sin(time * speed + phases[i].x) * amp,
+                            y:
+                                base.y +
+                                Math.sin(time * speed + phases[i].y) * amp,
+                        };
+                    });
+                }
+
+                // Touch tracking
+                field.addEventListener("touchstart", (e) => {
+                    const t = e.touches[0];
+                    touch = { x: t.clientX, y: t.clientY };
+                    touchActive = true;
+                });
+
+                field.addEventListener("touchmove", (e) => {
+                    const t = e.touches[0];
+                    touch = { x: t.clientX, y: t.clientY };
+                    touchActive = true;
+                });
+
+                const cancelTouch = () => {
+                    touchActive = false;
+                    touch = null;
+                };
+                field.addEventListener("touchend", cancelTouch);
+                field.addEventListener("touchcancel", cancelTouch);
             }
 
-            let floatTimer: number | undefined;
-            if (!isFinePointer) {
-                pickNewFloatTargets();
-                floatTimer = window.setInterval(pickNewFloatTargets, 4200);
-            }
+            let frameTime = 0;
 
             function render() {
+                frameTime = performance.now();
+
                 if (isFinePointer) {
-                    // Snake: head chases the mouse (or drifts home if mouse hasn't moved yet),
-                    // each following tag chases the one before it.
+                    // Desktop: snake follows mouse
                     const headTarget = mouseActive ? mouse : basePositions()[0];
                     positions[0].x += (headTarget.x - positions[0].x) * 0.16;
                     positions[0].y += (headTarget.y - positions[0].y) * 0.16;
@@ -241,11 +274,28 @@ const tags = [
                             (positions[i - 1].y - positions[i].y) * 0.22;
                     }
                 } else {
-                    for (let i = 0; i < n; i++) {
-                        positions[i].x +=
-                            (targets[i].x - positions[i].x) * 0.012;
-                        positions[i].y +=
-                            (targets[i].y - positions[i].y) * 0.012;
+                    // Mobile: drift when not touching, snake-follow when touching
+                    updateDriftTargets(frameTime);
+
+                    if (touchActive && touch) {
+                        // Snake follows touch (same as desktop)
+                        positions[0].x += (touch.x - positions[0].x) * 0.16;
+                        positions[0].y += (touch.y - positions[0].y) * 0.16;
+
+                        for (let i = 1; i < n; i++) {
+                            positions[i].x +=
+                                (positions[i - 1].x - positions[i].x) * 0.22;
+                            positions[i].y +=
+                                (positions[i - 1].y - positions[i].y) * 0.22;
+                        }
+                    } else {
+                        // Drift toward sinusoidal targets
+                        for (let i = 0; i < n; i++) {
+                            positions[i].x +=
+                                (targets[i].x - positions[i].x) * 0.012;
+                            positions[i].y +=
+                                (targets[i].y - positions[i].y) * 0.012;
+                        }
                     }
                 }
 
@@ -258,11 +308,8 @@ const tags = [
 
             requestAnimationFrame(render);
 
-            window.addEventListener("resize", () => {
-                if (!isFinePointer) {
-                    pickNewFloatTargets();
-                }
-            });
+            // On resize, let basePositions() recalculate from the data-fx/fy percentages
+            // and the drift targets will naturally adapt on the next frame.
 
             // ── Mobile menu toggle ──
             const menuBtn = document.getElementById("menuBtn")!;
@@ -376,7 +423,7 @@ const tags = [
             }
 
             .day-label {
-                font-weight: 400;
+                font-weight: 500;
                 font-size: 20px;
                 letter-spacing: 0.02em;
             }
@@ -384,7 +431,7 @@ const tags = [
             .desktop-nav {
                 display: flex;
                 gap: clamp(40px, 8vw, 140px);
-                font-weight: 400;
+                font-weight: 500;
                 font-size: 20px;
                 letter-spacing: 0.03em;
             }
