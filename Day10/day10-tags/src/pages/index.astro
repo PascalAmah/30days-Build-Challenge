@@ -231,24 +231,38 @@ const tags = [
 
             if (!isFinePointer) {
                 // Touch tracking
-                field.addEventListener("touchstart", (e) => {
-                    const t = e.touches[0];
-                    touch = { x: t.clientX, y: t.clientY };
-                    touchActive = true;
-                });
+                field.addEventListener(
+                    "touchstart",
+                    (e) => {
+                        e.preventDefault();
+                        const t = e.touches[0];
+                        touch = { x: t.clientX, y: t.clientY };
+                        touchActive = true;
+                    },
+                    { passive: false },
+                );
 
-                field.addEventListener("touchmove", (e) => {
-                    const t = e.touches[0];
-                    touch = { x: t.clientX, y: t.clientY };
-                    touchActive = true;
-                });
+                field.addEventListener(
+                    "touchmove",
+                    (e) => {
+                        e.preventDefault();
+                        const t = e.touches[0];
+                        touch = { x: t.clientX, y: t.clientY };
+                        touchActive = true;
+                    },
+                    { passive: false },
+                );
 
                 const cancelTouch = () => {
                     touchActive = false;
                     touch = null;
                 };
-                field.addEventListener("touchend", cancelTouch);
-                field.addEventListener("touchcancel", cancelTouch);
+                field.addEventListener("touchend", cancelTouch, {
+                    passive: true,
+                });
+                field.addEventListener("touchcancel", cancelTouch, {
+                    passive: true,
+                });
             }
 
             let frameTime = 0;
@@ -374,6 +388,7 @@ const tags = [
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
+                overscroll-behavior: none;
                 background: var(--paper);
                 font-family: "Cal Sans", system-ui, sans-serif;
                 font-weight: 400;
@@ -448,7 +463,7 @@ const tags = [
                 position: fixed;
                 inset: 0;
                 z-index: 10;
-                pointer-events: none;
+                touch-action: none;
             }
 
             .tag {
@@ -470,7 +485,7 @@ const tags = [
                 left: 24px;
                 bottom: 0;
                 z-index: 5;
-                margin: 0;
+                margin-bottom: 20px;
                 font-family: "Phudu", serif;
                 font-weight: 700;
                 font-style: bold;

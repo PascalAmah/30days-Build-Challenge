@@ -1,0 +1,603 @@
+---
+// Hero section — "Your smartest hire yet, without the payroll"
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Your smartest hire yet, without the payroll</title>
+        <meta
+            name="description"
+            content="Automate the busywork, surface the right decisions, and move faster without lifting a finger."
+        />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Phudu:wght@800&family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <!-- Announcement bar -->
+        <div class="announcement" id="announcement">
+            <span class="announcement__badge">NEW</span>
+            <span class="announcement__text"
+                >Multi-currency cards are now available for all users</span
+            >
+            <button
+                class="announcement__close"
+                id="announcementClose"
+                aria-label="Dismiss announcement"
+            >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                        d="M1 1L13 13M13 1L1 13"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Nav -->
+        <header class="nav">
+            <a href="/" class="nav__logo" aria-label="Home">
+                <img src="/Logo.svg" alt="Logo" width="34" height="34" />
+            </a>
+
+            <div class="nav__desktop-actions">
+                <a href="#" class="btn btn--ghost">Sign in</a>
+                <a href="#" class="btn btn--primary">Try for free</a>
+            </div>
+
+            <button
+                class="btn btn--primary nav__mobile-menu"
+                aria-label="Open menu">MENU</button
+            >
+        </header>
+
+        <!-- Hero -->
+        <main class="hero">
+            <h1 class="hero__title">
+                Your smartest hire yet, without the payroll
+            </h1>
+            <p class="hero__subtitle">
+                Automate the busywork, surface the right decisions, and move
+                faster without lifting a finger.
+            </p>
+            <a href="#" class="btn btn--primary btn--cta">
+                <span>Try for free</span>
+                <span class="btn__icon" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path
+                            d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12"
+                            stroke="#BB3599"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+            </a>
+        </main>
+
+        <div class="hero__frame" id="heroFrame">
+            <div class="hero__image-wrap" id="parallaxWrap">
+                <img
+                    src="/images/gorilla.png"
+                    alt="A stylized gorilla wearing sunglasses and a gold chain, arms crossed, holding a metallic sphere"
+                    class="hero__image"
+                    id="parallaxImg"
+                />
+            </div>
+
+            <div class="logo-strip">
+                <div class="logo-strip__track" id="logoTrack">
+                    <div class="logo-strip__group">
+                        <span class="logo-strip__item">
+                            <img
+                                src="/Brand Items.png"
+                                alt="Brand logo"
+                                width="100"
+                                height="32"
+                            />
+                        </span>
+                        <span class="logo-strip__divider"></span>
+                        <span class="logo-strip__item">
+                            <img
+                                src="/Brand Items (1).png"
+                                alt="Brand logo"
+                                width="100"
+                                height="32"
+                            />
+                        </span>
+                        <span class="logo-strip__divider"></span>
+                        <span class="logo-strip__item">
+                            <img
+                                src="/Brand Items (2).png"
+                                alt="Brand logo"
+                                width="100"
+                                height="32"
+                            />
+                        </span>
+                        <span class="logo-strip__divider"></span>
+                        <span class="logo-strip__item">
+                            <img
+                                src="/Brand Items [Atomic].png"
+                                alt="Brand logo"
+                                width="100"
+                                height="32"
+                            />
+                        </span>
+                    </div>
+                    <div class="logo-strip__group" aria-hidden="true">
+                        <span class="logo-strip__item">
+                            <img
+                                src="/Brand Items.png"
+                                alt="Brand logo"
+                                width="100"
+                                height="32"
+                            />
+                        </span>
+                        <span class="logo-strip__divider"></span>
+                        <span class="logo-strip__item">
+                            <img
+                                src="/Brand Items (1).png"
+                                alt="Brand logo"
+                                width="100"
+                                height="32"
+                            />
+                        </span>
+                        <span class="logo-strip__divider"></span>
+                        <span class="logo-strip__item">
+                            <img
+                                src="/Brand Items (2).png"
+                                alt="Brand logo"
+                                width="100"
+                                height="32"
+                            />
+                        </span>
+                        <span class="logo-strip__divider"></span>
+                        <span class="logo-strip__item">
+                            <img
+                                src="/Brand Items [Atomic].png"
+                                alt="Brand logo"
+                                width="100"
+                                height="32"
+                            />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            :root {
+                --pink: #bb3599;
+                --pink-dark: #a52c87;
+                --ink: #0a0a0a;
+                --gray: #6b6b6b;
+                --bg: #f7f7f5;
+                --badge-bg: #fbeff7;
+                --frame-radius: 28px;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                background-color: var(--bg);
+                background-image: radial-gradient(#d9d9d6 1px, transparent 1px);
+                background-size: 22px 22px;
+                font-family: "Inter", sans-serif;
+                color: var(--ink);
+                overflow-x: hidden;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                border-radius: 999px;
+                font-weight: 600;
+                font-size: 15px;
+                text-decoration: none;
+                cursor: pointer;
+                border: none;
+                white-space: nowrap;
+                transition:
+                    transform 0.15s ease,
+                    box-shadow 0.15s ease,
+                    background-color 0.15s ease;
+            }
+
+            .btn--ghost {
+                background: #fff;
+                color: var(--ink);
+                padding: 12px 22px;
+                border: 1px solid #e4e4e2;
+            }
+
+            .btn--primary {
+                background: var(--pink);
+                color: #fff;
+                padding: 12px 24px;
+                box-shadow: 0 0 0 4px rgba(187, 53, 153, 0.16);
+            }
+
+            .btn--primary:hover {
+                background: var(--pink-dark);
+                transform: translateY(-1px);
+            }
+
+            .btn--cta {
+                padding: 8px 8px 8px 26px;
+                font-size: 17px;
+            }
+
+            .btn__icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                background: #fff;
+            }
+
+            /* Announcement bar */
+            .announcement {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                padding: 14px 44px 14px 16px;
+                text-align: center;
+                font-size: 13.5px;
+                color: var(--ink);
+                position: relative;
+            }
+
+            .announcement__badge {
+                background: var(--badge-bg);
+                color: var(--pink);
+                font-weight: 700;
+                font-size: 11px;
+                letter-spacing: 0.03em;
+                padding: 3px 9px;
+                border-radius: 999px;
+            }
+
+            .announcement__text {
+                color: #333;
+            }
+
+            .announcement__close {
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: #9a9a9a;
+                cursor: pointer;
+                padding: 4px;
+                display: flex;
+            }
+
+            .announcement__close:hover {
+                color: var(--ink);
+            }
+
+            .announcement.is-hidden {
+                display: none;
+            }
+
+            /* Nav */
+            .nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 18px 40px 10px;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .nav__logo {
+                display: flex;
+            }
+
+            .nav__desktop-actions {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .nav__mobile-menu {
+                display: none;
+            }
+
+            /* Hero */
+            .hero {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 60px 24px 0;
+                text-align: center;
+            }
+
+            .hero__title {
+                font-family: "Phudu", "Inter", sans-serif;
+                font-weight: 800;
+                font-size: 68px;
+                text-transform: uppercase;
+                line-height: 1.02;
+                letter-spacing: 0.002em;
+                margin: 0 0 26px;
+            }
+
+            .hero__subtitle {
+                font-size: clamp(1rem, 1.6vw, 1.2rem);
+                color: var(--gray);
+                line-height: 1.55;
+                max-width: 560px;
+                margin: 0 auto 36px;
+            }
+
+            .hero__frame {
+                margin: 56px auto 0;
+                margin-bottom: 40px;
+                width: 95%;
+                max-width: 1400px;
+                position: relative;
+                border-radius: var(--frame-radius);
+                overflow: hidden;
+                background: #000;
+                aspect-ratio: 16 / 14;
+                max-height: 95vh;
+            }
+
+            .hero__image-wrap {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                will-change: transform;
+            }
+
+            .hero__image {
+                width: 60%;
+                height: auto;
+                object-fit: contain;
+                display: block;
+                margin-top: 100px;
+            }
+
+            /* Logo ticker strip */
+            .logo-strip {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 0;
+                width: 50%;
+                background: #fff;
+                border-radius: 50px 50px 0 0;
+                overflow: hidden;
+                padding: 18px 0;
+            }
+
+            .logo-strip::before,
+            .logo-strip::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 48px;
+                z-index: 2;
+                pointer-events: none;
+            }
+            .logo-strip::before {
+                left: 0;
+                background: linear-gradient(
+                    90deg,
+                    #fff,
+                    rgba(255, 255, 255, 0)
+                );
+            }
+            .logo-strip::after {
+                right: 0;
+                background: linear-gradient(
+                    270deg,
+                    #fff,
+                    rgba(255, 255, 255, 0)
+                );
+            }
+
+            .logo-strip__track {
+                display: flex;
+                width: max-content;
+                animation: ticker 22s linear infinite;
+            }
+
+            .logo-strip__track:hover {
+                animation-play-state: paused;
+            }
+
+            .logo-strip__group {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            .logo-strip__item {
+                display: flex;
+                align-items: center;
+                padding: 0 24px;
+                color: #4a4a4a;
+            }
+
+            .logo-strip__item img {
+                display: block;
+                height: 24px;
+                width: auto;
+            }
+
+            .logo-strip__divider {
+                width: 1px;
+                height: 22px;
+                background: #e6e6e4;
+                flex-shrink: 0;
+            }
+
+            @keyframes ticker {
+                from {
+                    transform: translateX(0);
+                }
+                to {
+                    transform: translateX(-50%);
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .logo-strip__track {
+                    animation: none;
+                }
+                .hero__image-wrap {
+                    transform: none !important;
+                }
+            }
+
+            /* Mobile */
+            @media (max-width: 720px) {
+                .nav {
+                    padding: 16px 20px 6px;
+                }
+
+                .nav__desktop-actions {
+                    display: none;
+                }
+
+                .nav__mobile-menu {
+                    display: inline-flex;
+                }
+
+                .hero {
+                    padding: 40px 18px 0;
+                }
+
+                .hero__title {
+                    font-size: clamp(2.1rem, 9vw, 2.7rem);
+                }
+
+                .hero__subtitle {
+                    font-size: 0.98rem;
+                    max-width: 320px;
+                }
+
+                .hero__frame {
+                    width: 95%;
+                    max-width: 100%;
+                    border-radius: 20px;
+                    aspect-ratio: 3 / 4;
+                    max-height: 50vh;
+                    margin-top: 20px;
+                }
+
+                .hero__image-wrap {
+                    position: absolute;
+                    inset: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .hero__image {
+                    width: 90%;
+                    height: auto;
+                    object-fit: contain;
+                    display: block;
+                }
+
+                .logo-strip {
+                    left: 50%;
+                    transform: translateX(-50%);
+                    bottom: 0;
+                    width: 100%;
+                    padding: 0;
+                    border-radius: 30px 30px 0 0;
+                }
+
+                .logo-strip__item {
+                    padding: 10px 16px;
+                }
+
+                .announcement {
+                    font-size: 10px;
+                    padding: 12px 40px 12px 14px;
+                }
+
+                .announcement__text {
+                    text-align: left;
+                }
+            }
+        </style>
+
+        <script>
+            // Dismiss announcement bar
+            const closeBtn = document.getElementById("announcementClose");
+            const announcement = document.getElementById("announcement");
+            closeBtn?.addEventListener("click", () => {
+                announcement?.classList.add("is-hidden");
+            });
+
+            // Parallax effect on the gorilla image as the page scrolls
+            const frame = document.getElementById("heroFrame");
+            const wrap = document.getElementById("parallaxWrap");
+
+            const prefersReducedMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)",
+            ).matches;
+
+            if (frame && wrap && !prefersReducedMotion) {
+                let ticking = false;
+                const strength = 0.4; // how strong the parallax drift is
+
+                const updateParallax = () => {
+                    const rect = frame.getBoundingClientRect();
+                    const viewportH = window.innerHeight;
+
+                    // progress: -1 (frame below viewport) -> 0 (frame centered) -> 1 (frame above viewport)
+                    const center = rect.top + rect.height / 2;
+                    const progress =
+                        (viewportH / 2 - center) /
+                        (viewportH / 2 + rect.height / 2);
+                    const offset = progress * rect.height * strength;
+
+                    wrap.style.transform = `translateY(${offset}px)`;
+                    ticking = false;
+                };
+
+                const onScroll = () => {
+                    if (!ticking) {
+                        window.requestAnimationFrame(updateParallax);
+                        ticking = true;
+                    }
+                };
+
+                window.addEventListener("scroll", onScroll, { passive: true });
+                window.addEventListener("resize", onScroll);
+                updateParallax();
+            }
+        </script>
+    </body>
+</html>
