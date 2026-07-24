@@ -1,0 +1,763 @@
+---
+const logos = [
+    { name: "Synergy", src: "/synergy.png" },
+    { name: "Horizon", src: "/horizon.png" },
+    { name: "Catalyst", src: "/catalyst.png" },
+    { name: "Phoenix", src: "/phoenix.png" },
+    { name: "Pulse", src: "/pulse.png" },
+    { name: "Solaris", src: "/solaris.png" },
+    { name: "Aurora", src: "/aurora.png" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Synergy — Secure your crypto. Anytime, Anywhere.</title>
+        <meta
+            name="description"
+            content="Secure your crypto with Synergy. Instant feedback, fresh ideas, and clean code — anytime, anywhere."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Load Three.js -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+        ></script>
+    </head>
+    <body>
+        <div class="scene">
+            <!-- ===== Header ===== -->
+            <header class="nav">
+                <a class="brand reveal" href="/" style="--d:0ms">
+                    <img
+                        class="brand-logo"
+                        src="/synergy-header.png"
+                        alt="Synergy"
+                    />
+                </a>
+
+                <nav class="links reveal" style="--d:60ms" aria-label="Primary">
+                    <a href="#">Products</a>
+                    <a href="#">Services <span class="badge">NEW</span></a>
+                    <a href="#" class="has-chevron"
+                        >Solutions <svg
+                            width="10"
+                            height="6"
+                            viewBox="0 0 10 6"
+                            fill="none"
+                            ><path
+                                d="M1 1l4 4 4-4"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"></path></svg
+                        ></a
+                    >
+                    <a href="#">Pricing</a>
+                    <a href="#">Contact</a>
+                </nav>
+
+                <a class="cta-btn reveal" href="#" style="--d:120ms"
+                    >Get started</a
+                >
+                <button
+                    class="menu-btn reveal"
+                    style="--d:120ms"
+                    aria-label="Open menu">MENU</button
+                >
+            </header>
+
+            <!-- ===== Hero ===== -->
+            <main class="hero">
+                <div class="hero-copy">
+                    <h1 class="reveal" style="--d:160ms">
+                        Secure your<br />crypto. Anytime,<br />Anywhere.
+                    </h1>
+                    <p class="reveal" style="--d:280ms">
+                        From wireframes to polished interfaces — get instant
+                        feedback, fresh ideas, and clean code. Our tool works
+                        alongside you, so you spend less time stuck and more
+                        time shipping.
+                    </p>
+                    <div class="cta-row reveal" style="--d:380ms">
+                        <a class="btn btn-primary" href="#">
+                            Get started free
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 14 14"
+                                fill="none"
+                                ><path
+                                    d="M3 11L11 3M11 3H4M11 3V10"
+                                    stroke="currentColor"
+                                    stroke-width="1.6"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"></path></svg
+                            >
+                        </a>
+                        <a class="btn btn-ghost" href="#">Talk to sales</a>
+                    </div>
+                </div>
+
+                <!-- Replaced CSS cube with Three.js Container -->
+                <div class="hero-cube reveal-scale" style="--d:220ms">
+                    <div class="cube-glow" aria-hidden="true"></div>
+                    <div id="container"></div>
+                </div>
+            </main>
+
+            <!-- ===== Logo ticker ===== -->
+            <footer class="ticker-wrap reveal" style="--d:480ms">
+                <div class="ticker-fade ticker-fade-l" aria-hidden="true"></div>
+                <div class="ticker-fade ticker-fade-r" aria-hidden="true"></div>
+                <div class="ticker-track">
+                    <ul class="ticker">
+                        {
+                            logos.map((logo) => (
+                                <li>
+                                    <img
+                                        class="logo-img"
+                                        src={logo.src}
+                                        alt={logo.name}
+                                        loading="lazy"
+                                    />
+                                </li>
+                            ))
+                        }
+                    </ul>
+                    <ul class="ticker" aria-hidden="true">
+                        {
+                            logos.map((logo) => (
+                                <li>
+                                    <img
+                                        class="logo-img"
+                                        src={logo.src}
+                                        alt={logo.name}
+                                        loading="lazy"
+                                    />
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+            </footer>
+        </div>
+
+        <!-- THREE.JS Logic -->
+        <script>
+            import * as THREE from "three";
+            // Wait for DOM to load before grabbing container
+            document.addEventListener("DOMContentLoaded", () => {
+                //grab html element to attach to
+                var container = document.getElementById("container");
+
+                // Bind dimensions to the container instead of window
+                var width = container.clientWidth,
+                    height = container.clientHeight;
+                var View_angle = 45,
+                    Aspect = width / height,
+                    Near = 0.01,
+                    Far = 10000;
+
+                //Create WebGL renderer, camera and scene (Added alpha: true for transparency)
+                var renderer = new THREE.WebGLRenderer({
+                    antialias: true,
+                    alpha: true,
+                });
+                renderer.setSize(width, height);
+                renderer.setClearColor(0x000000, 0); // Transparent background
+
+                var camera = new THREE.PerspectiveCamera(
+                    View_angle,
+                    Aspect,
+                    Near,
+                    Far,
+                );
+                var scene = new THREE.Scene();
+
+                //add camera to the scene
+                scene.add(camera);
+
+                //adjust camera y-index and z-index
+                camera.position.y = 160;
+                camera.position.z = 400;
+
+                //init renderer
+                container.appendChild(renderer.domElement);
+                //END Scene set up variables
+
+                // Helper function to create curved edges (Rounded Box)
+                function createRoundedBox(
+                    width,
+                    height,
+                    depth,
+                    radius,
+                    smoothness,
+                ) {
+                    var shape = new THREE.Shape();
+                    var eps = 0.00001;
+                    var radius0 = radius - eps;
+
+                    shape.absarc(eps, eps, eps, -Math.PI / 2, -Math.PI, true);
+                    shape.absarc(
+                        eps,
+                        height - radius0 * 2,
+                        eps,
+                        Math.PI,
+                        Math.PI / 2,
+                        true,
+                    );
+                    shape.absarc(
+                        width - radius0 * 2,
+                        height - radius0 * 2,
+                        eps,
+                        Math.PI / 2,
+                        0,
+                        true,
+                    );
+                    shape.absarc(
+                        width - radius0 * 2,
+                        eps,
+                        eps,
+                        0,
+                        -Math.PI / 2,
+                        true,
+                    );
+
+                    var geometry = new THREE.ExtrudeGeometry(shape, {
+                        depth: depth - radius0 * 2,
+                        bevelEnabled: true,
+                        bevelSegments: smoothness * 2,
+                        steps: 1,
+                        bevelSize: radius0,
+                        bevelThickness: radius0,
+                        curveSegments: smoothness,
+                    });
+                    geometry.center();
+                    return geometry;
+                }
+
+                // CREATE Cube object (Increased size from 100 to 140)
+                // var cubeGeometry = createRoundedBox(140, 140, 140, 6, 5);
+                var cubeGeometry = createRoundedBox(200, 200, 200, 10, 8);
+
+                var cubeMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x051055, // Deep blue base color
+                    specular: 0xffffff, // Bright white highlights
+                    shininess: 70, // Slightly lowered to spread out the color gradient
+                });
+
+                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+                cube.rotation.y = (Math.PI * 45) / 180;
+                cube.rotation.x = (Math.PI * 15) / 180;
+
+                //CREATE MOVEMENT
+                cube.rotation.y = +new Date() / 800; // Decreased from 5000 to be faster
+                cube.rotation.x = +new Date() / 1000; // Decreased from 7000 to be faster
+
+                scene.add(cube);
+                //END CUBE OBJECT
+
+                //tell camera what to look at
+                camera.lookAt(cube.position);
+
+                //START LIGHTING
+                var ambientLight = new THREE.AmbientLight(0x111133, 1.5);
+                scene.add(ambientLight);
+
+                var pinkLight = new THREE.DirectionalLight(0xff00cc, 5.0);
+                pinkLight.position.set(-1, 1.5, 1);
+                scene.add(pinkLight);
+
+                var cyanLight = new THREE.DirectionalLight(0x00ffff, 5.0);
+                cyanLight.position.set(1, -1, 1);
+                scene.add(cyanLight);
+
+                var yellowLight = new THREE.DirectionalLight(0xffaa00, 3.0);
+                yellowLight.position.set(0, 2, -2);
+                scene.add(yellowLight);
+
+                var fillLight = new THREE.DirectionalLight(0x2222ff, 1.0);
+                fillLight.position.set(0, 0, 1);
+                scene.add(fillLight);
+                //END LIGHTING
+
+                // Handle window resizing
+                window.addEventListener("resize", () => {
+                    var newWidth = container.clientWidth;
+                    var newHeight = container.clientHeight;
+                    renderer.setSize(newWidth, newHeight);
+                    camera.aspect = newWidth / newHeight;
+                    camera.updateProjectionMatrix();
+                });
+
+                //DRAW SCENE
+                function render() {
+                    renderer.render(scene, camera);
+
+                    //CREATE MOVEMENT
+                    cube.rotation.y = +new Date() / 5000;
+                    cube.rotation.x = +new Date() / 7000;
+
+                    requestAnimationFrame(render);
+                }
+                render();
+            });
+        </script>
+
+        <style>
+            :root {
+                --bg-0: #05060b;
+                --bg-1: #0a0e1c;
+                --ink: #f5f6fa;
+                --ink-dim: #9aa0b4;
+                --line: rgba(255, 255, 255, 0.09);
+                --panel: #ffffff;
+                --panel-ink: #6b7280;
+                --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                background: var(--bg-0);
+                color: var(--ink);
+                font-family: "Inter", system-ui, sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            h1,
+            .brand,
+            .btn,
+            .cta-btn,
+            .menu-btn,
+            .links a {
+                font-family:
+                    "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            button {
+                font: inherit;
+            }
+
+            .scene {
+                position: relative;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                background:
+                    radial-gradient(
+                        1200px 700px at 82% 18%,
+                        rgba(64, 60, 200, 0.28),
+                        transparent 60%
+                    ),
+                    radial-gradient(
+                        900px 600px at 15% 85%,
+                        rgba(120, 30, 160, 0.12),
+                        transparent 55%
+                    ),
+                    linear-gradient(
+                        180deg,
+                        var(--bg-0) 0%,
+                        var(--bg-1) 55%,
+                        #070812 100%
+                    );
+                overflow: hidden;
+            }
+
+            /* ---------- Header ---------- */
+            .nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 32px;
+                padding: 26px 48px;
+                position: relative;
+                z-index: 5;
+            }
+
+            .brand {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 700;
+                font-size: 1.05rem;
+                letter-spacing: -0.01em;
+                white-space: nowrap;
+            }
+
+            .brand-logo {
+                display: block;
+                height: 22px;
+                width: auto;
+            }
+
+            .links {
+                display: flex;
+                align-items: center;
+                gap: 30px;
+                font-size: 0.92rem;
+                color: #dfe1ec;
+                flex: 1;
+                justify-content: start;
+            }
+            .links a {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                opacity: 0.9;
+                transition: opacity 0.2s var(--ease);
+            }
+            .links a:hover {
+                opacity: 1;
+            }
+            .has-chevron svg {
+                opacity: 0.7;
+                margin-top: 1px;
+            }
+
+            .badge {
+                font-size: 0.62rem;
+                font-weight: 700;
+                letter-spacing: 0.02em;
+                background: rgba(255, 255, 255, 0.12);
+                color: #fff;
+                border-radius: 5px;
+                padding: 2px 6px;
+                line-height: 1.4;
+            }
+
+            .cta-btn {
+                background: #fff;
+                color: #0a0a0f;
+                font-weight: 600;
+                font-size: 0.9rem;
+                padding: 11px 20px;
+                border-radius: 10px;
+                white-space: nowrap;
+                transition:
+                    transform 0.25s var(--ease),
+                    box-shadow 0.25s var(--ease);
+            }
+            .cta-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+            }
+
+            .menu-btn {
+                display: none;
+                background: #fff;
+                color: #0a0a0f;
+                border: none;
+                font-weight: 700;
+                font-size: 0.78rem;
+                letter-spacing: 0.03em;
+                padding: 10px 18px;
+                border-radius: 999px;
+                cursor: pointer;
+            }
+
+            /* ---------- Hero ---------- */
+            .hero {
+                flex: 1;
+                display: grid;
+                grid-template-columns: minmax(320px, 620px) 1fr;
+                align-items: center;
+                gap: 24px;
+                padding: 40px 48px 60px;
+                position: relative;
+                z-index: 2;
+            }
+
+            .hero-copy {
+                max-width: 640px;
+            }
+
+            h1 {
+                font-size: clamp(2.6rem, 4.6vw, 4.4rem);
+                line-height: 1.03;
+                font-weight: 700;
+                letter-spacing: -0.02em;
+                margin: 0 0 26px;
+            }
+
+            .hero-copy p {
+                font-size: 1.08rem;
+                line-height: 1.6;
+                color: var(--ink-dim);
+                max-width: 500px;
+                margin: 0 0 34px;
+            }
+
+            .cta-row {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-weight: 600;
+                font-size: 0.95rem;
+                padding: 14px 22px;
+                border-radius: 10px;
+                transition:
+                    transform 0.25s var(--ease),
+                    background 0.25s var(--ease),
+                    box-shadow 0.25s var(--ease);
+            }
+            .btn-primary {
+                background: #fff;
+                color: #0a0a0f;
+            }
+            .btn-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 10px 24px rgba(255, 255, 255, 0.18);
+            }
+            .btn-primary svg {
+                transition: transform 0.25s var(--ease);
+            }
+            .btn-primary:hover svg {
+                transform: translate(1px, -1px);
+            }
+
+            .btn-ghost {
+                background: rgba(255, 255, 255, 0.06);
+                color: #fff;
+                border: 1px solid var(--line);
+            }
+            .btn-ghost:hover {
+                background: rgba(255, 255, 255, 0.11);
+            }
+
+            /* ---------- Container for Three.js Cube ---------- */
+            .hero-cube {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                min-height: 420px;
+            }
+
+            .cube-glow {
+                position: absolute;
+                width: 420px;
+                height: 420px;
+                border-radius: 50%;
+                background: radial-gradient(
+                    circle,
+                    rgba(90, 70, 230, 0.4) 0%,
+                    rgba(90, 70, 230, 0) 65%
+                );
+                filter: blur(10px);
+                pointer-events: none;
+            }
+
+            #container {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                min-height: 420px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+            }
+            #container canvas {
+                max-width: 100%;
+                height: auto;
+            }
+
+            /* ---------- Ticker ---------- */
+            .ticker-wrap {
+                position: relative;
+                background: var(--panel);
+                padding: 26px 0;
+                z-index: 4;
+                overflow: hidden;
+            }
+
+            .ticker-fade {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 90px;
+                z-index: 2;
+                pointer-events: none;
+            }
+            .ticker-fade-l {
+                left: 0;
+                background: linear-gradient(
+                    90deg,
+                    var(--panel),
+                    rgba(255, 255, 255, 0)
+                );
+            }
+            .ticker-fade-r {
+                right: 0;
+                background: linear-gradient(
+                    270deg,
+                    var(--panel),
+                    rgba(255, 255, 255, 0)
+                );
+            }
+
+            .ticker-track {
+                display: flex;
+                width: max-content;
+                animation: scroll-ticker 28s linear infinite;
+            }
+
+            @keyframes scroll-ticker {
+                from {
+                    transform: translateX(0);
+                }
+                to {
+                    transform: translateX(-50%);
+                }
+            }
+
+            .ticker {
+                display: flex;
+                align-items: center;
+                gap: 56px;
+                padding: 0 28px;
+            }
+
+            .ticker li {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                color: var(--panel-ink);
+                font-weight: 600;
+                font-size: 1rem;
+                white-space: nowrap;
+            }
+            .logo-img {
+                height: 22px;
+                width: auto;
+                display: block;
+                opacity: 0.75;
+                filter: grayscale(1);
+                transition:
+                    opacity 0.2s var(--ease),
+                    filter 0.2s var(--ease);
+            }
+            .ticker li:hover .logo-img {
+                opacity: 1;
+                filter: grayscale(0);
+            }
+
+            .ticker-wrap:hover .ticker-track {
+                animation-play-state: paused;
+            }
+
+            /* ---------- Entrance animation ---------- */
+            .reveal,
+            .reveal-scale {
+                opacity: 0;
+                animation: rise 0.9s var(--ease) forwards;
+                animation-delay: var(--d, 0ms);
+            }
+            .reveal {
+                transform: translateY(16px);
+            }
+            .reveal-scale {
+                transform: scale(0.92);
+            }
+
+            @keyframes rise {
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .reveal,
+                .reveal-scale {
+                    animation-duration: 0.01ms;
+                }
+                .ticker-track {
+                    animation: none;
+                }
+            }
+
+            /* ---------- Responsive ---------- */
+            @media (max-width: 900px) {
+                .links,
+                .cta-btn {
+                    display: none;
+                }
+                .menu-btn {
+                    display: inline-block;
+                }
+
+                .nav {
+                    padding: 20px 22px;
+                }
+
+                .hero {
+                    grid-template-columns: 1fr;
+                    text-align: center;
+                    padding: 24px 22px 40px;
+                    gap: 36px;
+                }
+                .hero-copy {
+                    max-width: 100%;
+                }
+                .hero-copy p {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                .cta-row {
+                    justify-content: center;
+                }
+
+                h1 {
+                    font-size: clamp(2.1rem, 8vw, 2.7rem);
+                }
+
+                .hero-cube {
+                    min-height: 300px;
+                    order: 2;
+                }
+
+                #container {
+                    min-height: 300px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .ticker li {
+                    font-size: 0.9rem;
+                }
+            }
+        </style>
+    </body>
+</html>
