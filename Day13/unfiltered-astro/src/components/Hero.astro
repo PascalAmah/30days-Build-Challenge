@@ -1,0 +1,117 @@
+---
+
+---
+
+<section class="hero">
+    <img
+        src="/hero.png"
+        alt="Placeholder — replace with hero photograph"
+        class="hero-image"
+    />
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content container">
+        <h1 class="hero-heading">
+            On the messy,<br />
+            beautiful reality<br />
+            of connection.
+        </h1>
+        <p class="hero-subtext">
+            unfiltered essays and perspectives on why we hurt the ones we
+            love&mdash;and how to fix it.
+        </p>
+        <a href="/essays" class="hero-cta">Read love stories</a>
+    </div>
+</section>
+
+<style>
+    .hero {
+        position: relative;
+        min-height: 640px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .hero-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            180deg,
+            rgba(20, 12, 6, 0.35) 0%,
+            rgba(20, 12, 6, 0.25) 45%,
+            rgba(20, 12, 6, 0.45) 100%
+        );
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 780px;
+        padding-top: 100px;
+        padding-bottom: 80px;
+    }
+
+    .hero-heading {
+        font-family: "Merriweather", Georgia, serif;
+        font-weight: 700;
+        font-style: Bold;
+        color: var(--color-cream);
+        font-size: 50px;
+        line-height: 1.2;
+        margin: 0 0 24px;
+        text-transform: uppercase;
+    }
+
+    .hero-subtext {
+        font-family: "Merriweather Sans", "Helvetica Neue", Arial, sans-serif;
+        font-weight: 400;
+        font-style: Regular;
+        color: rgba(245, 239, 224, 0.9);
+        font-size: 18px;
+        line-height: 1.6;
+        max-width: 520px;
+        margin: 0 auto 40px;
+    }
+
+    .hero-cta {
+        display: inline-block;
+        background: var(--color-red);
+        color: var(--color-cream);
+        font-family: var(--font-sans);
+        font-weight: 500;
+        font-size: 0.95rem;
+        padding: 16px 40px;
+        border-radius: 999px;
+        /*box-shadow: 0 0 0 6px #ffc2be;*/
+        box-shadow: 0 0 0 6px rgba(255, 194, 190, 0.25);
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .hero-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 0 8px rgba(255, 194, 190, 0.3);
+    }
+
+    @media (min-width: 768px) {
+        .hero {
+            min-height: 760px;
+        }
+
+        /*.hero-content {
+            padding-top: 200px;
+        }*/
+    }
+</style>

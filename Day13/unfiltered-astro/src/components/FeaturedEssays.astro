@@ -1,0 +1,203 @@
+---
+import EssayCard from "./EssayCard.astro";
+
+const essays = [
+    {
+        image: "/image-1.png",
+        caption: "Why we close up when we need each other the most.",
+    },
+    {
+        image: "/image-2.png",
+        caption: "Choosing each other again on the hardest days.",
+    },
+    {
+        image: "/image-3.png",
+        caption: "The silent battles we fight inside long-term commitment.",
+    },
+    {
+        image: "/image-4.png",
+        caption: "Relearning the art of an honest apology.",
+    },
+    {
+        image: "/image-5.png",
+        caption: "Finding strength in vulnerability and letting go.",
+    },
+];
+---
+
+<section class="featured">
+    <div class="container featured-header">
+        <h2 class="featured-title">Featured essays</h2>
+        <p class="featured-subtitle">perspectives that stay with you</p>
+    </div>
+
+    <div class="featured-scroll">
+        <div class="featured-track">
+            {
+                essays.map((essay, i) => (
+                    <EssayCard image={essay.image} caption={essay.caption} tall={i % 2 === 1} />
+                ))
+            }
+        </div>
+    </div>
+
+    <div class="featured-footer">
+        <a href="/journals" class="journal-link">Read the journal</a>
+        <div
+            class="journal-arrows"
+            role="group"
+            aria-label="Scroll featured essays"
+        >
+            <button class="arrow-nav" id="scroll-left" aria-label="Previous"
+                >&larr;</button
+            >
+            <button class="arrow-nav" id="scroll-right" aria-label="Next"
+                >&rarr;</button
+            >
+        </div>
+    </div>
+</section>
+
+<style>
+    .featured {
+        background: var(--color-cream-2);
+        padding: 96px 0 88px;
+    }
+
+    .featured-header {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 48px;
+    }
+
+    .featured-title {
+        font-family: var(--font-serif);
+        font-weight: 700;
+        font-size: 2.75rem;
+        color: var(--color-red);
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .featured-subtitle {
+        font-family: var(--font-sans);
+        font-style: italic;
+        color: var(--color-red);
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .featured-scroll {
+        padding-left: 32px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .featured-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .featured-track {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 28px;
+        padding-right: 32px;
+    }
+
+    .featured-footer {
+        text-align: center;
+        margin-top: 56px;
+    }
+
+    .journal-link {
+        font-family: var(--font-sans);
+        font-weight: 700;
+        text-decoration: underline;
+        color: var(--color-maroon);
+        font-size: 1.05rem;
+        letter-spacing: 0.01em;
+    }
+
+    .journal-arrows {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 14px;
+    }
+
+    .arrow-nav {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: var(--color-maroon);
+        cursor: pointer;
+        padding: 4px;
+    }
+
+    .arrow-nav:hover {
+        opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+        .featured {
+            padding: 72px 0 64px;
+        }
+
+        .featured-header {
+            flex-direction: column;
+            gap: 8px;
+            justify-content: flex-start;
+        }
+
+        .featured-title {
+            font-size: 2rem;
+        }
+
+        .featured-scroll {
+            padding-left: 24px;
+        }
+
+        .featured-track {
+            gap: 20px;
+            padding-right: 24px;
+        }
+
+        .featured-footer {
+            margin-top: 40px;
+        }
+    }
+</style>
+
+<script>
+    const scrollContainer = document.querySelector(".featured-scroll");
+    const track = document.querySelector(".featured-track");
+    const left = document.getElementById("scroll-left");
+    const right = document.getElementById("scroll-right");
+
+    function getScrollAmount(): number {
+        if (!track) return 340;
+        const cards = track.querySelectorAll(".essay-card");
+        if (cards.length >= 2) {
+            const first = cards[0] as HTMLElement;
+            const second = cards[1] as HTMLElement;
+            const gap = second.offsetLeft - first.offsetLeft - first.offsetWidth;
+            return first.offsetWidth + gap;
+        }
+        const card = track.querySelector(".essay-card") as HTMLElement | null;
+        return card ? card.offsetWidth + 28 : 340;
+    }
+
+    function scrollByCard(direction: number) {
+        if (!scrollContainer) return;
+        const amount = getScrollAmount();
+        scrollContainer.scrollBy({ left: amount * direction, behavior: "smooth" });
+    }
+
+    left?.addEventListener("click", () => scrollByCard(-1));
+    right?.addEventListener("click", () => scrollByCard(1));
+</script>
