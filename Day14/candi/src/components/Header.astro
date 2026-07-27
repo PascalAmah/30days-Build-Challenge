@@ -1,0 +1,173 @@
+---
+const links = [
+    { label: "Find the Cart", href: "#cart" },
+    { label: "Candy Club", href: "#club" },
+    { label: "Book an Event", href: "#events" },
+    { label: "Buy Candy", href: "#shop" },
+];
+---
+
+<header class="site-header">
+    <div class="container bar">
+        <a href="/" class="logo">CANDI</a>
+
+        <nav class="nav-links" aria-label="Primary">
+            {links.map((l) => <a href={l.href}>{l.label}</a>)}
+        </nav>
+
+        <div class="actions">
+            <a class="cta" href="#join">Join for free →</a>
+            <button
+                class="menu-toggle"
+                id="menu-toggle"
+                aria-expanded="false"
+                aria-controls="mobile-nav"
+            >
+                Menu
+            </button>
+        </div>
+    </div>
+
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        {links.map((l) => <a href={l.href}>{l.label}</a>)}
+        <a class="cta" href="#join">Join for free →</a>
+    </nav>
+</header>
+
+<style>
+    .site-header {
+        background: var(--cream);
+        border-bottom: 1px solid var(--line);
+        position: relative;
+    }
+
+    .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-block: 6px;
+        gap: 16px;
+    }
+
+    .logo {
+        font-family: "Freckle Face", var(--font-display);
+        font-weight: 400;
+        font-style: normal;
+        font-size: 40px;
+        color: var(--maroon);
+        letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+        display: none;
+        gap: 32px;
+        font-family: Arial, sans-serif;
+        font-weight: 400;
+        font-size: 15px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: var(--maroon);
+    }
+
+    .nav-links a {
+        transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+        color: var(--maroon);
+    }
+
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .cta {
+        display: none;
+        background: var(--lavender);
+        color: var(--maroon-deep);
+        font-family: Arial, sans-serif;
+        font-weight: 400;
+        font-size: 15px;
+        letter-spacing: 0.02em;
+        padding: 8px 20px;
+        border-radius: 10px;
+        text-transform: uppercase;
+        transition:
+            transform 0.2s ease,
+            background 0.2s ease;
+    }
+
+    .cta:hover {
+        background: var(--lavender-deep);
+        transform: translateY(-2px);
+    }
+
+    .menu-toggle {
+        background: var(--lavender);
+        color: var(--maroon-deep);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.02em;
+        padding: 12px 22px;
+        border-radius: 10px;
+        text-transform: uppercase;
+    }
+
+    .mobile-nav {
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        padding: 4px 24px 20px;
+        background: var(--cream);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .mobile-nav.open {
+        display: flex;
+    }
+
+    .mobile-nav a {
+        padding: 12px 0;
+        font-family: Arial, sans-serif;
+        font-weight: 400;
+        font-size: 15px;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .mobile-nav .cta {
+        display: inline-block;
+        text-align: center;
+        margin-top: 12px;
+        border-bottom: none;
+    }
+
+    @media (min-width: 900px) {
+        .nav-links {
+            display: flex;
+        }
+        .cta {
+            display: inline-block;
+        }
+        .menu-toggle {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    const toggle = document.getElementById("menu-toggle");
+    const mobileNav = document.getElementById("mobile-nav");
+
+    toggle?.addEventListener("click", () => {
+        const isOpen = mobileNav?.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", String(Boolean(isOpen)));
+    });
+</script>

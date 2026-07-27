@@ -1,0 +1,97 @@
+/* ============================================================
+   CANDI — design tokens
+   ============================================================ */
+:root {
+  /* palette */
+  --cream: #faf3e6;
+  --cream-soft: #fdf8ee;
+  --pink-bar: #f8dcd6;
+  --maroon: #7a2e22;
+  --maroon-deep: #5c1a1a;
+  --wine: #641226;
+  --wine-dark: #4f0e1e;
+  --ink: #4a3226;
+  --lavender: #c7ccf6;
+  --lavender-deep: #aab0ef;
+  --rocky-pink: #f6cdd0;
+  --grid-olive: #565a24;
+  --grid-pink: #f2a9c4;
+  --grid-chartreuse: #dbe75c;
+  --grid-peach: #f3a97e;
+  --grid-sky: #8fcbe0;
+  --line: rgba(122, 46, 34, 0.16);
+
+  --font-display: "Bagel Fat One", "Chewy", system-ui, sans-serif;
+  --font-mark: "Permanent Marker", cursive;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+@media (min-width: 900px) {
+  .container {
+    padding-inline: 48px;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* visible focus states */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--maroon);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

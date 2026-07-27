@@ -1,0 +1,287 @@
+---
+const columns = [
+    {
+        title: "For Treats",
+        links: ["Shop Candy", "Catering", "Monthly Club", "Gift Carts"],
+    },
+    {
+        title: "For Events",
+        links: [
+            "Book a Cart",
+            "Corporate Events",
+            "Weddings",
+            "Party Packages",
+        ],
+    },
+    {
+        title: "Important Stuff",
+        links: ["FAQs", "Contact Us", "Privacy Policy"],
+    },
+];
+---
+
+<footer class="site-footer">
+    <div class="container top">
+        <div class="columns">
+            {
+                columns.map((col) => (
+                    <div class="col">
+                        <h3>{col.title}</h3>
+                        <ul>
+                            {col.links.map((link) => (
+                                <li>
+                                    <a href="#">{link}</a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="newsletter">
+            <h3>Join the Newsletter</h3>
+            <p>
+                Sweet deals straight to your inbox. Loved by 5k+ candy lovers
+                and counting!
+            </p>
+            <form class="signup" onsubmit="event.preventDefault()">
+                <input
+                    type="email"
+                    required
+                    placeholder="Email address"
+                    aria-label="Email address"
+                />
+                <button type="submit" class="join-btn">Join →</button>
+            </form>
+        </div>
+    </div>
+
+    <button
+        class="wordmark"
+        id="wordmark"
+        type="button"
+        aria-label="Candi-licious"
+    >
+        candi-licious
+    </button>
+
+    <div class="bottom">
+        <p>Copyright Candilicious LLC 2026 · Site Credit · Candilicious</p>
+    </div>
+</footer>
+
+<style>
+    .site-footer {
+        background: var(--wine);
+        color: var(--rocky-pink);
+        padding-top: 64px;
+    }
+
+    .top {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        padding-bottom: 56px;
+    }
+
+    .columns {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+    }
+
+    .col h3 {
+        font-family: var(--font-serif);
+        font-size: 1.05rem;
+        color: var(--cream-soft);
+        margin-bottom: 16px;
+    }
+
+    .col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .col a {
+        font-size: 0.8rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: var(--rocky-pink);
+        opacity: 0.9;
+        transition: opacity 0.2s ease;
+    }
+
+    .col a:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+
+    .newsletter {
+        border: 1.5px dashed var(--rocky-pink);
+        border-radius: 8px;
+        padding: 28px 24px;
+    }
+
+    .newsletter h3 {
+        font-family: var(--font-serif);
+        font-size: 1.3rem;
+        color: var(--cream-soft);
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    .newsletter p {
+        text-align: center;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+
+    .signup {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .signup input {
+        background: transparent;
+        border: 1.5px solid var(--rocky-pink);
+        border-radius: 6px;
+        padding: 14px 16px;
+        color: var(--cream-soft);
+        font-size: 0.85rem;
+    }
+
+    .signup input::placeholder {
+        color: var(--rocky-pink);
+        opacity: 0.7;
+    }
+
+    .join-btn {
+        background: var(--rocky-pink);
+        color: var(--wine-dark);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.02em;
+        padding: 14px 20px;
+        border-radius: 6px;
+        transition: background 0.2s ease;
+    }
+
+    .join-btn:hover {
+        background: var(--cream-soft);
+        animation: joinBounce 0.6s ease;
+    }
+
+    @keyframes joinBounce {
+        0% {
+            transform: translateY(0);
+        }
+        30% {
+            transform: translateY(-9px);
+        }
+        50% {
+            transform: translateY(0);
+        }
+        70% {
+            transform: translateY(-4px);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+
+    .wordmark {
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-family: "Freckle Face", var(--font-mark);
+        font-weight: 400;
+        color: var(--cream-soft);
+        font-size: clamp(3rem, 18vw, 220px);
+        line-height: 1;
+        padding-block: 24px 40px;
+        transform-origin: center;
+    }
+
+    .wordmark:hover,
+    .wordmark.squish {
+        animation: squish 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+
+    @keyframes squish {
+        0% {
+            transform: scale(1, 1);
+        }
+        30% {
+            transform: scale(1.12, 0.82);
+        }
+        50% {
+            transform: scale(0.94, 1.08);
+        }
+        70% {
+            transform: scale(1.05, 0.95);
+        }
+        100% {
+            transform: scale(1, 1);
+        }
+    }
+
+    .bottom {
+        background: var(--pink-bar);
+        border-top: 1px solid rgba(246, 205, 208, 0.25);
+        padding-block: 14px;
+    }
+
+    .bottom p {
+        color: var(--maroon);
+        text-align: center;
+        font-size: 0.72rem;
+        letter-spacing: 0.03em;
+        opacity: 0.8;
+    }
+
+    @media (min-width: 900px) {
+        .top {
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 64px;
+        }
+
+        .columns {
+            grid-template-columns: repeat(3, 1fr);
+            flex: 1;
+        }
+
+        .newsletter {
+            width: 360px;
+            flex-shrink: 0;
+        }
+
+        .signup {
+            flex-direction: row;
+        }
+
+        .signup input {
+            flex: 1;
+        }
+    }
+</style>
+
+<script>
+    const wordmark = document.getElementById("wordmark");
+    wordmark?.addEventListener("click", () => {
+        wordmark.classList.remove("squish");
+        // retrigger animation even if already mid-hover-animation
+        void (wordmark as HTMLElement).offsetWidth;
+        wordmark.classList.add("squish");
+    });
+    wordmark?.addEventListener("animationend", () => {
+        wordmark.classList.remove("squish");
+    });
+</script>

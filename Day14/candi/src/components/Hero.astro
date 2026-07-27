@@ -1,0 +1,236 @@
+---
+
+---
+
+<section class="hero">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="container">
+        <div class="panel">
+            <div class="copy">
+                <h1>The Swedish Candi Cart of Your Dreams</h1>
+                <p>
+                    Your go-to cart to call for events and catering, monthly
+                    candy club deliverables, online candy and more.
+                </p>
+                <a class="cta" href="#join">Join the club →</a>
+            </div>
+
+            <div class="art">
+                <img
+                    class="squiggle"
+                    src="/curve-arrow.svg"
+                    alt=""
+                    aria-hidden="true"
+                />
+
+                <img
+                    class="badge badge-candilicious"
+                    src="/candilicious.png"
+                    alt="Candilicious"
+                />
+                <img class="badge badge-rocky" src="/rocky.png" alt="Rocky" />
+                <span class="badge badge-seal">
+                    <img src="/badge-seal.png" alt="Creative Playground seal" />
+                </span>
+
+                <img
+                    class="toast-art"
+                    src="/toast.png"
+                    alt="Illustration of toast topped with berry jam"
+                    loading="eager"
+                />
+            </div>
+        </div>
+    </div>
+
+    <img
+        class="checker-strip"
+        src="/strip.png"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+    />
+</section>
+
+<style>
+    .hero {
+        position: relative;
+        padding-block: 48px 0;
+        background: var(--cream);
+        overflow: hidden;
+    }
+
+    .grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(var(--line) 1px, transparent 1px),
+            linear-gradient(90deg, var(--line) 1px, transparent 1px);
+        background-size: 48px 48px;
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    .container {
+        padding-bottom: 64px;
+    }
+
+    .panel {
+        position: relative;
+        border: 1.5px solid var(--maroon);
+        border-radius: 4px;
+        background: var(--cream-soft);
+        padding: 16px 14px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .copy {
+        max-width: 520px;
+    }
+
+    h1 {
+        font-family: "Freckle Face", var(--font-display);
+        font-weight: 400;
+        font-size: clamp(2.6rem, 6vw, 64px);
+        color: var(--maroon);
+        line-height: 1.12;
+        margin-bottom: 20px;
+    }
+
+    .copy p {
+        color: var(--ink);
+        font-family: Arial, sans-serif;
+        font-weight: 400;
+        font-size: clamp(1rem, 2vw, 17px);
+        color: var(--maroon);
+        line-height: 1.6;
+        margin-bottom: 28px;
+    }
+
+    .cta {
+        display: inline-block;
+        background: var(--lavender);
+        color: var(--maroon-deep);
+        font-family: Arial, sans-serif;
+        font-weight: 400;
+        font-size: clamp(0.85rem, 1.5vw, 15px);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        padding: 8px 26px;
+        border-radius: 10px;
+        transition:
+            transform 0.2s ease,
+            background 0.2s ease;
+    }
+
+    .cta:hover {
+        background: var(--lavender-deep);
+        transform: translateY(-2px);
+    }
+
+    .art {
+        position: relative;
+        width: min(320px, 80%);
+        align-self: center;
+    }
+
+    .toast-art {
+        width: 100%;
+        height: auto;
+        transform: rotate(11.99deg);
+        align-self: center;
+    }
+
+    .squiggle {
+        position: absolute;
+        top: -78px;
+        right: -12%;
+        width: 95px;
+        z-index: 2;
+        transform: rotate(110deg);
+    }
+
+    .badge {
+        position: absolute;
+        z-index: 3;
+    }
+
+    .badge-candilicious {
+        top: 14px;
+        right: 60px;
+        width: 118px;
+        transform: rotate;
+    }
+
+    .badge-rocky {
+        bottom: 8%;
+        left: -14%;
+        width: 65px;
+    }
+
+    .badge-seal {
+        bottom: 18%;
+        right: -10%;
+        width: 70px;
+        height: 70px;
+        background: none;
+        padding: 0;
+    }
+
+    .badge-seal img {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .badge-seal svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    .checker-strip {
+        display: block;
+        width: 100%;
+        height: 28px;
+        object-fit: cover;
+        object-position: left center;
+    }
+
+    @media (min-width: 900px) {
+        .panel {
+            flex-direction: row;
+            justify-content: space-between;
+            text-align: left;
+            padding: 40px;
+        }
+
+        .copy {
+            max-width: 580px;
+        }
+
+        .art {
+            width: 340px;
+        }
+
+        .squiggle {
+            top: 220px;
+            left: -240px;
+            width: 190px;
+            transform: rotate(0deg);
+        }
+
+        .badge-rocky {
+            bottom: 8%;
+            left: -84%;
+            width: 92px;
+        }
+
+        .checker-strip {
+            height: 48px;
+        }
+    }
+</style>
