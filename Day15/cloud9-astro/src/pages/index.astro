@@ -1,0 +1,604 @@
+---
+// Cloud 9 Lingerie — landing page
+// Recreated in Astro from the supplied desktop/mobile mockups.
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cloud 9 Lingerie</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@800&family=Freehand&family=DM+Sans:wght@500&family=Poppins:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <main class="page">
+            <!-- ============ HEADER ============ -->
+            <header class="hero-header">
+                <h1 class="headline">
+                    <span class="headline-masked">CLOUD 9</span>
+                </h1>
+
+                <div class="header-row">
+                    <span class="headline-script">lingerie</span>
+                    <p class="copy-left">
+                        beyond pink:<br />elevate your every&nbsp;day
+                    </p>
+                    <p class="copy-right">
+                        we&rsquo;re introducing a new standard. discover cloud 9
+                        lingerie.
+                    </p>
+                </div>
+
+                <p class="copy-center">
+                    forget boundaries. our latest collections are designed for
+                    effortless comfort and a dreamlike state of mind. we believe
+                    that your first layer should be your softest thought.
+                </p>
+            </header>
+
+            <!-- ============ FLOATING HERO PHOTO ============ -->
+            <section class="hero-photo-wrap" id="hero-photo-wrap">
+                <img
+                    class="hero-photo"
+                    src="/images/hero.webp"
+                    alt=""
+                    draggable="false"
+                />
+
+                <div
+                    class="floating-product fp-tank"
+                    data-speed="0.10"
+                    style="top:2%; left:2%;"
+                >
+                    <div class="floating-inner">
+                        <img
+                            src="/images/tank-shorts.webp"
+                            alt="Grey ribbed tank and shorts set"
+                            draggable="false"
+                        />
+                    </div>
+                </div>
+
+                <div
+                    class="floating-product fp-cami"
+                    data-speed="0.16"
+                    style="top:1%; right:2%;"
+                >
+                    <div class="floating-inner">
+                        <img
+                            src="/images/cami-shorts.webp"
+                            alt="Pink cami and gingham shorts set"
+                            draggable="false"
+                        />
+                    </div>
+                </div>
+
+                <div
+                    class="floating-product fp-tee"
+                    data-speed="0.22"
+                    style="bottom:6%; right:3%;"
+                >
+                    <div class="floating-inner">
+                        <img
+                            src="/images/tee.webp"
+                            alt="I love monkey graphic tee"
+                            draggable="false"
+                        />
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ WOMEN / MEN CARDS ============ -->
+            <section class="cards">
+                <a class="card" href="#women">
+                    <img
+                        src="/images/women.webp"
+                        alt="Woman wearing pink Dreamweave pajamas"
+                        draggable="false"
+                    />
+                    <span class="card-label">Women</span>
+                    <span class="card-cta"
+                        >Dreamweave Pajamas <span class="arrow">&rsaquo;</span
+                        ></span
+                    >
+                </a>
+
+                <a class="card" href="#men">
+                    <img
+                        src="/images/men.webp"
+                        alt="Man wearing pink Foundation pajamas"
+                        draggable="false"
+                    />
+                    <span class="card-label">Men</span>
+                    <span class="card-cta"
+                        >Foundation Pajamas <span class="arrow">&rsaquo;</span
+                        ></span
+                    >
+                </a>
+            </section>
+        </main>
+
+        <script>
+            // ---- Draggable + hover-shake + parallax for floating product images ----
+            const wrap = document.getElementById("hero-photo-wrap")!;
+            const items = Array.from(
+                document.querySelectorAll<HTMLElement>(".floating-product"),
+            );
+
+            const state = items.map(() => ({
+                x: 0,
+                y: 0,
+                dragging: false,
+                startX: 0,
+                startY: 0,
+                baseX: 0,
+                baseY: 0,
+            }));
+
+            let scrollParallax = 0;
+            let ticking = false;
+
+            function render(i: number) {
+                const el = items[i];
+                const s = state[i];
+                const speed = parseFloat(el.dataset.speed || "0.15");
+                const py = scrollParallax * speed;
+                el.style.transform = `translate3d(${s.x}px, ${s.y - py}px, 0)`;
+            }
+
+            function renderAll() {
+                items.forEach((_, i) => render(i));
+                ticking = false;
+            }
+
+            function onScroll() {
+                scrollParallax = window.scrollY;
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(renderAll);
+                }
+            }
+            window.addEventListener("scroll", onScroll, { passive: true });
+            renderAll();
+
+            items.forEach((el, i) => {
+                const s = state[i];
+
+                el.addEventListener("pointerdown", (e: PointerEvent) => {
+                    s.dragging = true;
+                    s.startX = e.clientX - s.x;
+                    s.startY = e.clientY - s.y;
+                    el.setPointerCapture(e.pointerId);
+                    el.classList.add("is-dragging");
+                });
+
+                el.addEventListener("pointermove", (e: PointerEvent) => {
+                    if (!s.dragging) return;
+                    s.x = e.clientX - s.startX;
+                    s.y = e.clientY - s.startY;
+                    render(i);
+                });
+
+                function stopDrag(e: PointerEvent) {
+                    if (!s.dragging) return;
+                    s.dragging = false;
+                    el.classList.remove("is-dragging");
+                }
+                el.addEventListener("pointerup", stopDrag);
+                el.addEventListener("pointercancel", stopDrag);
+            });
+        </script>
+
+        <style>
+            :root {
+                --bg: #f5e5e6;
+                --pink-bg: #f5bbc9;
+                --red: #ee3131;
+                --taupe: #c7beb6;
+                --grey-body: #6b6b6b;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                background: var(--bg);
+                font-family: "Poppins", sans-serif;
+                overflow-x: hidden;
+            }
+
+            /* ---------- PAGE LOAD REVEAL ---------- */
+            .page {
+                animation: pageFadeIn 0.8s ease forwards;
+            }
+
+            @keyframes pageFadeIn {
+                0% {
+                    opacity: 0;
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            .hero-header,
+            .hero-photo-wrap,
+            .cards {
+                opacity: 0;
+                animation: slideUpFade 0.7s ease forwards;
+            }
+
+            .hero-header {
+                animation-delay: 0.1s;
+            }
+
+            .hero-photo-wrap {
+                animation-delay: 0.35s;
+            }
+
+            .cards {
+                animation-delay: 0.6s;
+            }
+
+            @keyframes slideUpFade {
+                0% {
+                    opacity: 0;
+                    transform: translateY(24px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .page {
+                width: 100%;
+                max-width: 1600px;
+                margin: 0 auto;
+            }
+
+            /* ============ HEADER ============ */
+            .hero-header {
+                padding: 1rem 3rem 2.5rem;
+                text-align: center;
+            }
+
+            .headline {
+                margin: 0;
+                font-family: "Sora", sans-serif;
+                font-weight: 800;
+                line-height: 0.9;
+                text-align: center;
+            }
+
+            .headline-masked {
+                font-size: clamp(6.5rem, 19vw, 32.75rem);
+                letter-spacing: 0.01em;
+                background-image: url("/images/hero.webp");
+                background-size: 200% auto;
+                background-position: 20% 10%;
+                background-repeat: no-repeat;
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+                -webkit-text-fill-color: transparent;
+            }
+
+            .headline-script {
+                font-family: "Freehand", cursive;
+                font-weight: 400;
+                color: var(--red);
+                font-size: clamp(4rem, 10vw, 8.75rem);
+                line-height: 1;
+                margin-top: -2rem;
+                /* desktop: order after left text, before right text */
+                order: 2;
+            }
+
+            .header-row .copy-left {
+                order: 1;
+            }
+
+            .header-row .copy-right {
+                order: 3;
+            }
+
+            .header-row {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+                gap: 1.5rem;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .header-row p {
+                flex: 0 1 240px;
+                margin: 0;
+                color: var(--red);
+                font-family: "DM Sans", sans-serif;
+                font-weight: 500;
+                font-size: 1.2rem;
+                line-height: 1.4;
+            }
+
+            .copy-left {
+                text-align: left;
+            }
+            .copy-right {
+                text-align: right;
+            }
+            .copy-center {
+                text-align: center;
+                max-width: 700px;
+                margin: 1.5rem auto 0;
+                padding: 0 3rem;
+                color: var(--red);
+                font-family: "DM Sans", sans-serif;
+                font-weight: 500;
+                font-size: 1.5rem;
+                line-height: 1.5;
+            }
+
+            /* ============ HERO PHOTO + FLOATING PRODUCTS ============ */
+            .hero-photo-wrap {
+                position: relative;
+                width: 100%;
+                overflow: visible;
+                isolation: isolate;
+            }
+
+            .hero-photo {
+                display: block;
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                user-select: none;
+                -webkit-user-drag: none;
+            }
+
+            .floating-product {
+                position: absolute;
+                width: 15%;
+                min-width: 130px;
+                max-width: 260px;
+                z-index: 5;
+                cursor: grab;
+                touch-action: none;
+                will-change: transform;
+            }
+
+            .floating-product.is-dragging {
+                cursor: grabbing;
+                z-index: 10;
+            }
+
+            .floating-inner {
+                transition: transform 0.25s ease;
+                filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.25));
+            }
+
+            .floating-product img {
+                display: block;
+                width: 100%;
+                height: auto;
+                user-select: none;
+                -webkit-user-drag: none;
+                pointer-events: none;
+            }
+
+            .floating-product:hover .floating-inner {
+                animation: hold-shake 0.7s ease-in-out infinite;
+            }
+
+            @keyframes hold-shake {
+                0% {
+                    transform: rotate(0deg) translateY(0);
+                }
+                20% {
+                    transform: rotate(-3deg) translateY(-2px);
+                }
+                40% {
+                    transform: rotate(2.5deg) translateY(0);
+                }
+                60% {
+                    transform: rotate(-2deg) translateY(-1px);
+                }
+                80% {
+                    transform: rotate(1.5deg) translateY(0);
+                }
+                100% {
+                    transform: rotate(0deg) translateY(0);
+                }
+            }
+
+            .fp-tank {
+                transform-origin: top left;
+            }
+            .fp-cami {
+                transform-origin: top right;
+            }
+            .fp-tee {
+                transform-origin: bottom right;
+            }
+
+            /* ============ CARDS ============ */
+            .cards {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0;
+                padding: 2rem;
+            }
+
+            .card {
+                position: relative;
+                display: block;
+                overflow: hidden;
+                aspect-ratio: 4 / 5;
+                text-decoration: none;
+                background: #ddd;
+                border-radius: 1.25rem;
+            }
+
+            .card:first-child {
+                margin-right: 1rem;
+            }
+
+            .card:last-child {
+                margin-left: 1rem;
+            }
+
+            .card img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+                transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+                user-select: none;
+                -webkit-user-drag: none;
+            }
+
+            .card:hover img {
+                transform: scale(1.1);
+            }
+
+            .card-label {
+                position: absolute;
+                top: 1.5rem;
+                left: 1.5rem;
+                font-family: "Yellowtail", cursive;
+                font-size: 2.2rem;
+                color: #fff;
+                text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+                z-index: 2;
+            }
+
+            .card-cta {
+                position: absolute;
+                bottom: 1.5rem;
+                right: 1.5rem;
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                color: #fff;
+                font-size: 0.85rem;
+                font-weight: 500;
+                padding: 0.6rem 1.1rem;
+                border-radius: 999px;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                z-index: 2;
+                transition: background 0.3s ease;
+            }
+
+            .card:hover .card-cta {
+                background: rgba(255, 255, 255, 0.4);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+            }
+
+            .arrow {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 1.2rem;
+                height: 1.2rem;
+                border-radius: 50%;
+                background: var(--red);
+                color: #fff;
+                font-size: 0.9rem;
+                line-height: 1;
+            }
+            .card-cta .arrow {
+                background: var(--pink-bg);
+            }
+
+            /* ============ RESPONSIVE ============ */
+            @media (max-width: 900px) {
+                .hero-header {
+                    padding: 2rem 1.25rem 1.5rem;
+                }
+
+                .headline-script {
+                    /* mobile: lingerie first */
+                    order: 0;
+                    margin-top: -0.2rem;
+                }
+
+                .header-row .copy-left {
+                    order: 1;
+                }
+
+                .header-row .copy-right {
+                    order: 2;
+                }
+
+                .headline-masked {
+                    font-size: clamp(4.5rem, 12vw, 28.75rem);
+                }
+
+                .headline {
+                    margin-bottom: -0.4rem;
+                }
+
+                .header-row {
+                    flex-direction: column;
+                    align-items: center;
+                    text-align: center;
+                    padding: 0 1.25rem;
+                    gap: 0.3rem;
+                }
+
+                .header-row p {
+                    text-align: center;
+                    font-size: 1rem;
+                    flex: none;
+                }
+
+                .copy-center {
+                    padding: 0 1.25rem;
+                    font-size: 1rem;
+                    margin-top: 0.75rem;
+                }
+
+                .headline-script {
+                    font-size: clamp(3rem, 6vw, 6.75rem);
+                }
+
+                .floating-product {
+                    width: 22%;
+                    min-width: 90px;
+                }
+
+                .cards {
+                    grid-template-columns: 1fr;
+                    padding: 0.75rem;
+                    gap: 0.75rem;
+                }
+
+                .card:first-child {
+                    margin-right: 0;
+                }
+
+                .card:last-child {
+                    margin-left: 0;
+                }
+
+                .card {
+                    aspect-ratio: 3 / 4;
+                }
+            }
+        </style>
+    </body>
+</html>
