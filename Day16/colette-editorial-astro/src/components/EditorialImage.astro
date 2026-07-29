@@ -1,0 +1,21 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  ratio?: string;
+  speed?: number; // parallax intensity, positive = slower than scroll
+  class?: string;
+}
+
+const { src, alt, ratio = '4 / 5', speed = 0.15, class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={['frame', className]}
+  style={`aspect-ratio: ${ratio};`}
+  data-reveal-fade
+>
+  <div class="parallax-layer" data-parallax data-speed={speed}>
+    <img src={src} alt={alt} loading="lazy" decoding="async" />
+  </div>
+</div>

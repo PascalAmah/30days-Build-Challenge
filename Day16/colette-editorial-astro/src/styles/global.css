@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg: #ffffff;
+  --ink: #0a0a0a;
+  --line: #0a0a0a;
+  --mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --gap: 24px;
+  --edge: 20px;
+  --max: 1700px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--edge);
+}
+
+.rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0;
+  width: 100%;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+/* ---------- reusable image frame: hover zoom + parallax host ---------- */
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  background: #eee;
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.001); /* establishes compositing layer */
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.frame:hover img {
+  transform: scale(1.06);
+}
+
+/* the parallax layer sits inside .frame and gets translated by JS;
+   it must be taller than its container so the shift never reveals edges */
+.parallax-layer {
+  position: absolute;
+  inset: -8% 0;
+  height: 116%;
+  width: 100%;
+}
+
+.parallax-layer img {
+  height: 100%;
+}
+
+/* ---------- photographic tone treatments ---------- */
+
+.tone-sepia img { filter: sepia(0.55) saturate(1.15) contrast(1.05) brightness(0.95); }
+.tone-vivid img { filter: saturate(1.25) contrast(1.05); }
+.tone-warm img  { filter: saturate(1.1) sepia(0.15) contrast(1.02); }
+.tone-motion img{ filter: saturate(1.05) contrast(0.98) brightness(1.02); }
+
+/* ---------- text appear effect ---------- */
+
+.reveal-line-wrap {
+  display: block;
+  overflow: hidden;
+}
+
+[data-reveal] .reveal-line {
+  display: block;
+  transform: translateY(110%);
+  opacity: 0;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+[data-reveal].is-visible .reveal-line {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* stagger children */
+[data-reveal].is-visible .reveal-line-wrap:nth-child(1) .reveal-line { transition-delay: 0.02s; }
+[data-reveal].is-visible .reveal-line-wrap:nth-child(2) .reveal-line { transition-delay: 0.08s; }
+[data-reveal].is-visible .reveal-line-wrap:nth-child(3) .reveal-line { transition-delay: 0.14s; }
+[data-reveal].is-visible .reveal-line-wrap:nth-child(4) .reveal-line { transition-delay: 0.20s; }
+[data-reveal].is-visible .reveal-line-wrap:nth-child(5) .reveal-line { transition-delay: 0.26s; }
+[data-reveal].is-visible .reveal-line-wrap:nth-child(6) .reveal-line { transition-delay: 0.32s; }
+
+/* fade-only reveal for frames/images */
+[data-reveal-fade] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal-fade].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

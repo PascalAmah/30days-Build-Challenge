@@ -1,0 +1,20 @@
+---
+interface Props {
+    lines: string[];
+    as?: keyof HTMLElementTagNameMap;
+    class?: string;
+}
+
+const { lines, as = "div", class: className = "" } = Astro.props;
+const Tag = as;
+---
+
+<Tag data-reveal class:list={[className]}>
+    {
+        lines.map((line: string) => (
+            <span class="reveal-line-wrap">
+                <span class="reveal-line">{line}</span>
+            </span>
+        ))
+    }
+</Tag>

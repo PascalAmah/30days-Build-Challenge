@@ -1,0 +1,59 @@
+---
+interface Props {
+  heading?: string;
+  items: string[];
+  class?: string;
+}
+
+const { heading, items, class: className = '' } = Astro.props;
+---
+
+<div class:list={['label-block', className]} data-reveal-fade>
+  {heading && (
+    <>
+      <hr class="rule" />
+      <p class="label-heading uppercase">{heading}</p>
+    </>
+  )}
+  <hr class="rule" />
+  <ul class="label-list uppercase">
+    {items.map((item) => (
+      <li>{item}</li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .label-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rule {
+    margin-top: 14px;
+  }
+
+  .label-block .rule:first-child {
+    margin-top: 0;
+  }
+
+  .label-heading {
+    margin: 10px 0 0;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+  }
+
+  .label-list {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .label-list li {
+    font-size: 12px;
+    letter-spacing: 0.03em;
+  }
+</style>

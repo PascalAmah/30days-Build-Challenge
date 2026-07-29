@@ -1,0 +1,287 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import EditorialImage from "../components/EditorialImage.astro";
+import LabelBlock from "../components/LabelBlock.astro";
+import RevealText from "../components/RevealText.astro";
+
+const heroA = "/image-1.png";
+const skyTrio = "/image-2.png";
+const forestCyclists = "https://picsum.photos/id/1067/1200/1500";
+const blurredRun = "https://picsum.photos/id/1074/1200/1500";
+---
+
+<Layout>
+    <Header />
+
+    <main>
+        <!-- ============ SECTION 1: overlapping portraits + copy ============ -->
+        <section class="wrap hero-section">
+            <div class="hero-grid">
+                <div class="hero-img-a">
+                    <EditorialImage
+                        src={heroA}
+                        alt="Archival portrait of a woman in motion, sepia toned"
+                        ratio="18 / 9"
+                    />
+                </div>
+
+                <div class="hero-copy" data-parallax data-speed="0.06">
+                    <RevealText
+                        as="p"
+                        class="para uppercase"
+                        lines={[
+                            "Nostalgia is going to kill us.",
+                            "A classic love romance along the",
+                            "riverbanks covered in graffiti.",
+                        ]}
+                    />
+                    <RevealText
+                        as="p"
+                        class="para uppercase"
+                        lines={[
+                            "This one was not slippery, it’s a",
+                            "must do event of love mixed with",
+                            "small juju.",
+                        ]}
+                    />
+                    <LabelBlock
+                        heading="Her Gaze"
+                        items={[
+                            "His Feelings",
+                            "His Joy",
+                            "His Love",
+                            "Her Time",
+                        ]}
+                    />
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ SECTION 2: sky/field trio ============ -->
+        <section class="wrap two-col-section">
+            <div class="stack-img">
+                <EditorialImage
+                    src={skyTrio}
+                    alt="Three friends sitting on a hillside beneath a painted sky"
+                    ratio="18 / 9"
+                />
+            </div>
+
+            <div class="stack-copy" data-parallax data-speed="0.06">
+                <RevealText
+                    as="p"
+                    class="para uppercase"
+                    lines={[
+                        "Coming from the swiss alps into italy,",
+                        "we spent time in florence before",
+                        "heading south to naples. it was a bit",
+                        "of shock to the system. where the",
+                        "nordics were cold, italy was hot;",
+                        "where the nordics were modern, italy",
+                        "was ancient.",
+                    ]}
+                />
+                <LabelBlock
+                    items={["His Feelings", "His Joy", "His Love", "Her Time"]}
+                />
+            </div>
+        </section>
+
+        <!-- ============ SECTION 3: two-up bottom images ============ -->
+        <section class="wrap grid-2">
+            <article class="grid-item">
+                <EditorialImage
+                    src={forestCyclists}
+                    alt="Two cyclists riding through a sunlit forest path"
+                    ratio="4 / 5"
+                    speed={0.15}
+                    class="tone-warm"
+                />
+                <div class="caption-row">
+                    <LabelBlock
+                        items={[
+                            "Best Friends For Life",
+                            "Everlasting Joy And Peace",
+                        ]}
+                    />
+                    <RevealText
+                        as="p"
+                        class="para uppercase"
+                        lines={[
+                            "This gnarly bank to brick ledge in",
+                            "shepherd’s bush slid but only after",
+                            "putting a massive dent in my backslide",
+                            "groove.",
+                        ]}
+                    />
+                </div>
+            </article>
+
+            <article class="grid-item">
+                <EditorialImage
+                    src={blurredRun}
+                    alt="Blurred motion of figures running through a field"
+                    ratio="4 / 5"
+                    speed={0.15}
+                    class="tone-motion"
+                />
+                <div class="caption-row">
+                    <LabelBlock items={["Life Time", "Bundle Of Joy"]} />
+                    <RevealText
+                        as="p"
+                        class="para uppercase"
+                        lines={[
+                            "This gnarly bank to brick ledge in",
+                            "shepherd’s bush slid but only after",
+                            "putting a massive dent in my backslide",
+                            "groove.",
+                        ]}
+                    />
+                </div>
+            </article>
+        </section>
+
+        <footer id="contact" class="wrap site-footer">
+            <hr class="rule" />
+            <p class="para uppercase footer-text">Colette® — Paris</p>
+        </footer>
+    </main>
+</Layout>
+
+<style>
+    /* ---------------- shared paragraph type ---------------- */
+    :global(.para) {
+        font-size: 12.5px;
+        line-height: 1.7;
+        letter-spacing: 0.02em;
+        margin: 0;
+    }
+
+    /* ---------------- section 1: hero ---------------- */
+    .hero-section {
+        padding-top: 28px;
+    }
+
+    .hero-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    .hero-img-a {
+        width: 100%;
+    }
+
+    .hero-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    /* ---------------- section 2 ---------------- */
+    .two-col-section {
+        padding-top: 36px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .stack-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    /* ---------------- section 3 ---------------- */
+    .grid-2 {
+        padding-top: 36px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .grid-item {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .caption-row {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    /* ---------------- footer ---------------- */
+    .site-footer {
+        margin-top: 60px;
+        padding-bottom: 40px;
+    }
+
+    .footer-text {
+        padding-top: 16px;
+        opacity: 0.6;
+    }
+
+    /* =========================================================
+     DESKTOP
+     ========================================================= */
+    @media (min-width: 900px) {
+        .hero-section {
+            padding-top: 40px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            column-gap: var(--gap);
+            align-items: start;
+        }
+
+        .hero-copy {
+            padding-top: 4px;
+        }
+
+        .two-col-section {
+            padding-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            column-gap: var(--gap);
+            align-items: start;
+        }
+
+        .stack-img {
+            grid-column: 2;
+            margin-top: -140px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .stack-copy {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .grid-2 {
+            padding-top: 70px;
+            grid-template-columns: 1fr 1fr;
+            column-gap: var(--gap);
+        }
+
+        .caption-row {
+            flex-direction: row;
+            justify-content: space-between;
+            gap: var(--gap);
+        }
+
+        .caption-row :global(.label-block) {
+            flex: 0 0 220px;
+        }
+
+        .caption-row :global(.para) {
+            flex: 1;
+            max-width: 480px;
+        }
+    }
+</style>
