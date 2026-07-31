@@ -1,0 +1,443 @@
+---
+const people = [
+    {
+        name: "MICHAEL JORDAN",
+        id: "michael-jordan",
+        accent: "#F2E9DC",
+        rotate: -6,
+        top: "8%",
+        left: "37%",
+        art: "flowers",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=260&fit=crop",
+    },
+    {
+        name: "RACHAEL ROW",
+        id: "rachael-row",
+        accent: "#F6D9C8",
+        rotate: 3,
+        top: "22%",
+        left: "34%",
+        art: "pinkhair",
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=260&fit=crop",
+    },
+    {
+        name: "EMMANUEL PHILIP",
+        id: "emmanuel-philip",
+        accent: "#EDEDED",
+        rotate: -4,
+        top: "18%",
+        left: "50%",
+        art: "braids",
+        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=260&fit=crop",
+    },
+    {
+        name: "OCHE RHOLLAND",
+        id: "oche-rholland",
+        accent: "#EFEFEF",
+        rotate: 5,
+        top: "40%",
+        left: "44%",
+        art: "afro",
+        image: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=200&h=260&fit=crop",
+    },
+    {
+        name: "EMILI PETER",
+        id: "emili-peter",
+        accent: "#DCE7E3",
+        rotate: -3,
+        top: "38%",
+        left: "56%",
+        art: "shades",
+        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=260&fit=crop",
+    },
+    {
+        name: "JAMES ED",
+        id: "james-ed",
+        accent: "#CDEAF5",
+        rotate: 6,
+        top: "48%",
+        left: "38%",
+        art: "tennisball",
+        image: "https://images.unsplash.com/photo-1508341591423-4347099e1f19?w=200&h=260&fit=crop",
+    },
+    {
+        name: "OBI THOMPSON",
+        id: "obi-thompson",
+        accent: "#E7E1F5",
+        rotate: -5,
+        top: "56%",
+        left: "50%",
+        art: "beanie",
+        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=260&fit=crop",
+    },
+];
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>PROFEL — Twenty Seven Brands</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700&family=Archivo+Black&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <main class="hero">
+            <header class="topbar">
+                <div class="wordmark">PROFEL<span class="reg">®</span></div>
+                <nav class="topnav">WORK, SERVICES, ABOUT</nav>
+            </header>
+
+            <div class="meta meta-left-top">
+                <p class="meta-strong">JUNE 19</p>
+                <p class="meta-strong">JUDGES</p>
+            </div>
+
+            <div class="meta meta-right-top">
+                <p class="meta-strong">MEMORIES</p>
+                <p class="meta-soft">LIGHT MODE PROFILE</p>
+            </div>
+
+            <div class="meta meta-left-bottom">
+                <p class="meta-strong">TWENTY SEVEN BRANDS</p>
+                <p class="meta-soft">WIDE VARIETY OF PEOPLE WITH SKILLS</p>
+            </div>
+
+            <div class="meta meta-right-bottom">
+                <p class="meta-strong">
+                    WE ARE<br />DIFFERENT! WE<br />STAND OUT!
+                </p>
+            </div>
+
+            <div class="stage">
+                <div class="names" id="names">
+                    {
+                        people.map((p) => (
+                            <a href="#" class="name-line" data-target={p.id}>
+                                {p.name}
+                            </a>
+                        ))
+                    }
+                </div>
+
+                <div class="cards" id="cards" aria-hidden="true">
+                    {
+                        people.map((p) => (
+                            <div
+                                class="card"
+                                id={p.id}
+                                style={`--rot:${p.rotate}deg; top:${p.top}; left:${p.left}; --accent:${p.accent};`}
+                            >
+                                <div class="card-inner">
+                                    <img
+                                        src={p.image}
+                                        alt={p.name}
+                                        class="portrait"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </main>
+
+        <script>
+            const nameLinks =
+                document.querySelectorAll<HTMLAnchorElement>(".name-line");
+            const cards = document.querySelectorAll<HTMLDivElement>(".card");
+
+            const clearActive = () => {
+                cards.forEach((c) => c.classList.remove("is-active"));
+                nameLinks.forEach((l) => l.classList.remove("is-hovered"));
+            };
+
+            nameLinks.forEach((link) => {
+                link.addEventListener("mouseenter", () => {
+                    clearActive();
+                    const target = link.dataset.target;
+                    const card = target
+                        ? document.getElementById(target)
+                        : null;
+                    if (card) card.classList.add("is-active");
+                    link.classList.add("is-hovered");
+                });
+
+                link.addEventListener("focus", () => {
+                    clearActive();
+                    const target = link.dataset.target;
+                    const card = target
+                        ? document.getElementById(target)
+                        : null;
+                    if (card) card.classList.add("is-active");
+                    link.classList.add("is-hovered");
+                });
+
+                link.addEventListener("click", (e) => e.preventDefault());
+            });
+
+            const namesWrap = document.getElementById("names");
+            namesWrap?.addEventListener("mouseleave", clearActive);
+            namesWrap?.addEventListener("focusout", (e) => {
+                if (!namesWrap.contains(e.relatedTarget as Node)) clearActive();
+            });
+        </script>
+    </body>
+</html>
+
+<style is:global>
+    :root {
+        --bg: #f6f6f4;
+        --ink: #0b0b0c;
+        --blue: #2a2ff5;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Archivo", Helvetica, Arial, sans-serif;
+    }
+</style>
+
+<style>
+    .hero {
+        position: relative;
+        min-height: 100vh;
+        width: 100%;
+        overflow: hidden;
+        padding: clamp(20px, 3vw, 40px) clamp(20px, 4vw, 64px) 80px;
+    }
+
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    .wordmark {
+        font-family: "Archivo Black", "Archivo", sans-serif;
+        font-size: clamp(20px, 2.1vw, 28px);
+        letter-spacing: 0.01em;
+    }
+
+    .reg {
+        font-size: 0.5em;
+        vertical-align: super;
+    }
+
+    .topnav {
+        font-weight: 700;
+        font-size: clamp(11px, 1vw, 13px);
+        letter-spacing: 0.04em;
+    }
+
+    .meta {
+        position: absolute;
+        font-weight: 700;
+        font-size: clamp(11px, 1vw, 13px);
+        line-height: 1.5;
+        letter-spacing: 0.01em;
+        z-index: 3;
+    }
+
+    .meta p {
+        margin: 0;
+    }
+
+    .meta-strong {
+        font-weight: 700;
+    }
+
+    .meta-soft {
+        font-weight: 500;
+        opacity: 0.75;
+    }
+
+    .meta-left-top {
+        top: 30%;
+        left: calc(50% - 36vw);
+    }
+
+    .meta-right-top {
+        top: 30%;
+        right: calc(50% - 40vw);
+        text-align: left;
+    }
+
+    .meta-left-bottom {
+        bottom: 20%;
+        left: calc(50% - 38vw);
+        max-width: 220px;
+    }
+
+    .meta-right-bottom {
+        bottom: 20%;
+        right: calc(50% - 38vw);
+        text-align: left;
+    }
+
+    .stage {
+        position: relative;
+        margin-top: clamp(40px, 8vh, 90px);
+        min-height: 68vh;
+    }
+
+    .names {
+        position: relative;
+        z-index: 4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .name-line {
+        display: block;
+        text-decoration: none;
+        color: var(--blue);
+        font-family: Arial;
+        font-weight: 700;
+        font-style: normal;
+        text-transform: uppercase;
+        font-size: clamp(34px, 7.4vw, 130px);
+        line-height: 0.92;
+        letter-spacing: -0.01em;
+        padding: 0.02em 0.1em;
+        animation: fadeInUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+        transition:
+            opacity 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+            transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    .name-line:hover,
+    .name-line.is-hovered {
+        opacity: 1;
+    }
+
+    .names:hover .name-line:not(:hover):not(.is-hovered) {
+        opacity: 0.35;
+    }
+
+    .name-line:nth-child(1) {
+        animation-delay: 0.05s;
+    }
+    .name-line:nth-child(2) {
+        animation-delay: 0.12s;
+    }
+    .name-line:nth-child(3) {
+        animation-delay: 0.19s;
+    }
+    .name-line:nth-child(4) {
+        animation-delay: 0.26s;
+    }
+    .name-line:nth-child(5) {
+        animation-delay: 0.33s;
+    }
+    .name-line:nth-child(6) {
+        animation-delay: 0.4s;
+    }
+    .name-line:nth-child(7) {
+        animation-delay: 0.47s;
+    }
+
+    .cards {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    .card {
+        position: absolute;
+        width: clamp(150px, 15vw, 200px);
+        aspect-ratio: 200 / 260;
+        transform: translate(-50%, -50%) rotate(var(--rot)) scale(0.85)
+            translateY(10px);
+        opacity: 0;
+        transition:
+            opacity 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
+            transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+        filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.18));
+    }
+
+    .card.is-active {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--rot)) scale(1)
+            translateY(0);
+    }
+
+    .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        /*padding: 6px;*/
+        border: 2px solid #fff;
+    }
+
+    .portrait {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @media (max-width: 720px) {
+        .meta-left-top {
+            top: 8%;
+            left: clamp(8px, 3vw, 24px);
+        }
+        .meta-right-top {
+            top: 8%;
+            right: clamp(8px, 3vw, 24px);
+        }
+        .meta-left-bottom {
+            bottom: 8%;
+            left: clamp(8px, 3vw, 24px);
+            max-width: 140px;
+        }
+        .meta-right-bottom {
+            bottom: 8%;
+            right: clamp(8px, 3vw, 24px);
+            max-width: 140px;
+        }
+        .stage {
+            min-height: 50vh;
+            margin-top: clamp(80px, 8vh, 90px);
+        }
+        .card {
+            width: 120px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .card,
+        .name-line {
+            transition: none;
+            animation: none;
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
