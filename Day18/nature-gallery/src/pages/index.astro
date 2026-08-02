@@ -28,7 +28,7 @@ const codaOffset = gallery.length;
       </ul>
     </header>
 
-    <section class="intro wrap">
+    <section class="intro wrap" data-reveal>
       <p>
         Nature is one of the most immediate and noticeable experiences of life. It does not
         require translation and evokes instinctive feelings. From forests to rivers, skies to
@@ -40,11 +40,11 @@ const codaOffset = gallery.length;
       </p>
     </section>
 
-    <section class="gallery-section">
+    <section class="gallery-section" data-reveal>
       <Gallery />
     </section>
 
-    <section class="quote wrap">
+    <section class="quote wrap" data-reveal>
       <h2>The language of nature</h2>
       <div class="lines">
         <p>Nature is one of the most constant things we live with, yet rarely fully notice.</p>
@@ -55,7 +55,7 @@ const codaOffset = gallery.length;
       </div>
     </section>
 
-    <section class="coda wrap" aria-label="Closing series">
+    <section class="coda wrap" aria-label="Closing series" data-reveal>
       <div class="coda-grid">
         {coda.map((item, i) => (
           <GalleryImage item={item} index={i + codaOffset} class="coda-tile" />
@@ -79,6 +79,27 @@ const codaOffset = gallery.length;
     </div>
 
     <script define:vars={{ items: all.map((i) => ({ title: i.title, year: i.year, image: i.image })) }}>
+      document.documentElement.classList.add("js");
+
+      // Scroll reveal — reveal [data-reveal] elements as they enter the viewport.
+      const revealEls = Array.from(document.querySelectorAll("[data-reveal]"));
+      if ("IntersectionObserver" in window && revealEls.length) {
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-in-view");
+                revealObserver.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+        );
+        revealEls.forEach((el) => revealObserver.observe(el));
+      } else {
+        revealEls.forEach((el) => el.classList.add("is-in-view"));
+      }
+
       const lightbox = document.getElementById("lightbox");
       const imgEl = document.getElementById("lightbox-img");
       const titleEl = document.getElementById("lightbox-title");

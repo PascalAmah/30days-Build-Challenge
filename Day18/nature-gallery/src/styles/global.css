@@ -7,11 +7,17 @@
   --gap: 20px;
   --max: 1440px;
   --font: -apple-system, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --rise: 18px;
 }
 
 * { box-sizing: border-box; }
 
 html { color-scheme: light; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(var(--rise, 18px)); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 body {
   margin: 0;
@@ -27,6 +33,28 @@ img, svg { display: block; max-width: 100%; }
 a { color: inherit; }
 
 button { font: inherit; color: inherit; }
+
+/* Page entry transitions — header rises in on load */
+
+.site-header {
+  animation: rise-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Scroll reveal — sections and gallery items reveal as they enter the viewport */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--rise, 18px));
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(min(var(--i, 0), 8) * 120ms);
+}
+
+.js [data-reveal].is-in-view {
+  opacity: 1;
+  transform: none;
+}
 
 .wrap {
   max-width: var(--max);
@@ -301,28 +329,36 @@ button { font: inherit; color: inherit; }
 .lightbox-prev,
 .lightbox-next {
   position: absolute;
-  border: 0;
-  background: rgba(10, 10, 8, 0.55);
-  color: var(--paper);
+  border: 1px solid rgba(251, 251, 248, 0.85);
+  background: #fff;
+  color: #111;
   cursor: pointer;
   border-radius: 999px;
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 26px;
   line-height: 1;
-  transition: background 0.15s ease;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .lightbox-close:hover,
 .lightbox-prev:hover,
 .lightbox-next:hover {
-  background: rgba(10, 10, 8, 0.8);
+  background: #111;
+  color: #fff;
 }
 
-.lightbox-close { top: -50px; right: 0; }
+.lightbox-close {
+  top: -50px; right: 0;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+}
 .lightbox-prev { top: 50%; left: -8px; transform: translateY(-50%); }
 .lightbox-next { top: 50%; right: -8px; transform: translateY(-50%); }
 
@@ -341,6 +377,7 @@ button { font: inherit; color: inherit; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lightbox-figure { animation: none; }
+  .site-header { animation: none; }
+  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
   .image-button img { transition: none; }
 }
