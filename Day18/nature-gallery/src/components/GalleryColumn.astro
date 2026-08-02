@@ -1,0 +1,29 @@
+---
+import GalleryImage from "./GalleryImage.astro";
+import type { GalleryItem } from "../data/gallery";
+
+interface Props {
+  items: GalleryItem[];
+  startIndex: number;
+  rowFrom?: number; // items from this index onward render side-by-side
+  class?: string;
+}
+
+const { items, startIndex, rowFrom, class: className = "" } = Astro.props;
+
+const stack = rowFrom != null ? items.slice(0, rowFrom) : items;
+const row = rowFrom != null ? items.slice(rowFrom) : [];
+---
+
+<div class:list={["gallery-column", className]}>
+  {stack.map((item, i) => (
+    <GalleryImage item={item} index={startIndex + i} />
+  ))}
+  {row.length > 0 && (
+    <div class="gallery-row">
+      {row.map((item, i) => (
+        <GalleryImage item={item} index={startIndex + stack.length + i} />
+      ))}
+    </div>
+  )}
+</div>

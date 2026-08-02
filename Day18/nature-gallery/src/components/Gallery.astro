@@ -1,0 +1,35 @@
+---
+import GalleryColumn from "./GalleryColumn.astro";
+import type { GalleryItem } from "../data/gallery";
+import { gallery } from "../data/gallery";
+
+interface ColumnDef {
+  items: GalleryItem[];
+  startIndex: number;
+  hero?: boolean;
+  rowFrom?: number;
+}
+
+// Four fixed editorial columns — manually curated, no auto-placement.
+const columns: ColumnDef[] = [
+  // Column 1 (18%) — portrait 2:3, square 1:1
+  { items: [gallery[0], gallery[1]], startIndex: 0 },
+  // Column 2 (18%) — portrait 4:5, landscape 3:2
+  { items: [gallery[2], gallery[3]], startIndex: 2 },
+  // Column 3 (34%, hero) — hero 16:9, then two squares 1:1 side-by-side
+  { items: [gallery[4], gallery[5], gallery[6]], startIndex: 4, hero: true, rowFrom: 1 },
+  // Column 4 (18%) — portrait 2:3, tall portrait 4:5
+  { items: [gallery[7], gallery[8]], startIndex: 7 },
+];
+---
+
+<section class="gallery" aria-label="Gallery">
+  {columns.map((column) => (
+    <GalleryColumn
+      items={column.items}
+      startIndex={column.startIndex}
+      rowFrom={column.rowFrom}
+      class={column.hero ? "gallery-column--hero" : undefined}
+    />
+  ))}
+</section>

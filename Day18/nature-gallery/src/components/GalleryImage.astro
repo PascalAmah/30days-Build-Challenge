@@ -1,0 +1,41 @@
+---
+import type { GalleryItem } from "../data/gallery";
+
+interface Props {
+  item: GalleryItem;
+  index: number;
+  class?: string;
+}
+
+const { item, index, class: className = "" } = Astro.props;
+
+const ratioClass = {
+  "1:1": "ratio-square",
+  "2:3": "ratio-portrait",
+  "4:5": "ratio-portrait-wide",
+  "3:2": "ratio-landscape",
+  "4:3": "ratio-landscape-small",
+  "16:9": "ratio-hero",
+}[item.ratio];
+---
+
+<figure class:list={["gallery-item", ratioClass, className]}>
+  <button
+    type="button"
+    class="image-button"
+    data-lightbox-trigger
+    data-index={index}
+    aria-label={`Open ${item.title}${item.year ? `, ${item.year}` : ""}`}
+  >
+    <img
+      src={item.image}
+      alt={item.title}
+      loading="lazy"
+    />
+  </button>
+
+  <figcaption>
+    <span>{item.title}</span>
+    {item.year && <span> - {item.year}</span>}
+  </figcaption>
+</figure>

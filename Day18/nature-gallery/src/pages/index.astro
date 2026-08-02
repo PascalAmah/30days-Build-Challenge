@@ -1,0 +1,142 @@
+---
+import "../styles/global.css";
+import Gallery from "../components/Gallery.astro";
+import GalleryImage from "../components/GalleryImage.astro";
+import { gallery, coda } from "../data/gallery";
+
+const all = [...gallery, ...coda];
+const codaOffset = gallery.length;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nature — a quiet study</title>
+    <meta
+      name="description"
+      content="Nature is one of the most immediate and noticeable experiences of life — a small visual study."
+    />
+  </head>
+  <body>
+    <header class="site-header wrap">
+      <p class="logo">Nature <sup>®</sup></p>
+      <ul class="site-nav">
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Email</a></li>
+      </ul>
+    </header>
+
+    <section class="intro wrap">
+      <p>
+        Nature is one of the most immediate and noticeable experiences of life. It does not
+        require translation and evokes instinctive feelings. From forests to rivers, skies to
+        valleys, nature shapes how we experience the world around us. It speaks through light,
+        weather, sound, and silence. With a quiet presence, nature reminds us of beauty, balance,
+        and stillness — where everything just exists as it is. It tells stories through light,
+        weather, sound, and silence. The rustle of leaves, the shift of wind, the warmth of sun
+        after rain — all of it works together in a language that is felt more than explained.
+      </p>
+    </section>
+
+    <section class="gallery-section">
+      <Gallery />
+    </section>
+
+    <section class="quote wrap">
+      <h2>The language of nature</h2>
+      <div class="lines">
+        <p>Nature is one of the most constant things we live with, yet rarely fully notice.</p>
+        <p>It doesn't ask for attention, but it always shapes how we feel.</p>
+        <p>Even in silence, there is movement — wind, light, growth, change.</p>
+        <p>It reminds us that nothing stays the same, and that there is rhythm in everything around us.</p>
+        <p>In a world that moves fast, nature quietly brings us back to stillness.</p>
+      </div>
+    </section>
+
+    <section class="coda wrap" aria-label="Closing series">
+      <div class="coda-grid">
+        {coda.map((item, i) => (
+          <GalleryImage item={item} index={i + codaOffset} class="coda-tile" />
+        ))}
+      </div>
+    </section>
+
+    <div class="lightbox" id="lightbox" data-open="false" role="dialog" aria-modal="true" aria-label="Image viewer">
+      <figure class="lightbox-figure">
+        <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close">✕</button>
+        <button class="lightbox-prev" id="lightbox-prev" type="button" aria-label="Previous image">‹</button>
+        <button class="lightbox-next" id="lightbox-next" type="button" aria-label="Next image">›</button>
+        <div class="lightbox-art" id="lightbox-art">
+          <img id="lightbox-img" src="" alt="" />
+        </div>
+        <figcaption class="lightbox-caption">
+          <span><span id="lightbox-title"></span><span class="tile-year" id="lightbox-year"></span></span>
+          <span id="lightbox-position" aria-hidden="true"></span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <script define:vars={{ items: all.map((i) => ({ title: i.title, year: i.year, image: i.image })) }}>
+      const lightbox = document.getElementById("lightbox");
+      const imgEl = document.getElementById("lightbox-img");
+      const titleEl = document.getElementById("lightbox-title");
+      const yearEl = document.getElementById("lightbox-year");
+      const posEl = document.getElementById("lightbox-position");
+      const closeBtn = document.getElementById("lightbox-close");
+      const prevBtn = document.getElementById("lightbox-prev");
+      const nextBtn = document.getElementById("lightbox-next");
+      const triggers = Array.from(document.querySelectorAll("[data-lightbox-trigger]"));
+
+      let current = 0;
+      let lastFocused = null;
+
+      function render(index) {
+        current = (index + items.length) % items.length;
+        const item = items[current];
+        imgEl.src = item.image;
+        imgEl.alt = item.title;
+        titleEl.textContent = item.title;
+        yearEl.textContent = item.year ? ` - ${item.year}` : "";
+        posEl.textContent = `${current + 1} / ${items.length}`;
+      }
+
+      function open(index) {
+        lastFocused = document.activeElement;
+        render(index);
+        lightbox.dataset.open = "true";
+        document.body.style.overflow = "hidden";
+        closeBtn.focus();
+      }
+
+      function close() {
+        lightbox.dataset.open = "false";
+        document.body.style.overflow = "";
+        if (lastFocused instanceof HTMLElement) lastFocused.focus();
+      }
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+          open(Number(trigger.dataset.index));
+        });
+      });
+
+      closeBtn.addEventListener("click", close);
+      prevBtn.addEventListener("click", () => render(current - 1));
+      nextBtn.addEventListener("click", () => render(current + 1));
+
+      // click outside the figure closes
+      lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) close();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (lightbox.dataset.open !== "true") return;
+        if (e.key === "Escape") close();
+        if (e.key === "ArrowLeft") render(current - 1);
+        if (e.key === "ArrowRight") render(current + 1);
+      });
+    </script>
+  </body>
+</html>
