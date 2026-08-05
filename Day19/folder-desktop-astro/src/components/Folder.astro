@@ -1,0 +1,36 @@
+---
+export interface Trinket {
+  kind: 'photo' | 'star' | 'triangle' | 'badge';
+  src: string;      // real photo URL (swap the placeholder for your own photos)
+  bg: string;       // fallback colour shown behind the photo while it loads
+  base: { x: number; y: number; r: number };
+  open: { x: number; y: number; r: number };
+}
+
+interface Props {
+  name: string;
+  color: string;
+  trinkets: Trinket[];
+}
+
+const { name, color, trinkets } = Astro.props as Props;
+
+const varStyle = (t: Trinket) =>
+  `--xb:${t.base.x}px;--yb:${t.base.y}px;--rb:${t.base.r}deg;` +
+  `--xh:${t.open.x}px;--yh:${t.open.y}px;--rh:${t.open.r}deg;`;
+---
+<button class="folder-wrap" type="button" data-folder data-name={name} aria-label={`Open ${name} folder`}>
+  <span class="folder">
+    <span class="folder-tab" style={`background:${color}`}></span>
+
+    {trinkets.map((t) => (
+      <span class={`trinket trinket-${t.kind}`} style={`${varStyle(t)}--imgbg:${t.bg}`}>
+        <img class="trinket-img" src={t.src} alt="" loading="lazy" decoding="async" />
+      </span>
+    ))}
+
+    <span class="folder-body" style={`background:${color}`}></span>
+    <span class="folder-shadow"></span>
+  </span>
+  <span class="folder-label">{name}</span>
+</button>

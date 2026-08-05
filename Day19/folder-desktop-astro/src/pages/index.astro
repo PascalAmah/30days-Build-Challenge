@@ -1,0 +1,181 @@
+---
+import '../styles/global.css';
+import Folder from '../components/Folder.astro';
+
+// shared "fan" geometry: at rest the trinkets sit stacked with their
+// bottoms tucked behind the folder body (positive base y pushes them
+// down into the pocket); on hover / tap they spread apart like a hand
+// of cards and lift up out of it (negative open y pops them clear).
+const back   = { base: { x: -40, y: 16, r: -7  }, open: { x: -60, y: -40, r: -24 } };
+const left   = { base: { x: -54, y: 18, r: -13 }, open: { x: -94, y: -32, r: -33 } };
+const right  = { base: { x: -10, y: 16, r: 9   }, open: { x: 28,  y: -34, r: 29  } };
+
+const g1 = 'linear-gradient(155deg,#ffd166,#ef476f)';
+const g2 = 'linear-gradient(155deg,#118ab2,#0b3d5c)';
+const g3 = 'linear-gradient(155deg,#f7b733,#fc4a1a)';
+const g4 = 'linear-gradient(155deg,#7de2d1,#118ab2)';
+const g5 = 'linear-gradient(155deg,#9b5de5,#f15bb5)';
+const g6 = 'linear-gradient(155deg,#ff9a8b,#ff6a88)';
+const g7 = 'linear-gradient(155deg,#6a89ff,#8fd3f4)';
+const g8 = 'linear-gradient(155deg,#3ddc97,#1b9aaa)';
+const g9 = 'linear-gradient(155deg,#f6d365,#fda085)';
+const g10 = 'linear-gradient(155deg,#c9a26d,#8a6a3d)';
+const g11 = 'linear-gradient(155deg,#a1c4fd,#c2e9fb)';
+const g12 = 'linear-gradient(155deg,#ff8ba7,#ffc6c7)';
+
+// real photos already provided in public/
+const img = (n: number) => {
+  const files = [
+    '01eb6584f7dc497618de2bc9d0a93a6e.jpg',
+    '03746e786330e21db378716685f22fdc365326d7 (1).webp',
+    '0d238c675ab28f5a142484dbc05c3dabe462d224.webp',
+    '1e53cf6d1218acdf9611103f3ea6f1f6d9e72fb3.webp',
+    '41777dcdf1bba17b75c41f4bffbcd17015fe3ed6 (1).webp',
+    '5d64993007f39f86ca040f07660c6b87.jpg',
+    '7ccd6fa4aadc01301dd078191ca4ac5f2f43083c.webp',
+    'b455d2bf80da090e9ecc34f544ea98ea2f4e7657.webp',
+    'd3d27fa8fca14123a9e25798f2a4dea3502a7433.webp',
+    'eaeac7278b1ca96306fbc0f125cec9f28569e31f.webp',
+    '0e9348a8af8332a8ef0c0e889d688d93.jpg',
+    '4f4b5713d19b694e0392f69c9bb15c0d.jpg',
+    '570ec448d2fe4f426b771d1a039da561.jpg',
+    '917c38793b4f927d4d2fc23229068775.jpg',
+    'b062df8a9df17b633a39feb673f9ea45.jpg',
+    'b8897b76033301f0dcfe2e5ec89b9906.jpg',
+    'HD-wallpaper-sunday-aesthetic-blue-minimal-pastel.jpg',
+    'wildcard-icon-tile.png',
+  ];
+  return `/` + files[n];
+};
+
+const folders = [
+  {
+    name: 'Projects',
+    color: '#f3c449',
+    trinkets: [
+      { kind: 'star',   src: img(0),                   bg: '#1a1a1a', ...back },
+      { kind: 'photo',  src: img(1),                   bg: g1, ...left },
+      { kind: 'photo',  src: img(2),                   bg: g2, ...right },
+    ],
+  },
+  {
+    name: 'Album',
+    color: '#eb7a3c',
+    trinkets: [
+      { kind: 'badge',  src: img(3),                   bg: g9, ...back },
+      { kind: 'photo',  src: img(4),                   bg: g3, ...left },
+      { kind: 'photo',  src: img(5),                   bg: g4, ...right },
+    ],
+  },
+  {
+    name: 'Design',
+    color: '#5fdb8c',
+    trinkets: [
+      { kind: 'photo',  src: img(6),                   bg: g5, ...back },
+      { kind: 'photo',  src: img(7),                   bg: g11, ...left },
+      { kind: 'photo',  src: img(8),                   bg: g2, ...right },
+    ],
+  },
+  {
+    name: 'Speaking events',
+    color: '#f0a3ef',
+    trinkets: [
+      { kind: 'photo',  src: img(9),                   bg: g10, ...back },
+      { kind: 'photo',  src: img(10),                  bg: g7, ...left },
+      { kind: 'photo',  src: img(11),                  bg: g12, ...right },
+    ],
+  },
+  {
+    name: 'Vacation',
+    color: '#6f8ff2',
+    trinkets: [
+      { kind: 'badge',    src: img(12),                bg: g5, ...back },
+      { kind: 'triangle', src: img(13),                bg: '#e7e2d3', ...left },
+      { kind: 'photo',    src: img(14),                bg: g8, ...right },
+    ],
+  },
+  {
+    name: 'Gym racks',
+    color: '#a3e6f2',
+    trinkets: [
+      { kind: 'star',   src: img(15),                  bg: '#c9a26d', ...back },
+      { kind: 'photo',  src: img(16),                  bg: g6, ...left },
+      { kind: 'photo',  src: img(17),                  bg: g2, ...right },
+    ],
+  },
+];
+---
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Folders</title>
+</head>
+<body>
+  <div class="titlebar">
+    <button aria-hidden="true">–</button>
+    <button aria-hidden="true">▢</button>
+    <button aria-hidden="true">×</button>
+  </div>
+
+  <main class="desktop" id="desktop">
+    {folders.map((f) => (
+      <Folder name={f.name} color={f.color} trinkets={f.trinkets} />
+    ))}
+  </main>
+
+  <div class="modal-backdrop" id="modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <header class="modal-header">
+        <h2 id="modal-title"></h2>
+        <button class="modal-close" id="modal-close" type="button" aria-label="Close">&times;</button>
+      </header>
+      <div class="modal-grid" id="modal-grid"></div>
+    </div>
+  </div>
+
+  <script define:vars={{ folders }} is:inline>
+    const folderEls = Array.from(document.querySelectorAll('[data-folder]'));
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalGrid = document.getElementById('modal-grid');
+    const modalClose = document.getElementById('modal-close');
+
+    const data = new Map(folders.map((f) => [f.name, f.trinkets.map((t) => t.src)]));
+
+    function openModal(name) {
+      const srcs = data.get(name) ?? [];
+      modalTitle.textContent = name;
+      modalGrid.replaceChildren(...srcs.map((src, i) => {
+        const cell = document.createElement('figure');
+        const imgEl = document.createElement('img');
+        imgEl.src = src;
+        imgEl.alt = `${name} photo ${i + 1}`;
+        imgEl.loading = 'lazy';
+        cell.appendChild(imgEl);
+        return cell;
+      }));
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      modalClose.focus();
+    }
+
+    function closeModal() {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    folderEls.forEach((folder) => {
+      folder.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openModal(folder.dataset.name || 'Folder');
+      });
+    });
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+  </script>
+</body>
+</html>
