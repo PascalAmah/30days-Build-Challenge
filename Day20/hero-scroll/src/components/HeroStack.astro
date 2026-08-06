@@ -1,0 +1,353 @@
+---
+import { slides } from "../data/slides";
+
+const count = slides.length;
+---
+
+<div class="hero-stack" style={`--count:${count}`}>
+  <div class="hero-sticky" id="hero-sticky">
+    {
+      slides.map((slide, i) => (
+        <section
+          class="hero-slide"
+          data-index={i}
+          style={`--bg:${slide.bg}; --bg-soft:${slide.bgSoft}; --fg:${slide.fg}; --fg-muted:${slide.fgMuted}; --accent:${slide.accent}; --img-w:${slide.imageWidth}; z-index:${i + 1};`}
+        >
+          <div class="hero-slide__inner">
+            <header class="hero-slide__top">
+              <span class="eyebrow">{slide.eyebrow}</span>
+              <p class="blurb">{slide.blurb}</p>
+            </header>
+
+            <img
+              class="hero-slide__character"
+              src={slide.image}
+              alt={slide.imageAlt}
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
+            />
+
+            <footer class="hero-slide__bottom">
+              <div class="hero-slide__heading">
+                <span class="date">{slide.date}</span>
+                <h2 class="title">
+                  {slide.titleLines[0]}
+                  <br />
+                  {slide.titleLines[1]}
+                </h2>
+              </div>
+
+              <a class="view-btn" href="#" aria-label={`View the ${slide.titleLines.join(" ")} case study`}>
+                <span>View</span>
+                <span class="arrow" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M2 8H14M14 8L9 3M14 8L9 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </a>
+            </footer>
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <div class="hero-progress" aria-hidden="true">
+    {slides.map((_, i) => <span class="hero-progress__dot" data-dot={i} />)}
+  </div>
+</div>
+
+<style>
+  .hero-stack {
+    position: relative;
+    height: calc(var(--count) * 100svh);
+  }
+
+  .hero-sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    color: var(--fg);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .hero-slide[data-index="0"] {
+    transform: none;
+  }
+
+  .hero-slide__inner {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: clamp(1.25rem, 3.4vw, 3rem) clamp(1.25rem, 4.6vw, 4.25rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero-slide__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: clamp(1.5rem, 6vw, 5rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .eyebrow {
+    font-size: clamp(0.85rem, 1vw, 1.05rem);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--fg);
+    opacity: 0.92;
+    white-space: nowrap;
+  }
+
+  .blurb {
+    margin: 0;
+    max-width: 30ch;
+    text-align: right;
+    font-size: clamp(0.85rem, 1vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg-muted);
+  }
+
+  .hero-slide__character {
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    transform: translateX(-50%);
+    width: var(--img-w, 26vw);
+    height: auto;
+    max-height: 66svh;
+    object-fit: contain;
+    filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.35));
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hero-slide[data-index="0"] .hero-slide__character,
+  .hero-slide[data-index="1"] .hero-slide__character {
+    bottom: 14svh;
+  }
+
+  .hero-slide[data-index="1"] .hero-slide__character {
+    width: 100%;
+    max-height: 100svh;
+    bottom: 0;
+  }
+
+  .hero-slide[data-index="2"] .hero-slide__character {
+    bottom: -12svh;
+    max-height: 120svh;
+  }
+
+  .hero-slide__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-slide__heading {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.6rem, 1.6vw, 1.1rem);
+  }
+
+  .date {
+    font-size: clamp(0.85rem, 1vw, 1.05rem);
+    letter-spacing: 0.02em;
+    color: var(--fg);
+    opacity: 0.85;
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    font-size: clamp(2.6rem, min(8.4vw, 12vh), 5.5rem);
+    color: var(--fg);
+  }
+
+  .view-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(0.65rem, 1.4vw, 1rem);
+    padding: 0.4rem 0.4rem 0.4rem clamp(1rem, 1.6vw, 1.5rem);
+    border-radius: 999px;
+    border: 3px solid color-mix(in srgb, var(--fg) 35%, transparent);
+    background: color-mix(in srgb, var(--bg-soft) 55%, transparent);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: clamp(0.85rem, 1vw, 1rem);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--fg);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .view-btn:hover {
+    background: color-mix(in srgb, var(--bg-soft) 85%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(2.1rem, 3vw, 2.5rem);
+    height: clamp(2.1rem, 3vw, 2.5rem);
+    border-radius: 50%;
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  .hero-progress {
+    position: fixed;
+    right: clamp(1rem, 2.5vw, 2rem);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    pointer-events: none;
+  }
+
+  .hero-progress__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    transition: background-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .hero-progress__dot[data-active="true"] {
+    background: #fff;
+    transform: scale(1.6);
+  }
+
+  @media (max-width: 760px) {
+    .hero-slide__top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .blurb {
+      text-align: left;
+      max-width: 36ch;
+    }
+
+    .hero-slide__character {
+      width: min(58vw, 340px);
+      top: 50%;
+      left: 50%;
+      bottom: auto;
+      transform: translate(-50%, -50%);
+      max-height: 50svh;
+    }
+
+    .hero-slide__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+
+    .title {
+      font-size: clamp(2.6rem, 14vw, 4rem);
+    }
+
+    .view-btn {
+      align-self: flex-start;
+    }
+
+    .hero-progress {
+      right: 0.75rem;
+    }
+  }
+
+  @media (max-width: 760px) and (orientation: landscape) {
+    .hero-slide__character {
+      width: min(30vw, 260px);
+      bottom: 6%;
+      left: 78%;
+      max-height: 70svh;
+    }
+
+    .hero-slide__top {
+      max-width: 60%;
+    }
+  }
+</style>
+
+<script>
+  function initHeroStack() {
+    const stack = document.querySelector<HTMLElement>(".hero-stack");
+    const slides = Array.from(document.querySelectorAll<HTMLElement>(".hero-slide"));
+    const dots = Array.from(document.querySelectorAll<HTMLElement>(".hero-progress__dot"));
+    if (!stack || slides.length === 0) return;
+
+    const count = slides.length;
+    let ticking = false;
+
+    function update() {
+      ticking = false;
+      const rect = stack!.getBoundingClientRect();
+      const viewportH = window.innerHeight;
+      const scrollable = stack!.offsetHeight - viewportH;
+      const raw = -rect.top;
+      const p = scrollable > 0 ? Math.min(1, Math.max(0, raw / scrollable)) : 0;
+      const t = p * (count - 1);
+
+      let activeIndex = 0;
+
+      slides.forEach((slide, i) => {
+        if (i === 0) {
+          activeIndex = Math.max(activeIndex, 0);
+          return;
+        }
+        const local = Math.min(1, Math.max(0, t - (i - 1)));
+        const translate = (1 - local) * 100;
+        slide.style.transform = `translate3d(${translate}%, 0, 0)`;
+        slide.style.boxShadow = local > 0.01 ? `-48px 0 90px rgba(0, 0, 0, ${0.4 * local})` : "none";
+        if (local > 0.5) activeIndex = i;
+      });
+
+      dots.forEach((dot, i) => {
+        dot.dataset.active = String(i === activeIndex);
+      });
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initHeroStack);
+  } else {
+    initHeroStack();
+  }
+</script>
