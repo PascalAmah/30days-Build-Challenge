@@ -1,0 +1,355 @@
+---
+export interface NavItem {
+  id: string;
+  label: string;
+  blurb: string;
+  filter: string;
+  tint: string;
+  image: string;
+}
+
+const items: NavItem[] = [
+  {
+    id: 'about',
+    label: 'About',
+    blurb:
+      'We are a brand you do not want to leave or push out. We make sure your business is ours and we deliver the best result and make sure you rank!',
+    filter: 'saturate(1) hue-rotate(0deg) brightness(1)',
+    tint: 'rgba(20, 20, 12, 0)',
+    image: '/images/hero-about.png',
+  },
+  {
+    id: 'team',
+    label: 'Team',
+    blurb:
+      'Strategists, designers and builders who obsess over your brand as much as you do. Small team, senior hands, no account-manager buffer.',
+    filter: 'saturate(1.25) hue-rotate(-18deg) brightness(1.05)',
+    tint: 'rgba(217, 255, 79, 0.14)',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&auto=format&fit=crop',
+  },
+  {
+    id: 'services',
+    label: 'Services',
+    blurb:
+      'SEO, paid media, brand strategy and web builds — everything your growth needs under one roof, run by people who ship.',
+    filter: 'saturate(0.85) hue-rotate(24deg) brightness(0.95) contrast(1.1)',
+    tint: 'rgba(120, 160, 255, 0.12)',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop',
+  },
+  {
+    id: 'careers',
+    label: 'Careers',
+    blurb:
+      "We're always looking for sharp, curious people who want to do the best work of their career. Come make something you're proud of.",
+    filter: 'saturate(1.1) hue-rotate(40deg) brightness(1.05) contrast(1.05)',
+    tint: 'rgba(255, 170, 100, 0.12)',
+    image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900&auto=format&fit=crop',
+  },
+  {
+    id: 'contact',
+    label: 'Contact',
+    blurb:
+      "Got a project in mind? Tell us where you're stuck and we'll tell you exactly how we fix it.",
+    filter: 'saturate(0.6) hue-rotate(-8deg) brightness(0.9) contrast(1.15)',
+    tint: 'rgba(255, 255, 255, 0.08)',
+    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&auto=format&fit=crop',
+  },
+];
+
+---
+
+<div class="nav-overlay" id="navOverlay" data-active="about">
+  <button class="close-btn" id="closeBtn" aria-label="Close menu" type="button">
+    <span>Close</span>
+    <svg width="12" height="12" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M1 1L17 17M17 1L1 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <div class="visual" id="visual">
+    {items.map((item) => (
+      <div
+        class="visual-layer"
+        data-layer={item.id}
+        style={`--tint:${item.tint}`}
+      >
+        <img
+          src={item.image}
+          alt=""
+          style={`filter:${item.filter}`}
+          loading={item.id === 'about' ? 'eager' : 'lazy'}
+        />
+      </div>
+    ))}
+  </div>
+
+  <div class="panel">
+    <nav class="nav-list" aria-label="Primary">
+      {items.map((item) => (
+        <a
+          href={`#${item.id}`}
+          class="nav-link"
+          data-target={item.id}
+          data-blurb={item.blurb}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <p class="blurb" id="blurb">{items[0].blurb}</p>
+
+    <a class="cta" href="#book-a-call">
+      <span>Book a call</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  :root {
+    --bg: #13140c;
+    --ink: #f4f2e9;
+    --muted: #8c8b80;
+    --accent: #d7ff4a;
+    --accent-ink: #14140c;
+  }
+
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: clamp(20px, 4vw, 40px);
+    right: clamp(20px, 4vw, 48px);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(16px, 2vw, 18px);
+    font-weight: 590;
+    font-style: normal;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+  }
+  .close-btn svg { flex-shrink: 0; }
+  .close-btn:hover { opacity: 0.7; }
+
+  /* ---------- Visual (image) panel ---------- */
+  .visual {
+    position: relative;
+    width: 100%;
+    flex: 0 0 38%;
+    min-height: 0;
+    order: 2;
+    overflow: hidden;
+    background: #13140c;
+  }
+
+  .visual-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+  }
+  .visual-layer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--tint);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+  .visual-layer[data-active-layer='true'] {
+    opacity: 1;
+  }
+  .visual-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    transition: filter 0.5s ease, transform 0.6s ease;
+  }
+
+  /* ---------- Text panel ---------- */
+  .panel {
+    order: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(48px, 8vh, 100px) clamp(24px, 5vw, 40px) clamp(16px, 4vh, 48px);
+    gap: clamp(8px, 1.5vh, 24px);
+    overflow: hidden;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    justify-content: space-evenly;
+    gap: 0;
+  }
+
+  .nav-link {
+    font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    /* fluid: scales with viewport height, capped at 60px */
+    font-size: clamp(22px, 7vh, 60px);
+    font-weight: 590;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.25s ease;
+    width: fit-content;
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-link.is-active {
+    color: var(--ink);
+    outline: none;
+  }
+
+  .blurb {
+    max-width: 46ch;
+    font-size: clamp(14px, 2.2vw, 16px);
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 16px 36px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 2px solid #13140c;
+    box-shadow: 6px 6px 0px 0px #7a9a00;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .cta:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0px 0px #7a9a00;
+  }
+  .cta:active {
+    transform: translate(6px, 6px);
+    box-shadow: 0px 0px 0px 0px #7a9a00;
+  }
+
+  /* ---------- Desktop layout ---------- */
+  @media (min-width: 900px) {
+    .nav-overlay {
+      flex-direction: row;
+    }
+    .visual {
+      order: 1;
+      flex: 0 0 46%;
+      width: 46%;
+      height: 100%;
+      min-height: 0;
+    }
+    .panel {
+      order: 2;
+      flex: 1 1 auto;
+      width: 54%;
+      justify-content: center;
+      overflow: hidden;
+      padding: clamp(48px, 6vw, 96px) clamp(48px, 6vw, 120px);
+    }
+    .nav-link {
+      /* on desktop full height is available — fluid up to 60px */
+      font-size: clamp(28px, 6vh, 60px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .visual-layer, .cta, .nav-link, .visual-layer img {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  function initNavOverlay() {
+    const overlay = document.getElementById('navOverlay');
+    if (!overlay) return;
+
+    const links = overlay.querySelectorAll<HTMLAnchorElement>('.nav-link');
+    const layers = overlay.querySelectorAll<HTMLDivElement>('.visual-layer');
+    const blurbEl = document.getElementById('blurb');
+    const closeBtn = document.getElementById('closeBtn');
+
+    let selected = 'about';
+
+    function setActive(id: string, updateBlurb = false) {
+      links.forEach((link) => {
+        link.classList.toggle('is-active', link.dataset.target === id);
+      });
+      layers.forEach((layer) => {
+        const isActive = layer.dataset.layer === id;
+        if (isActive) {
+          layer.setAttribute('data-active-layer', 'true');
+        } else {
+          layer.removeAttribute('data-active-layer');
+        }
+      });
+      if (updateBlurb && blurbEl) {
+        const match = Array.from(links).find((l) => l.dataset.target === id);
+        if (match?.dataset.blurb) blurbEl.textContent = match.dataset.blurb;
+      }
+    }
+
+    setActive(selected, true);
+
+    const canHover = window.matchMedia('(hover: hover)').matches;
+
+    links.forEach((link) => {
+      const id = link.dataset.target as string;
+
+      if (canHover) {
+        link.addEventListener('mouseenter', () => setActive(id));
+        link.addEventListener('mouseleave', () => setActive(selected));
+      }
+      link.addEventListener('focus', () => setActive(id));
+      link.addEventListener('blur', () => setActive(selected));
+
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        selected = id;
+        setActive(id, true);
+      });
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      overlay.dispatchEvent(new CustomEvent('nav:close', { bubbles: true }));
+      window.dispatchEvent(new CustomEvent('nav-overlay-close'));
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initNavOverlay);
+</script>
