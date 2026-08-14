@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <defs>
+    <polygon id="h" points="0,-5.6 4.85,-2.8 4.85,2.8 0,5.6 -4.85,2.8 -4.85,-2.8" />
+  </defs>
+  <rect width="40" height="40" rx="9" fill="#131315"/>
+  <g fill="#6d64ff">
+    <use href="#h" transform="translate(20 20) translate(0 -8.6)" />
+    <use href="#h" transform="translate(20 20) rotate(60) translate(0 -8.6)" />
+    <use href="#h" transform="translate(20 20) rotate(120) translate(0 -8.6)" />
+    <use href="#h" transform="translate(20 20) rotate(180) translate(0 -8.6)" />
+    <use href="#h" transform="translate(20 20) rotate(240) translate(0 -8.6)" />
+    <use href="#h" transform="translate(20 20) rotate(300) translate(0 -8.6)" />
+  </g>
+</svg>

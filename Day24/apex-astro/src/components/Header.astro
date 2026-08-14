@@ -1,0 +1,647 @@
+---
+import { icons } from './icons';
+
+const solutions = [
+  { key: 'compliance', label: 'Compliance', icon: icons.compliance, active: true },
+  { key: 'jobCosting', label: 'Job Costing', icon: icons.jobCosting },
+  { key: 'integration', label: 'Integration', icon: icons.integration },
+  { key: 'sales', label: 'Sales', icon: icons.sales },
+];
+
+const resourceLinks = [
+  { key: 'academy', label: 'Academy', icon: icons.academy },
+  { key: 'changelog', label: 'Changelog', icon: icons.changelog },
+];
+---
+
+<header class="site-header">
+  <div class="bar" data-animate="fade-in" data-duration="base" data-delay="0">
+
+    <!-- Logo: Icon.svg + "Apex" text -->
+    <a href="/" class="brand" aria-label="Apex home">
+      <img src="/Icon.svg" alt="" width="26" height="26" class="brand-icon" />
+      <span class="brand-name">Apex</span>
+    </a>
+
+    <!-- Nav sits immediately after the logo (left-aligned) -->
+    <nav class="nav-desktop" aria-label="Primary">
+      <ul class="nav-list">
+        <li class="nav-item" data-menu="solutions">
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="menu-solutions">
+            Solutions
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons.chevronDown} />
+          </button>
+
+          <div class="mega" id="menu-solutions" role="menu">
+            <div class="mega-inner solutions-panel">
+              <ul class="solutions-list" role="none">
+                {solutions.map((item) => (
+                  <li>
+                    <a class:list={['solutions-link', { 'is-active': item.active }]} href="#" role="menuitem">
+                      <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={item.icon} />
+                      <span>{item.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <!-- white-cloud.png for solutions -->
+              <div class="solutions-media" aria-hidden="true">
+                <img src="/white-cloud.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item" data-menu="resources">
+          <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="menu-resources">
+            Resources
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons.chevronDown} />
+          </button>
+
+          <div class="mega" id="menu-resources" role="menu">
+            <div class="mega-inner resources-panel">
+              <div class="resource-feature">
+                <!-- dark-cloud.png for resources -->
+                <a href="#" class="feature-media" role="menuitem" aria-label="Help center">
+                  <img src="/dark-cloud.png" alt="" />
+                </a>
+                <h3>Help center</h3>
+                <p>Learn how to use Apex and get answers to your questions</p>
+              </div>
+
+              <div class="resource-feature">
+                <a href="#" class="feature-media feature-media--short swatch-gradient" role="menuitem" aria-label="Developer documentation"></a>
+                <h3>Developer documentation</h3>
+                <p>Integrate Apex Finance into your product.</p>
+
+                <ul class="resource-links" role="none">
+                  {resourceLinks.map((link) => (
+                    <li>
+                      <a href="#" class="resource-link" role="menuitem">
+                        <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={link.icon} />
+                        <span>{link.label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-trigger nav-link" href="#pricing">Pricing</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Spacer pushes CTA to the far right -->
+    <div class="bar-spacer"></div>
+
+    <div class="bar-actions">
+      <a class="cta-demo" href="#demo">Request a demo</a>
+      <button class="hamburger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons.menu} />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav -->
+  <div class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-close" type="button" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+    <div class="mobile-nav-inner">
+      <details class="mobile-group">
+        <summary>
+          Solutions
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons.chevronDown} />
+        </summary>
+        <ul class="mobile-sublist">
+          {solutions.map((item) => (
+            <li>
+              <a href="#">
+                <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={item.icon} />
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+
+      <details class="mobile-group">
+        <summary>
+          Resources
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons.chevronDown} />
+        </summary>
+        <ul class="mobile-sublist">
+          <li><a href="#">Help center</a></li>
+          <li><a href="#">Developer documentation</a></li>
+          {resourceLinks.map((link) => (
+            <li>
+              <a href="#">
+                <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={link.icon} />
+                <span>{link.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+
+      <a class="mobile-link" href="#pricing">Pricing</a>
+      <a class="cta-demo mobile-cta" href="#demo">Request a demo</a>
+    </div>
+  </div>
+  <button class="mobile-scrim" tabindex="-1" aria-hidden="true"></button>
+</header>
+
+<style>
+  /* ─── Header shell ─────────────────────────────── */
+  .site-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    width: 100%;
+    background: transparent;
+  }
+
+  .bar {
+    max-width: 1440px;        /* ← updated from var(--container) */
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    /* no justify-content:space-between — logo + nav are left, spacer + CTA push right */
+    gap: 0;
+    padding: 20px 32px;
+  }
+
+  /* ─── Logo ─────────────────────────────────────── */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-right: 8px;        /* tiny gap before the nav links */
+  }
+
+  .brand-icon {
+    display: block;
+    width: 26px;
+    height: 26px;
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  /* ─── Desktop nav — left-aligned next to logo ─── */
+  .nav-desktop {
+    display: none;
+  }
+
+  @media (min-width: 901px) {
+    .nav-desktop {
+      display: flex;           /* sits inline, not centered */
+      align-items: center;
+    }
+  }
+
+  .nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .nav-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .nav-trigger:hover,
+  .nav-item.is-open .nav-trigger {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-link { text-decoration: none; }
+
+  .chev {
+    width: 15px;
+    height: 15px;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-item.is-open .chev {
+    transform: rotate(180deg);
+  }
+
+  /* ─── Spacer ────────────────────────────────────── */
+  .bar-spacer {
+    flex: 1;
+  }
+
+  /* ─── Mega menus ─────────────────────────────────  */
+  .mega {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
+    pointer-events: none;
+  }
+
+  .nav-item.is-open .mega {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .mega-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 24px 48px -12px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.2);
+    padding: 8px;
+  }
+
+  /* Solutions */
+  .solutions-panel {
+    display: flex;
+    gap: 4px;
+    width: 343px;
+    align-items: stretch;
+  }
+
+  .solutions-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 178px;
+    flex-shrink: 0;
+  }
+
+  .solutions-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .solutions-link:hover,
+  .solutions-link.is-active {
+    background: var(--surface-3);
+    color: var(--text);
+  }
+
+  .item-icon {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+
+  .solutions-media {
+    flex: 1;
+    min-width: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    align-self: stretch;
+  }
+
+  .solutions-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Resources */
+  .resources-panel {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 16px;
+    width: 471px;
+    padding: 8px;
+  }
+
+  .resource-feature h3 {
+    margin: 14px 0 4px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .resource-feature p {
+    margin: 0;
+    font-size: 0.83rem;
+    line-height: 1.4;
+    color: var(--text-dim);
+  }
+
+  .feature-media {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 0.86;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .feature-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .feature-media--short {
+    aspect-ratio: 1 / 0.5;
+  }
+
+  .swatch-gradient {
+    background: linear-gradient(120deg, #ff6b6b 0%, #ffd76b 30%, #8affc1 60%, #4fd6ff 85%, #38b6ff 100%);
+  }
+
+  .resource-links {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .resource-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 4px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+
+  .resource-link:hover { color: var(--accent); }
+
+  /* ─── Bar actions ────────────────────────────────  */
+  .bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .cta-demo {
+    display: inline-flex;
+    align-items: center;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 11px 20px;
+    border-radius: 10px;
+    transition: background-color 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .cta-demo:hover { background: var(--accent-hover); }
+
+  .hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+  }
+
+  .hamburger svg { width: 20px; height: 20px; }
+
+  @media (min-width: 901px) { .hamburger { display: none; } }
+  @media (max-width: 900px) { .cta-demo { display: none; } }
+
+  /* ─── Mobile nav drawer ──────────────────────────  */
+  .mobile-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    border: none;
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 90;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(88vw, 360px);
+    background: var(--bg-elevated);
+    border-left: 1px solid var(--border);
+    z-index: 110;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    overflow-y: auto;
+  }
+
+  :global(body.mobile-nav-open) .mobile-nav  { transform: translateX(0); }
+  :global(body.mobile-nav-open) .mobile-scrim { opacity: 1; visibility: visible; }
+  :global(body.mobile-nav-open)               { overflow: hidden; }
+
+  .mobile-nav-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .mobile-nav-close:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .mobile-nav-close svg { width: 18px; height: 18px; }
+
+  .mobile-nav-inner {
+    padding: 84px 22px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .mobile-group summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .mobile-group summary::-webkit-details-marker { display: none; }
+  .mobile-group[open] summary .chev { transform: rotate(180deg); }
+
+  .mobile-sublist {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 0 4px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mobile-sublist a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 0.94rem;
+  }
+
+  .mobile-sublist a:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .mobile-link {
+    padding: 14px 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+    margin-top: 6px;
+  }
+
+  .mobile-cta {
+    justify-content: center;
+    margin-top: 18px;
+    text-align: center;
+  }
+
+  @media (min-width: 901px) {
+    .mobile-nav,
+    .mobile-scrim { display: none; }
+  }
+</style>
+
+<script>
+  const HOVER_QUERY = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const items = Array.from(document.querySelectorAll<HTMLLIElement>('.nav-item[data-menu]'));
+  let closeTimer: number | undefined;
+
+  function openItem(item: HTMLLIElement) {
+    items.forEach((i) => { if (i !== item) closeItem(i); });
+    item.classList.add('is-open');
+    item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeItem(item: HTMLLIElement) {
+    item.classList.remove('is-open');
+    item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+  }
+
+  function closeAll() { items.forEach(closeItem); }
+
+  items.forEach((item) => {
+    const trigger = item.querySelector('.nav-trigger') as HTMLButtonElement | null;
+    if (!trigger) return;
+
+    item.addEventListener('mouseenter', () => {
+      if (!HOVER_QUERY.matches) return;
+      window.clearTimeout(closeTimer);
+      openItem(item);
+    });
+
+    item.addEventListener('mouseleave', () => {
+      if (!HOVER_QUERY.matches) return;
+      closeTimer = window.setTimeout(() => closeItem(item), 120);
+    });
+
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = item.classList.contains('is-open');
+      closeAll();
+      if (!isOpen) openItem(item);
+    });
+  });
+
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
+  document.addEventListener('click', (e) => {
+    const target = e.target as Node;
+    if (!items.some((i) => i.contains(target))) closeAll();
+  });
+
+  // Mobile drawer
+  const hamburger = document.querySelector<HTMLButtonElement>('.hamburger');
+  const scrim     = document.querySelector<HTMLButtonElement>('.mobile-scrim');
+  const closeBtn  = document.querySelector<HTMLButtonElement>('.mobile-nav-close');
+
+  function setMobileNav(open: boolean) {
+    document.body.classList.toggle('mobile-nav-open', open);
+    hamburger?.setAttribute('aria-expanded', String(open));
+  }
+
+  hamburger?.addEventListener('click', () => setMobileNav(!document.body.classList.contains('mobile-nav-open')));
+  scrim?.addEventListener('click', () => setMobileNav(false));
+  closeBtn?.addEventListener('click', () => setMobileNav(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMobileNav(false); });
+</script>

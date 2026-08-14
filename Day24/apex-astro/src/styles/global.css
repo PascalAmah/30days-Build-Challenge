@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&family=Outfit:wght@600&display=swap');
+
+:root {
+  /* Surfaces */
+  --bg: #131315;
+  --bg-elevated: #18181b;
+  --surface: #19191c;
+  --surface-2: #1f1f23;
+  --surface-3: #26262b;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Text */
+  --text: #f5f5f7;
+  --text-muted: #9a9aa4;
+  --text-dim: #6c6c76;
+
+  /* Accent */
+  --accent: #6d64ff;
+  --accent-hover: #5b52f2;
+  --accent-soft: rgba(109, 100, 255, 0.14);
+
+  /* Data viz */
+  --chart-blue: #335cff;
+  --chart-cyan: #35ade9;
+  --chart-purple: #8b7bfa;
+  --positive: #3ddc84;
+  --positive-bg: rgba(61, 220, 132, 0.12);
+  --negative: #ff6b6b;
+  --negative-bg: rgba(255, 107, 107, 0.12);
+
+  /* Type */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Inter Tight', 'Inter', -apple-system, sans-serif;
+
+  --container: 1280px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─── Entry animations ───────────────────────────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+[data-animate] {
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-animate="fade-up"]  { animation-name: fade-up; }
+[data-animate="fade-in"]  { animation-name: fade-in; }
+
+/* Stagger delays */
+[data-delay="0"]  { animation-delay: 0ms; }
+[data-delay="1"]  { animation-delay: 80ms; }
+[data-delay="2"]  { animation-delay: 160ms; }
+[data-delay="3"]  { animation-delay: 240ms; }
+[data-delay="4"]  { animation-delay: 340ms; }
+[data-delay="5"]  { animation-delay: 460ms; }
+
+/* Duration variants */
+[data-duration="fast"]   { animation-duration: 0.4s; }
+[data-duration="base"]   { animation-duration: 0.6s; }
+[data-duration="slow"]   { animation-duration: 0.9s; }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

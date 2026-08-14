@@ -1,0 +1,204 @@
+---
+import DashboardMock from './DashboardMock.astro';
+import { icons } from './icons';
+---
+
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <a class="eyebrow" href="#dashboard" data-animate="fade-up" data-duration="base" data-delay="1">
+      <span class="eyebrow-badge">NEW</span>
+      Unified banking dashboard
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons.arrowUpRight} />
+    </a>
+
+    <h1 class="headline" data-animate="fade-up" data-duration="base" data-delay="2">
+      Your entire crypto portfolio,<br />
+      one smart dashboard
+    </h1>
+
+    <p class="subcopy" data-animate="fade-up" data-duration="base" data-delay="3">
+      From secure payments to account insights, all in one place.<br class="lg-only" />
+      Your tokens, swaps, and market data — all in one secure app.
+    </p>
+
+    <a class="cta" href="#open-account" data-animate="fade-up" data-duration="base" data-delay="4">
+      Open your account
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={icons.arrowUpRight} />
+    </a>
+  </div>
+
+  <div class="hero-mock" id="dashboard" data-animate="fade-up" data-duration="slow" data-delay="5">
+    <DashboardMock />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: 64px 24px 0;
+  }
+
+  /* Square tile pattern — top half only */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/square-pattern.png');
+    background-repeat: repeat;
+    background-size: 32px 32px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 35%, transparent 52%);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 35%, transparent 52%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /*
+    THE GLOW — absolutely positioned in .hero, aligned to sit
+    at the top of the dashboard image. The dashboard has margin-top:56px
+    from .hero-content. We approximate its vertical position.
+    Wider than the page so it bleeds left and right of the dashboard.
+  */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1800px;
+    height: 600px;
+    background:
+      radial-gradient(
+        ellipse 55% 55% at 40% 45%,
+        rgba(200, 130, 60, 0.28) 0%,
+        rgba(200, 110, 40, 0.12) 45%,
+        transparent 68%
+      ),
+      radial-gradient(
+        ellipse 55% 30% at 50% 50%,
+        rgba(0, 230, 80, 0.6) 0%,
+        rgba(0, 200, 60, 0.30) 45%,
+        transparent 68%
+      );
+    filter: blur(60px);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    max-width: 880px;
+    margin: 100px auto 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 14px 7px 8px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.83rem;
+    font-weight: 500;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .eyebrow:hover {
+    background: var(--surface-3);
+    border-color: var(--border-strong);
+  }
+
+  .eyebrow svg {
+    width: 14px;
+    height: 14px;
+    color: var(--text-dim);
+  }
+
+  .eyebrow-badge {
+    background: var(--accent-soft);
+    color: #a6a1ff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 3px 7px;
+    border-radius: 999px;
+  }
+
+  .headline {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    font-size: 56px;
+    margin: 22px 0 0;
+    color: #fff;
+  }
+
+  .subcopy {
+    margin: 22px 0 0;
+    color: var(--text-muted);
+    font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+    line-height: 1.6;
+    max-width: 640px;
+  }
+
+  .cta {
+    margin-top: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 14px 24px;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px -8px rgba(109, 100, 255, 0.5);
+    transition: background-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .cta:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .cta svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Dashboard — on top of the glow */
+  .hero-mock {
+    position: relative;
+    z-index: 2;
+    max-width: 1068px;
+    margin: 56px auto -220px;
+    -webkit-mask-image: linear-gradient(180deg, black 0%, black 55%, transparent 78%);
+    mask-image: linear-gradient(180deg, black 0%, black 55%, transparent 78%);
+  }
+
+  @media (max-width: 700px) {
+    .hero {
+      padding-top: 40px;
+    }
+    .headline {
+      font-size: 36px;
+    }
+    .hero-mock {
+      margin-top: 40px;
+      margin-bottom: -120px;
+    }
+    .hero::after {
+      bottom: 100px; /* pushed down to sit behind/below the dashboard on mobile */
+      width: 100vw;
+      height: 200px;
+    }
+  }
+</style>
