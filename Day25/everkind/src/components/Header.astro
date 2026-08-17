@@ -219,6 +219,15 @@ const tabs = [
     padding: 14px var(--gutter);
     overflow-x: auto;
     scrollbar-width: none;
+    /* prevent content from being clipped on the trailing edge */
+    padding-inline-end: var(--gutter);
+  }
+
+  @media (max-width: 900px) {
+    .tabs {
+      gap: 20px;
+      padding: 12px var(--gutter);
+    }
   }
 
   .tabs::-webkit-scrollbar {
@@ -234,6 +243,12 @@ const tabs = [
     text-decoration: none;
     white-space: nowrap;
     flex-shrink: 0;
+  }
+
+  @media (max-width: 900px) {
+    .tab {
+      font-size: 0.72rem;
+    }
   }
 
   .tab.active {
