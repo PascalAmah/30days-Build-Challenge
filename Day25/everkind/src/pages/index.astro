@@ -1,0 +1,135 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ProductTile from "../components/ProductTile.astro";
+import FeatureTile from "../components/FeatureTile.astro";
+import IntroText from "../components/IntroText.astro";
+import StoryCard from "../components/StoryCard.astro";
+import { products } from "../data/products";
+
+import midnightGown from "../assets/products/midnight-gown.png";
+import highFashionCape from "../assets/products/high-fashion-cape.png";
+import crimsonEarring from "../assets/products/crimson-earring.png";
+import camelSuit from "../assets/products/camel-suit.jpg";
+import casualJeans from "../assets/products/casual-jeans.png";
+import ivoryCapeSuit from "../assets/products/ivory-cape-suit.png";
+import storyCollage from "../assets/products/story-collage.png";
+---
+
+<Layout title="Everkind — Timeless pieces for everyday living">
+  <Header />
+
+  <main>
+    <section class="grid" aria-label="Featured products">
+      <div data-reveal style="grid-area:p1;min-width:0;">
+        <ProductTile
+          product={products.midnight}
+          image={midnightGown}
+          imageAlt="Model in a flowing midnight sculptural gown with warm golden light"
+          priority
+        />
+      </div>
+      <div data-reveal style="grid-area:p2;min-width:0;">
+        <FeatureTile
+          image={highFashionCape}
+          imageAlt="Model wearing an ivory textured caped blazer with a gold earring"
+          label="High Fashion"
+          href={`/products/${products.ivory.slug}`}
+        />
+      </div>
+      <div data-reveal style="grid-area:p3;min-width:0;">
+        <ProductTile
+          product={products.crimson}
+          image={crimsonEarring}
+          imageAlt="Close-up profile of a model wearing a cream drop earring and maroon blazer"
+        />
+      </div>
+      <div data-reveal style="grid-area:p4;min-width:0;">
+        <ProductTile
+          product={products.camel}
+          image={camelSuit}
+          imageAlt="Model walking in a camel textured power suit with a gold earring"
+        />
+      </div>
+
+      <div data-reveal style="grid-area:text;min-width:0;">
+        <IntroText />
+      </div>
+
+      <div data-reveal style="grid-area:blog;min-width:0;height:100%;">
+        <StoryCard
+          image={storyCollage}
+          imageAlt="Editorial collage portrait illustrating Everkind's sustainability commitments"
+        />
+      </div>
+
+      <div data-reveal style="grid-area:jeans;min-width:0;">
+        <ProductTile
+          product={products.jeans}
+          image={casualJeans}
+          imageAlt="Model in a suede jacket and relaxed denim jeans, leaning against a wall"
+          ratio="4 / 5"
+        />
+      </div>
+      <div data-reveal style="grid-area:ivory;min-width:0;">
+        <ProductTile
+          product={products.ivory}
+          image={ivoryCapeSuit}
+          imageAlt="Model in an ivory textured cape suit standing barefoot on coastal rocks at dusk"
+          ratio="4 / 5"
+        />
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      "p1 p2 p3 p4"
+      "text text blog blog"
+      "jeans ivory blog blog";
+    gap: 40px 24px;
+    padding: 40px var(--gutter) 72px;
+  }
+
+  @media (max-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "p1 p2"
+        "p3 p4"
+        "text text"
+        "jeans ivory"
+        "blog blog";
+      gap: 32px 20px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "p1"
+        "p2"
+        "p3"
+        "p4"
+        "text"
+        "blog"
+        "jeans"
+        "ivory";
+      gap: 40px;
+      padding: 8px var(--gutter) 56px;
+    }
+  }
+</style>

@@ -1,0 +1,183 @@
+---
+const columns = [
+  {
+    title: "Shop",
+    links: ["New In", "Clothing", "Dresses", "Shoes", "Accessories"],
+  },
+  {
+    title: "Company",
+    links: ["Our Story", "Sustainability", "Stories", "Careers"],
+  },
+  {
+    title: "Support",
+    links: ["Contact Us", "Shipping & Returns", "Size Guide", "FAQ"],
+  },
+];
+---
+
+<footer class="site-footer" data-reveal data-reveal-quick>
+  <div class="footer-top">
+    <div class="brand-col">
+      <p class="logo">Everkind</p>
+      <p class="tag">People. Planet. Product. Progress.</p>
+    </div>
+
+    {columns.map((col) => (
+      <div class="link-col">
+        <p class="col-title">{col.title}</p>
+        <ul>
+          {col.links.map((link) => (
+            <li><a href="/">{link}</a></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+
+    <div class="link-col newsletter">
+      <p class="col-title">Stay in touch</p>
+      <p class="newsletter-copy">Edits, restocks, and stories — a few times a month.</p>
+      <form class="newsletter-form" onsubmit="event.preventDefault()">
+        <input type="email" placeholder="Email address" aria-label="Email address" required />
+        <button type="submit">Join</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {new Date().getFullYear()} Everkind. All rights reserved.</p>
+    <p>Lagos &middot; London &middot; New York</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--surface-1);
+    padding: 56px var(--gutter) 24px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1.3fr;
+    gap: 32px;
+    padding-bottom: 40px;
+  }
+
+  .brand-col .logo {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    margin: 0 0 10px;
+    color: var(--ink-0);
+  }
+
+  .tag {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    max-width: 24ch;
+    margin: 0;
+  }
+
+  .col-title {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-0);
+    margin: 0 0 16px;
+  }
+
+  .link-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .link-col a {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  .link-col a:hover {
+    color: var(--accent);
+  }
+
+  .newsletter-copy {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--ink-2);
+    margin: 0 0 14px;
+  }
+
+  .newsletter-form {
+    display: flex;
+    border-bottom: 1px solid var(--ink-0);
+    max-width: 260px;
+  }
+
+  .newsletter-form input {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 6px 0;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: var(--ink-0);
+    outline: none;
+  }
+
+  .newsletter-form button {
+    border: none;
+    background: none;
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-0);
+    cursor: pointer;
+  }
+
+  .newsletter-form button:hover {
+    color: var(--accent);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    color: var(--ink-3);
+  }
+
+  .footer-bottom p {
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .footer-top {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 32px;
+    }
+
+    .brand-col {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 6px;
+    }
+  }
+</style>

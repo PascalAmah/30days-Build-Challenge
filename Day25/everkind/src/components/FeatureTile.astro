@@ -1,0 +1,69 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  image: ImageMetadata;
+  imageAlt: string;
+  label: string;
+  href: string;
+  area?: string;
+  ratio?: string;
+}
+
+const { image, imageAlt, label, href, area, ratio = "3 / 4" } = Astro.props;
+---
+
+<article class="feature" style={area ? `grid-area:${area};` : undefined}>
+  <a class="frame" href={href} style={`aspect-ratio:${ratio};`}>
+    <Image
+      src={image}
+      alt={imageAlt}
+      widths={[400, 700, 1000]}
+      sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 25vw"
+      loading="lazy"
+      class="photo"
+    />
+    <span class="overlay-text">{label}</span>
+  </a>
+</article>
+
+<style>
+  .feature {
+    min-width: 0;
+  }
+
+  .frame {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    background: var(--surface-2);
+  }
+
+  .photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (hover: hover) {
+    .frame:hover .photo {
+      transform: scale(1.045);
+    }
+  }
+
+  .overlay-text {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    z-index: 2;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 2rem;
+    color: var(--surface-0);
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
+  }
+</style>

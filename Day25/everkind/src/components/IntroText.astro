@@ -1,0 +1,37 @@
+---
+interface Props {
+  area?: string;
+}
+const { area } = Astro.props;
+---
+
+<div class="intro" style={area ? `grid-area:${area};` : undefined}>
+  <p>
+    Made for everyday living, our collections are timeless pieces designed to
+    move with you from season to season. We believe in fair supply chains,
+    thoughtful production, and fabrics that put responsibility first. Every
+    garment is part of our promise to do better, guided by four values:
+    <strong>People, Planet, Product, and Progress.</strong>
+  </p>
+</div>
+
+<style>
+  .intro {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  p {
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 1.6vw, 1.55rem);
+    line-height: 1.5;
+    color: var(--ink-0);
+    margin: 0;
+    max-width: 42ch;
+  }
+
+  strong {
+    font-weight: 500;
+    font-style: italic;
+  }
+</style>

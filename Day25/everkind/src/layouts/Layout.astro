@@ -1,0 +1,180 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Everkind — timeless, responsibly made clothing and accessories for everyday living.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#faf8f4" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @view-transition {
+    navigation: auto;
+  }
+
+  :root {
+    --font-serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --font-sans: "Helvetica Neue", Helvetica, Arial, -apple-system, BlinkMacSystemFont,
+      sans-serif;
+
+    --surface-0: #ffffff;
+    --surface-1: #faf8f4;
+    --surface-2: #ece7dd;
+    --ink-0: #16130f;
+    --ink-1: #3a352e;
+    --ink-2: #6b6459;
+    --ink-3: #948c7e;
+    --line: #e6e1d6;
+    --accent: #7c2130;
+
+    --gutter: clamp(20px, 4vw, 56px);
+    --max-width: 1760px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    background: var(--surface-0);
+  }
+
+  body {
+    margin: 0;
+    background: var(--surface-0);
+    color: var(--ink-0);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--surface-0);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ── Entry animations ───────────────────────────────────────────── */
+
+  /* Header slides down */
+  .site-header {
+    animation: headerReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+
+  @keyframes headerReveal {
+    from {
+      opacity: 0;
+      transform: translateY(-24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Reveal class toggled by JS — elements start invisible */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition:
+      opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger delay for siblings — JS sets --reveal-delay via inline style */
+  [data-reveal] {
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* Quick variant — no stagger delay, faster transition (e.g. footer) */
+  [data-reveal][data-reveal-quick] {
+    transition-duration: 0.55s;
+    transition-delay: 0ms !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Assign staggered delays to siblings that share the same parent
+  document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => {
+    // Skip quick-reveal elements — they use 0ms delay via CSS
+    if (el.hasAttribute("data-reveal-quick")) return;
+    const siblings = Array.from(el.parentElement?.querySelectorAll<HTMLElement>("[data-reveal]:not([data-reveal-quick])") ?? []);
+    const idx = siblings.indexOf(el);
+    // Base delay: 300ms for page-load feel + 150ms stagger per item
+    el.style.setProperty("--reveal-delay", `${300 + idx * 150}ms`);
+  });
+
+  // Small timeout so the browser has painted before observer fires —
+  // prevents above-the-fold items from revealing before the delay kicks in
+  setTimeout(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+  }, 50);
+</script>
