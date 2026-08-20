@@ -1,0 +1,576 @@
+---
+// Build in Public — hero section
+// Card data: the row of builders shown in the filmstrip.
+const people = [
+  { name: "Tomiwa", role: "Builder",  img: "/images/tomiwa.jpg", tilt: -6  },
+  { name: "Sam",    role: "Designer", img: "/images/sam.jpg",    tilt: -3  },
+  { name: "Crownz", role: "Thinker",  img: "/images/crownz.jpg", tilt: 0   },
+  { name: "Nkechi", role: "Designer", img: "/images/nkechi.jpg", tilt: 3   },
+  { name: "Eze",    role: "Designer", img: "/images/eze.png",    tilt: -2  },
+  { name: "Aisha",  role: "Maker",    img: "/images/aisha.jpg",  tilt: 5   },
+  { name: "Jenny",  role: "Designer", img: "/images/jenny.jpg",  tilt: -5  },
+];
+// Triple the set — the middle copy is the "home" position for infinite wrapping.
+const filmstrip = [...people, ...people, ...people];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Helping Designers Build in Public</title>
+  <meta name="description" content="Join the community of builders sharing their design work in public." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <main class="hero">
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <section class="intro">
+      <p class="eyebrow">Join the community of builders</p>
+
+      <h1 class="headline" id="headline">
+        <span class="word">Helping</span>
+        <span class="word">Designers</span>
+        <br class="lg-break" />
+        <span class="word">Build</span>
+        <span class="word">in</span>
+        <span class="word">Public</span>
+      </h1>
+
+      <p class="subhead">
+        Over 100 people joined this challenge&mdash;some gained the visibility
+        they needed, while others used it to level up their design skills.
+      </p>
+
+      <form class="signup" id="signup" novalidate>
+        <label class="signup-field">
+          <svg class="mail-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M3 5.5C3 4.67 3.67 4 4.5 4h11c.83 0 1.5.67 1.5 1.5v9c0 .83-.67 1.5-1.5 1.5h-11A1.5 1.5 0 0 1 3 14.5v-9Z" stroke="currentColor" stroke-width="1.4"/>
+            <path d="m4 5.5 6 5 6-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input
+            id="email-input"
+            type="email"
+            name="email"
+            placeholder="Your email address..."
+            autocomplete="email"
+            required
+          />
+        </label>
+        <button type="submit" class="signup-btn" id="signup-btn">
+          <span class="btn-label">Join the list</span>
+        </button>
+      </form>
+      <p class="signup-note" id="signup-note" role="status" aria-live="polite">&nbsp;</p>
+    </section>
+
+    <section class="filmstrip-wrap" aria-label="Builders in the community">
+      <div class="filmstrip" id="filmstrip">
+        <div class="track" id="track">
+          {filmstrip.map((p, i) => (
+            <figure class="card" style={`--tilt:${p.tilt}deg`}>
+              <img
+                src={p.img}
+                alt={`${p.name}, ${p.role}`}
+                draggable="false"
+                loading={i < people.length ? "eager" : "lazy"}
+              />
+              <figcaption class="tag">{p.name.toUpperCase()} <span>&mdash; {p.role}</span></figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+      <div class="fade fade-left" aria-hidden="true"></div>
+      <div class="fade fade-right" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <style>
+    @font-face {
+      font-family: 'ZT Talk';
+      src: url('/zt_talk/ZTTalk-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'ZT Talk';
+      src: url('/zt_talk/ZTTalk-BoldItalic.ttf') format('truetype');
+      font-weight: 700;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: #16150f;
+      --paper: #f6f4ee;
+      --muted: #726d61;
+      --accent: #2f5d50;
+      --accent-soft: #dce7e2;
+      --card-white: #fffdf8;
+      --mono: 'IBM Plex Mono', ui-monospace, monospace;
+      --display: 'ZT Talk', 'Space Grotesk', system-ui, sans-serif;
+      --body: 'Inter', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      overflow-x: hidden;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 1.5rem 4rem;
+      isolation: isolate;
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image: repeating-linear-gradient(
+        135deg,
+        rgba(22, 21, 15, 0.035) 0px,
+        rgba(22, 21, 15, 0.035) 1px,
+        transparent 1px,
+        transparent 14px
+      );
+    }
+
+    .intro {
+      max-width: 46rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 1.4rem;
+    }
+
+    .headline {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 84px;
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+      margin: 0 0 1.5rem;
+      cursor: default;
+    }
+
+    @media (max-width: 900px) {
+      .headline { font-size: clamp(2.4rem, 10vw, 84px); }
+    }
+
+    .headline .word {
+      display: inline-block;
+      transition: transform 0.28s cubic-bezier(.2,.8,.2,1.4), color 0.28s ease;
+      opacity: 0;
+      transform: translateY(0.6em);
+      animation: word-in 0.6s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .headline .word:nth-child(1) { animation-delay: 0.02s; }
+    .headline .word:nth-child(2) { animation-delay: 0.09s; }
+    .headline .word:nth-child(4) { animation-delay: 0.16s; }
+    .headline .word:nth-child(5) { animation-delay: 0.22s; }
+    .headline .word:nth-child(6) { animation-delay: 0.28s; }
+
+    @keyframes word-in {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .headline .word:hover {
+      color: var(--accent);
+      transform: translateY(-0.06em) rotate(-3deg) scale(1.04);
+    }
+    .headline .word:nth-child(even):hover {
+      transform: translateY(-0.06em) rotate(3deg) scale(1.04);
+    }
+
+    .subhead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin: 0 auto 2.2rem;
+      max-width: 34rem;
+    }
+
+    .signup {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .signup-field {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: var(--card-white);
+      border: 1px solid rgba(22,21,15,0.14);
+      border-radius: 999px;
+      padding: 0.7rem 1.2rem;
+      min-width: 17rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .signup-field:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+    .mail-icon { width: 1.05rem; height: 1.05rem; color: var(--muted); flex: none; }
+    .signup-field input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: var(--body);
+      font-size: 0.95rem;
+      color: var(--ink);
+      width: 100%;
+    }
+    .signup-field input::placeholder { color: #a29c8c; }
+
+    .signup-btn {
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--paper);
+      background: var(--ink);
+      border: none;
+      border-radius: 999px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+    .signup-btn:hover { background: var(--accent); transform: translateY(-1px); }
+    .signup-btn:active { transform: translateY(0) scale(0.97); }
+    .signup-btn.is-loading .btn-label { opacity: 0.6; }
+    .signup-btn.is-success { background: var(--accent); }
+
+    .signup-field.is-invalid { border-color: #b5453b; animation: shake 0.4s ease; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .signup-note {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-top: 0.85rem;
+      min-height: 1em;
+    }
+
+    /* Filmstrip */
+    .filmstrip-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .filmstrip {
+      overflow: hidden;
+      width: 100%;
+      cursor: grab;
+      /* Enough vertical room for tall polaroid cards + tilt overhang */
+      padding: 2rem 0 3rem;
+      touch-action: pan-y;
+    }
+    .filmstrip.is-dragging { cursor: grabbing; }
+
+    .track {
+      display: flex;
+      /* Tighter gap so cards overlap slightly like in the reference */
+      gap: 1rem;
+      width: max-content;
+      will-change: transform;
+      /* Pull the strip left so cards start partially off-screen */
+      padding: 0 2vw;
+      /* Vertically align card bottoms so the row feels grounded */
+      align-items: flex-end;
+    }
+
+    .card {
+      margin: 0;
+      flex: none;
+      width: clamp(11rem, 18vw, 15rem);
+      /* No background/padding — photo fills the card edge to edge */
+      background: none;
+      padding: 0;
+      box-shadow:
+        0 16px 32px rgba(22,21,15,0.18),
+        0 3px 6px rgba(22,21,15,0.1);
+      transform: rotate(var(--tilt));
+      transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease;
+      position: relative;
+      overflow: hidden; /* keeps the tag inside the rounded corners */
+    }
+    .card:hover {
+      transform: rotate(0deg) translateY(-0.6rem) scale(1.04);
+      box-shadow:
+        0 24px 40px rgba(22,21,15,0.22),
+        0 5px 10px rgba(22,21,15,0.12);
+      z-index: 2;
+    }
+
+    .card img {
+      display: block;
+      width: 100%;
+      /* Portrait ratio — shows more of each person */
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: 0;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    /* Tag sits on top of the image, pinned to the bottom-left */
+    .tag {
+      position: absolute;
+      bottom: 0.65rem;
+      left: 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: rgba(255, 253, 248, 0.92);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 0.28rem 0.55rem;
+      white-space: nowrap;
+      line-height: 1.4;
+      box-shadow: 0 1px 4px rgba(22,21,15,0.15);
+    }
+    .tag span { color: var(--muted); font-weight: 400; }
+
+    .fade {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      /* Wider fade so partial cards blend naturally */
+      width: 12vw;
+      min-width: 3rem;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .fade-left  { left:  0; background: linear-gradient(90deg,  var(--paper), transparent); }
+    .fade-right { right: 0; background: linear-gradient(270deg, var(--paper), transparent); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .headline .word { animation: none; opacity: 1; transform: none; }
+      .card { transition: none; }
+    }
+
+    @media (max-width: 560px) {
+      .hero { padding-top: 4.5rem; }
+      .signup { flex-direction: column; }
+      .signup-field, .signup-btn { width: 100%; }
+    }
+  </style>
+
+  <script>
+    // ---- Headline: subtle pointer-follow tilt on the whole line ----
+    const headline = document.getElementById('headline');
+    headline?.addEventListener('mousemove', (e) => {
+      const rect = headline.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      headline.style.transform = `rotate(${px * 0.6}deg)`;
+    });
+    headline?.addEventListener('mouseleave', () => {
+      headline.style.transform = 'rotate(0deg)';
+    });
+
+    // ---- Email signup ----
+    const form = document.getElementById('signup') as HTMLFormElement | null;
+    const input = document.getElementById('email-input') as HTMLInputElement | null;
+    const field = input?.closest('.signup-field');
+    const btn = document.getElementById('signup-btn');
+    const note = document.getElementById('signup-note');
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!input) return;
+      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+
+      if (!valid) {
+        field?.classList.remove('is-invalid');
+        void field?.offsetWidth; // restart animation
+        field?.classList.add('is-invalid');
+        if (note) note.textContent = 'That email doesn\'t look right — try again.';
+        return;
+      }
+
+      field?.classList.remove('is-invalid');
+      btn?.classList.add('is-loading');
+      if (note) note.textContent = 'Adding you to the list...';
+
+      window.setTimeout(() => {
+        btn?.classList.remove('is-loading');
+        btn?.classList.add('is-success');
+        const label = btn?.querySelector('.btn-label');
+        if (label) label.textContent = 'You\'re on the list';
+        if (input) input.disabled = true;
+        if (note) note.textContent = `Sent to ${input?.value.trim()}. Welcome in.`;
+      }, 700);
+    });
+
+    // ---- Filmstrip: infinite drag-to-scroll with momentum ----
+    const filmstripEl = document.getElementById('filmstrip');
+    const trackEl = document.getElementById('track');
+
+    if (filmstripEl && trackEl) {
+      let x = 0;
+
+      type Mode = 'drag' | 'momentum' | 'idle';
+      let mode: Mode = 'idle';
+      let rafId = 0;
+
+      // The width of ONE full set of cards (1/3 of the total track).
+      // We use this to teleport seamlessly for infinite looping.
+      let setWidth = 0;
+
+      // Drag state
+      let pointerStartX = 0;
+      let trackStartX = 0;
+
+      // Velocity history for accurate flick detection
+      const velHistory: { t: number; x: number }[] = [];
+      let velocity = 0; // px/ms
+
+      // Feel: 0.96 = gentle coast, 0.92 = stops quicker
+      const FRICTION = 0.96;
+      const STOP_THRESHOLD = 0.008;
+
+      function measure() {
+        // Track has 3 identical sets; one set = 1/3 of total scrollWidth
+        setWidth = trackEl.scrollWidth / 3;
+        // Start in the middle set so we can scroll both ways freely
+        x = -setWidth;
+        applyTransform();
+      }
+
+      function applyTransform() {
+        trackEl.style.transform = `translateX(${x}px)`;
+      }
+
+      // Wrap x so it always stays within the middle set's range,
+      // making the loop invisible to the user.
+      function wrapInfinite() {
+        if (setWidth === 0) return;
+        // If we've scrolled past the right edge of the middle set, jump back
+        if (x > -(setWidth * 0) + 1) {
+          x -= setWidth;
+        }
+        // If we've scrolled past the left edge of the middle set, jump forward
+        if (x < -(setWidth * 2) - 1) {
+          x += setWidth;
+        }
+      }
+
+      function stopLoop() {
+        cancelAnimationFrame(rafId);
+      }
+
+      function tick() {
+        if (mode !== 'momentum') return;
+
+        velocity *= FRICTION;
+        x += velocity * 16;
+
+        wrapInfinite();
+        applyTransform();
+
+        if (Math.abs(velocity) < STOP_THRESHOLD) {
+          mode = 'idle';
+        } else {
+          rafId = requestAnimationFrame(tick);
+        }
+      }
+
+      function onPointerDown(e: PointerEvent) {
+        if (e.button !== 0 && e.pointerType === 'mouse') return;
+
+        stopLoop();
+        mode = 'drag';
+        velocity = 0;
+        velHistory.length = 0;
+
+        pointerStartX = e.clientX;
+        trackStartX = x;
+
+        filmstripEl.setPointerCapture(e.pointerId);
+        filmstripEl.classList.add('is-dragging');
+        e.preventDefault();
+      }
+
+      function onPointerMove(e: PointerEvent) {
+        if (mode !== 'drag') return;
+
+        x = trackStartX + (e.clientX - pointerStartX);
+
+        wrapInfinite();
+        applyTransform();
+
+        // Rolling velocity window (last 80ms)
+        const now = performance.now();
+        velHistory.push({ t: now, x: e.clientX });
+        while (velHistory.length > 1 && now - velHistory[0].t > 80) {
+          velHistory.shift();
+        }
+      }
+
+      function onPointerUp() {
+        if (mode !== 'drag') return;
+
+        filmstripEl.classList.remove('is-dragging');
+
+        if (velHistory.length >= 2) {
+          const newest = velHistory[velHistory.length - 1];
+          const oldest = velHistory[0];
+          const dt = newest.t - oldest.t;
+          if (dt > 0) velocity = (newest.x - oldest.x) / dt;
+        }
+
+        mode = 'momentum';
+        rafId = requestAnimationFrame(tick);
+      }
+
+      filmstripEl.addEventListener('pointerdown', onPointerDown);
+      filmstripEl.addEventListener('pointermove', onPointerMove);
+      filmstripEl.addEventListener('pointerup', onPointerUp);
+      filmstripEl.addEventListener('pointercancel', onPointerUp);
+
+      window.addEventListener('resize', measure);
+
+      // Measure after images are loaded for accurate scrollWidth
+      if (document.readyState === 'complete') {
+        measure();
+      } else {
+        window.addEventListener('load', measure);
+      }
+    }
+  </script>
+</body>
+</html>
