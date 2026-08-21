@@ -1,0 +1,103 @@
+---
+import '../styles/global.css';
+import AvatarTrail from '../components/AvatarTrail.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="Dezo — helping designers build in public."
+    />
+    <title>Dezo — Helping Designers Build in Public</title>
+  </head>
+  <body>
+    <main class="hero">
+      <h1 class="headline">
+        <span class="line-wrap"><span class="line" style="--i:0">Helping</span></span>
+        <span class="line-wrap"><span class="line" style="--i:1">Designers</span></span>
+        <span class="line-wrap"><span class="line" style="--i:2">Build in</span></span>
+        <span class="line-wrap"><span class="line" style="--i:3">Public.</span></span>
+      </h1>
+
+      <div data-reveal data-reveal-delay="150">
+        <AvatarTrail />
+      </div>
+    </main>
+
+    <SiteFooter />
+
+    <script>
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function reveal() {
+        const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        els.forEach((el) => {
+          const delay = prefersReduced ? 0 : Number(el.dataset.revealDelay ?? 0);
+          setTimeout(() => el.classList.add('is-visible'), delay);
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', reveal);
+      } else {
+        reveal();
+      }
+    </script>
+
+    <style>
+      .hero {
+        position: relative;
+        z-index: 1;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: clamp(12px, 2vw, 28px) clamp(12px, 2vw, 32px) 0;
+        display: grid;
+        grid-template-columns: 35% 65%;
+        align-items: start;
+      }
+
+      .headline {
+        margin: 0;
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: clamp(40px, 6.4vw, 96px);
+        line-height: 0.98;
+        letter-spacing: -0.02em;
+        padding-top: clamp(8px, 1vw, 16px);
+      }
+
+      .line-wrap {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.12em; /* prevents descender clip */
+      }
+
+      .line {
+        display: block;
+        opacity: 0;
+        transform: translateY(110%);
+        animation: lineUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: calc(0.08s + var(--i) * 0.12s);
+      }
+
+      @keyframes lineUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 860px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,293 @@
+---
+import aisha from '../assets/avatars/aisha.jpg';
+import crownz from '../assets/avatars/crownz.jpg';
+import eze from '../assets/avatars/eze.png';
+import jenny from '../assets/avatars/jenny.jpg';
+import nkechi from '../assets/avatars/nkechi.jpg';
+import tomiwa from '../assets/avatars/tomiwa.jpg';
+import { Image } from 'astro:assets';
+
+// Each entry is positioned as a percentage of the trail zone.
+// kind: "photo" uses a real uploaded image, "swatch" is a generated
+// placeholder card (initials on a flat color) for community members
+// we don't have a photo for.
+const items = [
+  { kind: 'photo', x: 6.9,  y: 22, img: aisha,  alt: 'Aisha' },
+  { kind: 'photo', x: 20.3, y: 15, img: nkechi,  alt: 'Nkechi' },
+  { kind: 'photo', x: 54.2, y: 12, img: tomiwa,  alt: 'Tomiwa' },
+  { kind: 'photo', x: 77.4, y: 12, img: crownz,  alt: 'Crownz' },
+  { kind: 'photo', x: 34.8, y: 34, img: eze,     alt: 'Eze' },
+  { kind: 'photo', x: 49,   y: 45, img: tomiwa,  alt: 'Tomiwa' },
+  { kind: 'photo', x: 64.5, y: 33, img: jenny,   alt: 'Jenny' },
+  { kind: 'photo', x: 78.4, y: 45, img: jenny,   alt: 'Jenny' },
+  { kind: 'photo', x: 10.9, y: 53, img: crownz,  alt: 'Crownz' },
+  { kind: 'photo', x: 25.2, y: 54, img: aisha,   alt: 'Aisha' },
+  { kind: 'photo', x: 34.8, y: 73, img: nkechi,  alt: 'Nkechi' },
+  { kind: 'photo', x: 53.9, y: 71, img: eze,     alt: 'Eze' },
+  { kind: 'photo', x: 68.3, y: 68, img: tomiwa,  alt: 'Tomiwa' },
+  { kind: 'photo', x: 20.3, y: 77, img: crownz,  alt: 'Crownz' },
+];
+---
+
+<div class="trail-zone" id="trailZone" aria-hidden="false">
+  <p class="trail-hint" id="trailHint">
+    <span class="hint-desktop">move your cursor across the space →</span>
+    <span class="hint-mobile">drag your finger across the space →</span>
+  </p>
+
+  {items.map((item, i) => (
+    <div
+      class="avatar-item"
+      data-index={i}
+      style={`--x:${item.x}%; --y:${item.y}%;`}
+    >
+      {item.kind === 'photo' ? (
+        <Image src={item.img!} alt={item.alt || ''} width={280} height={400} class="avatar-img" loading={i < 4 ? 'eager' : 'lazy'} />
+      ) : (
+        <div
+          class="avatar-swatch"
+          style={`background:${item.color}; color:${item.accent ?? '#f5f5f3'};`}
+        >
+          <span>{item.initials}</span>
+        </div>
+      )}
+    </div>
+  ))}
+
+  <button type="button" class="reveal-all" id="revealAll">
+    Reveal the trail
+  </button>
+</div>
+
+<style>
+  .trail-zone {
+    position: relative;
+    width: 100%;
+    height: clamp(320px, 36vw, 620px);
+    margin-top: 0;
+  }
+
+  .trail-hint {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    color: var(--muted-2);
+    font-size: clamp(12px, 1.1vw, 14px);
+    letter-spacing: 0.02em;
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    white-space: nowrap;
+  }
+
+  .trail-zone.has-activity .trail-hint {
+    opacity: 0;
+  }
+
+  .hint-mobile {
+    display: none;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .hint-desktop {
+      display: none;
+    }
+    .hint-mobile {
+      display: inline;
+    }
+  }
+
+  .avatar-item {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--avatar-w);
+    height: var(--avatar-h);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.72) translateY(10px);
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  .avatar-item.revealed {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) translateY(0);
+  }
+
+  .avatar-img,
+  .avatar-swatch {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: flex;
+  }
+
+  .avatar-swatch {
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 10px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(13px, 1.3vw, 17px);
+    letter-spacing: 0.02em;
+  }
+
+  .reveal-all {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    z-index: 2;
+    background: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--hairline);
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .reveal-all:hover,
+  .reveal-all:focus-visible {
+    border-color: rgba(255, 255, 255, 0.35);
+    color: var(--fg);
+  }
+
+  @media (max-width: 860px) {
+    .trail-zone {
+      height: clamp(520px, 130vw, 900px);
+      margin-top: 24px;
+    }
+    .reveal-all {
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
+</style>
+
+<script>
+  function initTrail() {
+    const zone = document.getElementById('trailZone');
+    if (!zone) return;
+    const items = Array.from(zone.querySelectorAll<HTMLElement>('.avatar-item'));
+    const revealAllBtn = document.getElementById('revealAll');
+
+    const revealedSet = new Set<HTMLElement>();
+    const queue: HTMLElement[] = [];
+    let processing = false;
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    function markActive() {
+      zone?.classList.add('has-activity');
+    }
+
+    function processQueue() {
+      if (processing) return;
+      processing = true;
+      const step = () => {
+        const next = queue.shift();
+        if (!next) {
+          processing = false;
+          return;
+        }
+        next.classList.add('revealed');
+        setTimeout(step, prefersReducedMotion ? 0 : 70);
+      };
+      step();
+    }
+
+    function enqueue(el: HTMLElement) {
+      if (revealedSet.has(el)) return;
+      revealedSet.add(el);
+      queue.push(el);
+      processQueue();
+    }
+
+    function getCenters() {
+      const zoneRect = zone!.getBoundingClientRect();
+      return items.map((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          el,
+          cx: r.left + r.width / 2 - zoneRect.left,
+          cy: r.top + r.height / 2 - zoneRect.top,
+        };
+      });
+    }
+
+    let centers = getCenters();
+    let resizeTimer: number;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        centers = getCenters();
+      }, 150);
+    });
+
+    const RADIUS = 130;
+
+    function checkPoint(px: number, py: number) {
+      const zoneRect = zone!.getBoundingClientRect();
+      const x = px - zoneRect.left;
+      const y = py - zoneRect.top;
+      for (const c of centers) {
+        const dx = c.cx - x;
+        const dy = c.cy - y;
+        if (dx * dx + dy * dy <= RADIUS * RADIUS) {
+          enqueue(c.el);
+        }
+      }
+    }
+
+    // Desktop: mouse trail
+    zone!.addEventListener('mousemove', (e) => {
+      markActive();
+      checkPoint(e.clientX, e.clientY);
+    });
+
+    // Mobile / touch: drag trail
+    zone!.addEventListener(
+      'touchstart',
+      (e) => {
+        markActive();
+        for (const t of Array.from(e.touches)) checkPoint(t.clientX, t.clientY);
+      },
+      { passive: true }
+    );
+    zone!.addEventListener(
+      'touchmove',
+      (e) => {
+        markActive();
+        for (const t of Array.from(e.touches)) checkPoint(t.clientX, t.clientY);
+      },
+      { passive: true }
+    );
+
+    // Accessibility / fallback: reveal everything on demand
+    revealAllBtn?.addEventListener('click', () => {
+      markActive();
+      items.forEach((el, i) => {
+        if (revealedSet.has(el)) return;
+        revealedSet.add(el);
+        setTimeout(() => el.classList.add('revealed'), prefersReducedMotion ? 0 : i * 60);
+      });
+    });
+
+    if (prefersReducedMotion) {
+      // Skip the discovery game for folks who asked for less motion.
+      items.forEach((el) => el.classList.add('revealed'));
+      zone?.classList.add('has-activity');
+    }
+  }
+
+  initTrail();
+</script>
