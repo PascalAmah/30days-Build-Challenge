@@ -1,0 +1,295 @@
+---
+interface Props {
+  eyebrow?: string;
+  headlineTop?: string;
+  headlineBottom?: string;
+  copy?: string;
+  frameSrc?: string;
+  videoSrc?: string;
+}
+
+const {
+  eyebrow      = 'Decades of experience',
+  headlineTop  = 'DRIVEN BY',
+  headlineBottom = 'CREATIVITY',
+  copy = `We are transforming your vision into a stunning reality with a
+    seamless, strategic, and collaborative design process. With a seamless
+    end-to-end approach, we develop groundbreaking feature films, podcasts,
+    and produce high impact branded content.`,
+  frameSrc = '/tv-frame.png',
+  videoSrc = '/showreel.mp4',
+} = Astro.props;
+---
+
+<section class="hero">
+  <p class="eyebrow">{eyebrow}</p>
+
+  <h1 class="headline">
+    <span>{headlineTop}</span>
+    <span>{headlineBottom}</span>
+  </h1>
+
+  <!--
+    tv-frame.png is 1680 × 1718 px.
+    The actual TV body runs from y=306 to y=1401 (height = 1095 px).
+    Dead transparent space: 306 px top + 317 px bottom.
+
+    Strategy:
+      .tv        → full PNG size via aspect-ratio 1680/1718, width 100%
+      .tv-clip   → clips to only the TV body height using overflow:hidden
+                   Height = 1095/1718 = 63.74% of .tv's height.
+                   Since .tv width = .tv-clip width, and aspect-ratio
+                   makes .tv height = width × (1718/1680),
+                   we offset .tv upward by 306/1718 × height = 17.81% of .tv height
+                   = 17.81% × (1718/1680) × width of .tv-clip
+                   ≈ 18.22% of .tv-clip width  (used as padding-top offset via margin)
+
+    Screen hole in the PNG (measured from pixel data):
+      left   = 143/1680 = 8.51%
+      top    = 307/1718 = 17.87%   (of full .tv height)
+      right  = 452/1680 = 26.90%
+      bottom = 516/1718 = 30.03%
+  -->
+  <div class="tv-clip">
+    <div class="tv" id="tv">
+      <div class="tv__screen">
+        <video
+          class="tv__video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+        <div class="tv__scanlines" aria-hidden="true"></div>
+        <div class="tv__glow"     aria-hidden="true"></div>
+      </div>
+      <img class="tv__frame" src={frameSrc} alt="Retro television" />
+    </div>
+  </div>
+
+  <p class="copy">{copy}</p>
+</section>
+
+<script>
+  const tv    = document.getElementById('tv');
+  const video = tv?.querySelector('video') as HTMLVideoElement | null;
+  const mq    = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function syncMotion() {
+    if (!video) return;
+    mq.matches
+      ? (video.pause(), video.removeAttribute('autoplay'))
+      : video.play().catch(() => {});
+  }
+
+  syncMotion();
+  mq.addEventListener('change', syncMotion);
+</script>
+
+<style>
+  /* ─── Hero ─────────────────────────────────────────────────── */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: clamp(1rem, 3vw, 2rem);
+
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vw, 5rem) clamp(1rem, 4vw, 2.5rem);
+  }
+
+  /* ─── Eyebrow ───────────────────────────────────────────────── */
+  .eyebrow {
+    font-family: var(--font-script);
+    font-size: clamp(1rem, 1.4vw + 0.4rem, 1.4rem);
+    color: var(--script);
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── Headline ──────────────────────────────────────────────── */
+  .headline {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: normal;
+    text-transform: uppercase;
+    /* 120px at desktop, scales down fluidly on smaller screens */
+    font-size: clamp(2.8rem, 10vw, 7.5rem);
+    line-height: 0.93;
+    letter-spacing: -0.02em;
+    text-align: center;
+    color: var(--cream);
+  }
+  .headline span { display: block; }
+
+  /* ─── TV clip container ─────────────────────────────────────
+     Clips the transparent dead-space at top/bottom of tv-frame.png.
+
+     The PNG body occupies 63.74% of the full image height (1095/1718).
+     We set .tv-clip height to exactly that fraction of .tv's height.
+
+     .tv has aspect-ratio 1680/1718 so its height = width × (1718/1680).
+     .tv-clip width = min(100%, 740px).
+
+     To crop top dead space (17.81% of .tv height), we shift .tv up
+     via a negative margin-top on it:
+       shift = (306/1718) × tv_height
+             = (306/1718) × width × (1718/1680)
+             = (306/1680) × width
+             = 18.21% of .tv-clip width
+     CSS margin % is always relative to the element's own WIDTH,
+     so  margin-top: -18.21%  on .tv  is exactly right.
+
+     .tv-clip height = tv_height × (1095/1718)
+                     = width × (1718/1680) × (1095/1718)
+                     = width × (1095/1680)
+     We express this as a padding-bottom trick:
+       padding-bottom: calc(1095 / 1680 * 100%) = 65.18%
+  ────────────────────────────────────────────────────────────── */
+  .tv-clip {
+    position: relative;
+    width: min(100%, 740px);
+    /* height = 1095/1680 × width */
+    height: 0;
+    padding-bottom: 45.18%;
+    overflow: hidden;
+    filter: drop-shadow(0 12px 40px var(--tv-shadow));
+  }
+
+  /* ─── TV box ────────────────────────────────────────────────
+     Full PNG aspect ratio, shifted up to hide top dead space.
+     Width matches .tv-clip so percentages stay consistent.
+  ────────────────────────────────────────────────────────────── */
+  .tv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* full PNG height = width × (1718/1680) */
+    padding-bottom: calc(1718 / 1680 * 100%);
+    /* shift up by dead-space top = 306/1680 × width */
+    margin-top: -18.21%;
+  }
+
+  /* ─── TV frame PNG (z-index 2, on top) ─────────────────────── */
+  .tv__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    pointer-events: none;
+    user-select: none;
+    z-index: 2;
+  }
+
+  /* ─── TV screen (z-index 1, behind frame) ──────────────────
+     Offsets are % of .tv box dimensions:
+       left   = 143/1680 = 8.51%   (of .tv width)
+       top    = 307/1718 = 17.87%  (of .tv height = padding-bottom value)
+       right  = 452/1680 = 26.90%
+       bottom = 516/1718 = 30.03%
+  ────────────────────────────────────────────────────────────── */
+  .tv__screen {
+    position: absolute;
+    left:   8.51%;
+    top:    17.87%;
+    right:  26.90%;
+    bottom: 30.03%;
+    z-index: 1;
+    background: #000;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .tv__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* CRT scanlines */
+  .tv__scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.20) 0px,
+      rgba(0,0,0,0.20) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+    opacity: 0.6;
+  }
+
+  /* Screen glow */
+  .tv__glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255,255,255,0.06) 0%,
+      transparent 70%
+    );
+  }
+
+  /* ─── Body copy ─────────────────────────────────────────────── */
+  .copy {
+    font-family: var(--font-body);
+    color: var(--body-copy);
+    font-size: clamp(0.88rem, 1.1vw + 0.4rem, 1.05rem);
+    line-height: 1.8;
+    max-width: 52ch;
+  }
+
+  /* ─── Breakpoints ────────────────────────────────────────────
+     .tv-clip width changes but the math stays self-consistent
+     because all offsets are percentages of that width.
+  ────────────────────────────────────────────────────────────── */
+
+  /* Tablet portrait */
+  @media (max-width: 768px) {
+    .tv-clip {
+      width: min(100%, 580px);
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .hero {
+      gap: clamp(0.75rem, 3vw, 1.25rem);
+    }
+    .tv-clip {
+      width: 100%;
+    }
+    .copy {
+      max-width: 40ch;
+    }
+  }
+
+  /* Small phones */
+  @media (max-width: 360px) {
+    .headline {
+      font-size: clamp(2.1rem, 11vw, 2.8rem);
+    }
+    .copy {
+      font-size: 0.85rem;
+    }
+  }
+
+  /* Large desktop */
+  @media (min-width: 1280px) {
+    .tv-clip {
+      filter: drop-shadow(0 20px 60px var(--tv-shadow));
+    }
+  }
+</style>

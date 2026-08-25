@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Phudu:wght@700&family=Caveat:wght@500;600&family=Work+Sans:wght@400;500&display=swap');
+
+/* ─── Design tokens ─────────────────────────────────────────── */
+:root {
+  --bg:          #16100b;
+  --bg-vignette: #0d0906;
+  --cream:       #f4ecdd;
+  --script:      #cdbfa8;
+  --body-copy:   #a9998a;
+  --tv-shadow:   rgba(0, 0, 0, 0.65);
+
+  --font-display: 'Phudu', sans-serif;
+  --font-script:  'Caveat', cursive;
+  --font-body:    'Work Sans', system-ui, sans-serif;
+}
+
+/* ─── Reset ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Base ──────────────────────────────────────────────────── */
+html {
+  /* Smooth font scaling: 14px @ 320px → 16px @ 1280px */
+  font-size: clamp(14px, 1vw + 11.5px, 16px);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--bg);
+  /* Radial vignette for the cinematic look */
+  background-image: radial-gradient(
+    ellipse at 50% 40%,
+    #2a1e14 0%,
+    var(--bg) 55%,
+    var(--bg-vignette) 100%
+  );
+  background-attachment: fixed;
+  color: var(--cream);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ─── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
