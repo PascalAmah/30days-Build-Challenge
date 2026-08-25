@@ -87,9 +87,71 @@ const {
 
   syncMotion();
   mq.addEventListener('change', syncMotion);
+
+  // ── Intersection-observer entrance animations ──────────────
+  // Elements start invisible (set via CSS) and get .is-visible
+  // when they enter the viewport, triggering their transition.
+  if (!mq.matches) {
+    const targets = document.querySelectorAll(
+      '.eyebrow, .headline, .tv-clip, .copy'
+    );
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+  } else {
+    // Reduced-motion: skip animation, show everything immediately
+    document.querySelectorAll('.eyebrow, .headline, .tv-clip, .copy')
+      .forEach((el) => el.classList.add('is-visible'));
+  }
 </script>
 
 <style>
+  /* ─── Entrance animations ──────────────────────────────────
+     Only opacity + translateY — never scale on .tv-clip as it
+     would distort the padding-bottom height trick used for layout.
+  ────────────────────────────────────────────────────────────── */
+  .eyebrow,
+  .headline,
+  .tv-clip,
+  .copy {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity  0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* TV gets a slightly longer, weightier entrance */
+  .tv-clip {
+    transition-duration: 0.9s;
+  }
+
+  /* Stagger delays */
+  .eyebrow  { transition-delay: 0s;    }
+  .headline { transition-delay: 0.15s; }
+  .tv-clip  { transition-delay: 0.3s;  }
+  .copy     { transition-delay: 0.55s; }
+
+  /* Visible state */
+  .eyebrow.is-visible,
+  .headline.is-visible,
+  .tv-clip.is-visible,
+  .copy.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   /* ─── Hero ─────────────────────────────────────────────────── */
   .hero {
     display: flex;
@@ -119,7 +181,8 @@ const {
     font-style: normal;
     text-transform: uppercase;
     /* 120px at desktop, scales down fluidly on smaller screens */
-    font-size: clamp(2.8rem, 10vw, 7.5rem);
+    /* 100px desktop → scales down to ~38px on 320px phones */
+    font-size: clamp(2.375rem, 4rem + 4vw, 6.25rem);
     line-height: 0.93;
     letter-spacing: -0.02em;
     text-align: center;
@@ -154,16 +217,30 @@ const {
   .tv-clip {
     position: relative;
     width: min(100%, 740px);
-    /* height = 1095/1680 × width */
+    /*
+      .tv total height as % of its width = 1718/1680 × 100 = 102.26%
+      Top dead space cropped by margin-top = 306/1680 × 100 = 18.21%
+      TV body bottom from top of .tv = (306+1095)/1718 × 102.26% = 83.65%
+      TV body bottom from top of .tv-clip = 83.65% - 18.21% = 65.44%
+      → padding-bottom = 65.44% shows exactly the TV body, no bottom gap.
+    */
     height: 0;
-    padding-bottom: 45.18%;
+    padding-bottom: 45%;
     overflow: hidden;
     filter: drop-shadow(0 12px 40px var(--tv-shadow));
   }
 
   /* ─── TV box ────────────────────────────────────────────────
      Full PNG aspect ratio, shifted up to hide top dead space.
-     Width matches .tv-clip so percentages stay consistent.
+     top offset = -(306/1680 × 100%) = -18.21% of .tv-clip width
+     This works at ALL screen sizes because .tv width = .tv-clip width,
+     and CSS top % on an absolutely-positioned child is relative to
+     the containing block's HEIGHT — so we convert:
+       px offset = 306/1680 × clip_width
+       clip_height = 65.18% × clip_width
+       top % = (306/1680 × clip_width) / (65.18% × clip_width) × 100
+             = (306/1680) / 0.6518 × 100
+             = 27.94%  of .tv-clip height
   ────────────────────────────────────────────────────────────── */
   .tv {
     position: absolute;
@@ -172,7 +249,7 @@ const {
     width: 100%;
     /* full PNG height = width × (1718/1680) */
     padding-bottom: calc(1718 / 1680 * 100%);
-    /* shift up by dead-space top = 306/1680 × width */
+    /* shift up by dead-space top = 306/1680 × width = 18.21% */
     margin-top: -18.21%;
   }
 
@@ -251,25 +328,25 @@ const {
     max-width: 52ch;
   }
 
-  /* ─── Breakpoints ────────────────────────────────────────────
-     .tv-clip width changes but the math stays self-consistent
-     because all offsets are percentages of that width.
-  ────────────────────────────────────────────────────────────── */
+  /* ─── Breakpoints ─────────────────────────────────────────── */
 
   /* Tablet portrait */
   @media (max-width: 768px) {
     .tv-clip {
       width: min(100%, 580px);
+      padding-bottom: 45%;
     }
   }
 
   /* Mobile */
   @media (max-width: 480px) {
     .hero {
-      gap: clamp(0.75rem, 3vw, 1.25rem);
+      gap: 0.75rem;
+      padding: 1.5rem 0.75rem;
     }
     .tv-clip {
       width: 100%;
+      padding-bottom: 65% !important;
     }
     .copy {
       max-width: 40ch;
@@ -278,11 +355,20 @@ const {
 
   /* Small phones */
   @media (max-width: 360px) {
+    .hero {
+      padding: 1.25rem 0.5rem;
+      gap: 0.5rem;
+    }
     .headline {
       font-size: clamp(2.1rem, 11vw, 2.8rem);
     }
+    .tv-clip {
+      width: 100%;
+      padding-bottom: 65% !important;
+    }
     .copy {
       font-size: 0.85rem;
+      max-width: 34ch;
     }
   }
 
